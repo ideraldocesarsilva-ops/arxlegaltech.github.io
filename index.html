@@ -9,15 +9,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --black: #080808;
-      --dark: #0f0f0f;
-      --card: #141414;
-      --border: #222;
+      --black: #080c14;
+      --dark: #0a0e1a;
+      --card: #0f1729;
+      --border: #1e3a5f;
       --white: #f5f5f0;
       --silver: #b8b8b8;
-      --green: #93c5fd;
-      --green-dim: rgba(147, 197, 253, 0.12);
-      --green-glow: rgba(147, 197, 253, 0.25);
+      --gold: #c9a84c;
+      --gold-dim: rgba(201, 168, 76, 0.12);
+      --gold-glow: rgba(201, 168, 76, 0.25);
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -50,7 +50,7 @@
       width: 600px;
       height: 600px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(147,197,253,0.06) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 70%);
       top: -200px;
       right: -200px;
       pointer-events: none;
@@ -68,7 +68,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: rgba(8,8,8,0.85);
+      background: rgba(8,12,20,0.92);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
     }
@@ -83,7 +83,7 @@
     }
 
     .nav-logo span {
-      color: var(--green);
+      color: var(--gold);
     }
 
     .nav-cta {
@@ -92,7 +92,7 @@
       letter-spacing: 0.15em;
       text-transform: uppercase;
       color: var(--black);
-      background: var(--green);
+      background: var(--gold);
       padding: 0.6rem 1.5rem;
       text-decoration: none;
       transition: opacity 0.2s;
@@ -118,7 +118,7 @@
       font-weight: 500;
       letter-spacing: 0.4em;
       text-transform: uppercase;
-      color: var(--green);
+      color: var(--gold);
       margin-bottom: 2rem;
       opacity: 0;
       animation: fadeUp 0.8s ease 0.2s forwards;
@@ -174,7 +174,7 @@
       letter-spacing: 0.15em;
       text-transform: uppercase;
       color: var(--black);
-      background: var(--green);
+      background: var(--gold);
       padding: 1rem 2.5rem;
       text-decoration: none;
       transition: all 0.2s;
@@ -182,7 +182,7 @@
     }
 
     .btn-primary:hover {
-      background: #bfdbfe;
+      background: #e8d5a3;
       transform: translateY(-1px);
     }
 
@@ -225,7 +225,7 @@
       font-weight: 500;
       letter-spacing: 0.5em;
       text-transform: uppercase;
-      color: var(--green);
+      color: var(--gold);
       margin-bottom: 1rem;
     }
 
@@ -260,7 +260,7 @@
       transition: border-color 0.3s;
     }
 
-    .step:hover { border-color: var(--green); }
+    .step:hover { border-color: var(--gold); }
 
     .step::before {
       content: '';
@@ -269,7 +269,7 @@
       left: 0;
       right: 0;
       height: 2px;
-      background: var(--green);
+      background: var(--gold);
       transform: scaleX(0);
       transition: transform 0.3s;
     }
@@ -280,7 +280,7 @@
       font-family: 'Cormorant Garamond', serif;
       font-size: 3rem;
       font-weight: 300;
-      color: var(--green);
+      color: var(--gold);
       opacity: 0.3;
       line-height: 1;
       margin-bottom: 1rem;
@@ -309,8 +309,8 @@
 
     .diff {
       padding: 2rem;
-      border-left: 2px solid var(--green);
-      background: var(--green-dim);
+      border-left: 2px solid var(--gold);
+      background: var(--gold-dim);
     }
 
     .diff h3 {
@@ -343,13 +343,13 @@
     }
 
     .plan:hover {
-      border-color: var(--green);
+      border-color: var(--gold);
       transform: translateY(-4px);
     }
 
     .plan.featured {
-      border-color: var(--green);
-      background: linear-gradient(135deg, #141414 0%, #0f1520 100%);
+      border-color: var(--gold);
+      background: linear-gradient(135deg, #141414 0%, #0a1225 100%);
     }
 
     .plan-badge {
@@ -357,7 +357,7 @@
       top: -1px;
       left: 50%;
       transform: translateX(-50%);
-      background: var(--green);
+      background: var(--gold);
       color: var(--black);
       font-size: 0.6rem;
       font-weight: 600;
@@ -398,7 +398,7 @@
       font-family: 'Cormorant Garamond', serif;
       font-size: 1.5rem;
       font-weight: 300;
-      color: var(--green);
+      color: var(--gold);
       margin-bottom: 0.5rem;
     }
 
@@ -426,7 +426,7 @@
 
     .plan-features li::before {
       content: '·';
-      color: var(--green);
+      color: var(--gold);
       font-size: 1.2rem;
     }
 
@@ -440,19 +440,19 @@
       padding: 0.9rem;
       text-decoration: none;
       transition: all 0.2s;
-      border: 1px solid var(--green);
-      color: var(--green);
+      border: 1px solid var(--gold);
+      color: var(--gold);
     }
 
     .plan-btn:hover, .plan.featured .plan-btn {
-      background: var(--green);
+      background: var(--gold);
       color: var(--black);
     }
 
     /* ── CUPOM ── */
     .coupon-bar {
-      background: var(--green-dim);
-      border: 1px solid var(--green);
+      background: var(--gold-dim);
+      border: 1px solid var(--gold);
       padding: 1.5rem 2rem;
       text-align: center;
       margin: 3rem 0 0;
@@ -466,7 +466,7 @@
     .coupon-code {
       font-family: 'Cormorant Garamond', serif;
       font-size: 1.5rem;
-      color: var(--green);
+      color: var(--gold);
       letter-spacing: 0.2em;
       margin-top: 0.25rem;
     }
@@ -529,7 +529,7 @@
 <!-- HERO -->
 <div class="hero">
   <p class="hero-eyebrow">Direito Imobiliário · Inteligência Artificial · Revisão Especializada</p>
-  <img src="logo_ARX_white.png" alt="ARX Legaltech" />
+  <img src="logo_ARX_gold.png" alt="ARX Legaltech" />
   <h1>Due diligence jurídica <em>que trabalha por você</em></h1>
   <p class="hero-sub">
     Análise de viabilidade jurídica imobiliária com IA e revisão por especialista.
@@ -687,13 +687,13 @@
 <!-- FOOTER -->
 <!-- CTA ENVIAR CASO -->
 <div style="position:relative;z-index:1;background:#0a0a0a;border-top:1px solid #1a1a1a;border-bottom:1px solid #1a1a1a;padding:5rem 2rem;text-align:center;">
-  <p style="font-size:0.65rem;font-weight:500;letter-spacing:0.5em;text-transform:uppercase;color:#93c5fd;margin-bottom:1rem;">Já é assinante?</p>
+  <p style="font-size:0.65rem;font-weight:500;letter-spacing:0.5em;text-transform:uppercase;color:#c9a84c;margin-bottom:1rem;">Já é assinante?</p>
   <h2 style="font-family:Cormorant Garamond,serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:300;margin-bottom:1rem;">Envie seu caso para análise</h2>
   <p style="font-size:0.9rem;color:#888;max-width:480px;margin:0 auto 2.5rem;">Preencha o formulário com os dados do caso e faça upload dos documentos. O relatório chega no seu e-mail em até 24 horas úteis.</p>
   <a
     href="https://arxlegaltech.fillout.com/t/bRh6vzCtEdus"
     target="_blank"
-    style="display:inline-block;font-size:0.8rem;font-weight:500;letter-spacing:0.15em;text-transform:uppercase;color:#0a0a0a;background:#93c5fd;border:none;padding:1rem 2.5rem;cursor:pointer;text-decoration:none;transition:opacity 0.2s;"
+    style="display:inline-block;font-size:0.8rem;font-weight:500;letter-spacing:0.15em;text-transform:uppercase;color:#0a0a0a;background:#c9a84c;border:none;padding:1rem 2.5rem;cursor:pointer;text-decoration:none;transition:opacity 0.2s;"
     onmouseover="this.style.opacity=0.85"
     onmouseout="this.style.opacity=1"
   >
@@ -702,7 +702,7 @@
 </div>
 
 <footer>
-  <img src="logo_ARX_white.png" alt="ARX Legaltech" />
+  <img src="logo_ARX_gold.png" alt="ARX Legaltech" />
   <p class="footer-tagline">Agilitas et Securitas</p>
   <p>© 2025 ARX Legaltech · arxlegaltech.com.br · contato@arxlegaltech.com.br</p>
 </footer>
