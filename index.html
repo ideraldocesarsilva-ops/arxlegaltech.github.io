@@ -3,106 +3,76 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ARX Legaltech — Análise Jurídica Imobiliária com IA</title>
-  <meta name="description" content="Due diligence jurídica imobiliária com revisão especializada. Relatório em até 24 horas úteis, entregue com sua marca." />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>ARX Legaltech</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --black: #080c14;
-      --dark: #0a0e1a;
-      --card: #0f1729;
-      --border: #1e3a5f;
-      --white: #f5f5f0;
-      --silver: #b8b8b8;
+      --navy: #080c14;
+      --navy-light: #0f1729;
       --gold: #c9a84c;
-      --gold-dim: rgba(201, 168, 76, 0.12);
-      --gold-glow: rgba(201, 168, 76, 0.25);
+      --gold-dim: rgba(201,168,76,0.12);
+      --gold-border: rgba(201,168,76,0.25);
+      --silver: #9a9a9a;
+      --text: #e8e8e8;
+      --text-soft: #888;
+      --border: rgba(255,255,255,0.06);
+      --white: #ffffff;
     }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    html { scroll-behavior: smooth; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      background: var(--black);
-      color: var(--white);
-      font-family: 'Raleway', sans-serif;
+      background: var(--navy);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
       font-weight: 300;
-      line-height: 1.7;
-      overflow-x: hidden;
-    }
-
-    /* ── NOISE TEXTURE OVERLAY ── */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.4;
-    }
-
-    /* ── GLOW BACKGROUND ── */
-    .glow-orb {
-      position: fixed;
-      width: 600px;
-      height: 600px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 70%);
-      top: -200px;
-      right: -200px;
-      pointer-events: none;
-      z-index: 0;
+      min-height: 100vh;
     }
 
     /* ── NAV ── */
     nav {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
+      top: 0; left: 0; right: 0;
       z-index: 100;
-      padding: 1.5rem 3rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: rgba(8,12,20,0.92);
-      backdrop-filter: blur(12px);
+      padding: 1.2rem 2.5rem;
+      background: rgba(8,12,20,0.95);
       border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
     }
 
     .nav-logo {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 1.1rem;
-      font-weight: 400;
-      letter-spacing: 0.3em;
-      color: var(--white);
-      text-decoration: none;
-    }
-
-    .nav-logo span {
+      font-size: 1.2rem;
+      font-weight: 600;
       color: var(--gold);
-    }
-
-    .nav-cta {
-      font-size: 0.75rem;
-      font-weight: 500;
       letter-spacing: 0.15em;
       text-transform: uppercase;
-      color: var(--black);
-      background: var(--gold);
-      padding: 0.6rem 1.5rem;
-      text-decoration: none;
-      transition: opacity 0.2s;
     }
 
-    .nav-cta:hover { opacity: 0.85; }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--silver);
+      text-decoration: none;
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--gold); }
 
     /* ── HERO ── */
     .hero {
-      position: relative;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -110,53 +80,43 @@
       justify-content: center;
       text-align: center;
       padding: 8rem 2rem 4rem;
-      z-index: 1;
+      position: relative;
     }
 
-    .hero-eyebrow {
-      font-size: 0.7rem;
-      font-weight: 500;
-      letter-spacing: 0.4em;
-      text-transform: uppercase;
-      color: var(--gold);
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 40%, rgba(201,168,76,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-logo {
+      width: 140px;
       margin-bottom: 2rem;
-      opacity: 0;
-      animation: fadeUp 0.8s ease 0.2s forwards;
-    }
-
-    .hero img {
-      width: 300px;
-      margin-bottom: 2.5rem;
-      opacity: 0;
-      animation: fadeUp 0.8s ease 0.4s forwards;
+      opacity: 0.9;
     }
 
     .hero h1 {
       font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(2.8rem, 6vw, 5rem);
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
       font-weight: 300;
-      line-height: 1.1;
-      letter-spacing: -0.01em;
       color: var(--white);
-      max-width: 800px;
-      margin-bottom: 1.5rem;
-      opacity: 0;
-      animation: fadeUp 0.8s ease 0.6s forwards;
+      line-height: 1.3;
+      max-width: 600px;
+      margin-bottom: 1rem;
     }
 
     .hero h1 em {
       font-style: italic;
-      color: var(--silver);
+      color: var(--gold);
     }
 
     .hero-sub {
-      font-size: 1rem;
-      font-weight: 300;
       color: var(--silver);
-      max-width: 560px;
+      font-size: 0.9rem;
+      letter-spacing: 0.05em;
       margin-bottom: 3rem;
-      opacity: 0;
-      animation: fadeUp 0.8s ease 0.8s forwards;
     }
 
     .hero-actions {
@@ -164,531 +124,491 @@
       gap: 1rem;
       flex-wrap: wrap;
       justify-content: center;
-      opacity: 0;
-      animation: fadeUp 0.8s ease 1s forwards;
     }
 
     .btn-primary {
+      background: var(--gold);
+      color: var(--navy);
+      padding: 0.85rem 2rem;
+      border-radius: 2px;
+      text-decoration: none;
       font-size: 0.8rem;
       font-weight: 500;
-      letter-spacing: 0.15em;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: var(--black);
-      background: var(--gold);
-      padding: 1rem 2.5rem;
-      text-decoration: none;
-      transition: all 0.2s;
-      display: inline-block;
+      transition: opacity 0.2s;
     }
 
-    .btn-primary:hover {
-      background: #e8d5a3;
-      transform: translateY(-1px);
-    }
+    .btn-primary:hover { opacity: 0.88; }
 
     .btn-secondary {
-      font-size: 0.8rem;
-      font-weight: 400;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--silver);
-      border: 1px solid var(--border);
-      padding: 1rem 2.5rem;
+      border: 1px solid var(--gold-border);
+      color: var(--gold);
+      padding: 0.85rem 2rem;
+      border-radius: 2px;
       text-decoration: none;
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
       transition: all 0.2s;
-      display: inline-block;
     }
 
     .btn-secondary:hover {
-      border-color: var(--silver);
-      color: var(--white);
+      background: var(--gold-dim);
     }
 
-    /* ── DIVIDER ── */
-    .divider {
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--border), transparent);
-      margin: 0 3rem;
-    }
-
-    /* ── SECTION ── */
+    /* ── SEÇÕES ── */
     section {
-      position: relative;
-      z-index: 1;
-      padding: 6rem 2rem;
-      max-width: 1100px;
+      padding: 5rem 2rem;
+      max-width: 900px;
       margin: 0 auto;
-    }
-
-    .section-label {
-      font-size: 0.65rem;
-      font-weight: 500;
-      letter-spacing: 0.5em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 1rem;
     }
 
     .section-title {
       font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(2rem, 4vw, 3rem);
+      font-size: 1.6rem;
       font-weight: 300;
-      line-height: 1.15;
+      color: var(--gold);
+      margin-bottom: 2.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--gold-border);
+    }
+
+    /* ── ANÁLISES ── */
+    .analises-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .analise-card {
+      background: var(--navy-light);
+      border: 1px solid var(--border);
+      border-top: 2px solid var(--gold-border);
+      padding: 2rem 1.5rem;
+      border-radius: 2px;
+      transition: border-color 0.2s;
+    }
+
+    .analise-card:hover {
+      border-top-color: var(--gold);
+    }
+
+    .analise-nivel {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
+
+    .analise-preco {
+      font-size: 1.8rem;
+      font-weight: 300;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+
+    .analise-preco span {
+      font-size: 0.9rem;
+      color: var(--silver);
+    }
+
+    .analise-desc {
+      font-size: 0.8rem;
+      color: var(--silver);
+      line-height: 1.6;
       margin-bottom: 1.5rem;
     }
 
-    .section-body {
-      color: var(--silver);
-      font-size: 0.95rem;
-      max-width: 560px;
-    }
-
-    /* ── HOW IT WORKS ── */
-    .steps {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 2px;
-      margin-top: 4rem;
-    }
-
-    .step {
-      background: var(--card);
-      padding: 2.5rem 2rem;
-      border: 1px solid var(--border);
-      position: relative;
-      overflow: hidden;
-      transition: border-color 0.3s;
-    }
-
-    .step:hover { border-color: var(--gold); }
-
-    .step::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background: var(--gold);
-      transform: scaleX(0);
-      transition: transform 0.3s;
-    }
-
-    .step:hover::before { transform: scaleX(1); }
-
-    .step-num {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 3rem;
-      font-weight: 300;
+    .analise-btn {
+      display: block;
+      text-align: center;
+      background: transparent;
+      border: 1px solid var(--gold-border);
       color: var(--gold);
-      opacity: 0.3;
-      line-height: 1;
-      margin-bottom: 1rem;
+      padding: 0.7rem 1rem;
+      border-radius: 2px;
+      text-decoration: none;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: all 0.2s;
     }
 
-    .step h3 {
+    .analise-btn:hover {
+      background: var(--gold-dim);
+    }
+
+    /* ── VOLUME ── */
+    .volume-box {
+      background: var(--navy-light);
+      border: 1px solid var(--gold-border);
+      padding: 2rem;
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .volume-text h3 {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 1.25rem;
-      font-weight: 400;
-      margin-bottom: 0.75rem;
+      font-size: 1.1rem;
+      color: var(--gold);
+      margin-bottom: 0.4rem;
     }
 
-    .step p {
-      font-size: 0.85rem;
+    .volume-text p {
+      font-size: 0.82rem;
       color: var(--silver);
       line-height: 1.6;
     }
 
-    /* ── DIFFERENTIALS ── */
-    .diffs {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-      margin-top: 3rem;
-    }
-
-    .diff {
-      padding: 2rem;
-      border-left: 2px solid var(--gold);
-      background: var(--gold-dim);
-    }
-
-    .diff h3 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.2rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .diff p {
-      font-size: 0.85rem;
-      color: var(--silver);
-    }
-
-    /* ── PRICING ── */
-    .pricing-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1.5rem;
-      margin-top: 3rem;
-    }
-
-    .plan {
-      background: var(--card);
-      border: 1px solid var(--border);
-      padding: 2.5rem 2rem;
-      display: flex;
-      flex-direction: column;
-      transition: all 0.3s;
-      position: relative;
-    }
-
-    .plan:hover {
-      border-color: var(--gold);
-      transform: translateY(-4px);
-    }
-
-    .plan.featured {
-      border-color: var(--gold);
-      background: linear-gradient(135deg, #141414 0%, #0a1225 100%);
-    }
-
-    .plan-badge {
-      position: absolute;
-      top: -1px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--gold);
-      color: var(--black);
-      font-size: 0.6rem;
-      font-weight: 600;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      padding: 0.3rem 1rem;
-    }
-
-    .plan-name {
-      font-size: 0.7rem;
-      font-weight: 500;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--silver);
-      margin-bottom: 1.5rem;
-    }
-
-    .plan-price {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 2.8rem;
-      font-weight: 300;
-      line-height: 1;
-      margin-bottom: 0.25rem;
-    }
-
-    .plan-price span {
-      font-size: 1rem;
-      color: var(--silver);
-    }
-
-    .plan-period {
-      font-size: 0.75rem;
-      color: var(--silver);
-      margin-bottom: 2rem;
-    }
-
-    .plan-analyses {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.5rem;
-      font-weight: 300;
-      color: var(--gold);
-      margin-bottom: 0.5rem;
-    }
-
-    .plan-analyses-label {
-      font-size: 0.75rem;
-      color: var(--silver);
-      margin-bottom: 2rem;
-    }
-
-    .plan-features {
-      list-style: none;
-      margin-bottom: 2.5rem;
-      flex: 1;
-    }
-
-    .plan-features li {
-      font-size: 0.8rem;
-      color: var(--silver);
-      padding: 0.4rem 0;
-      border-bottom: 1px solid var(--border);
-      display: flex;
+    .volume-btn {
+      display: inline-flex;
       align-items: center;
       gap: 0.5rem;
+      background: var(--gold);
+      color: var(--navy);
+      padding: 0.85rem 1.8rem;
+      border-radius: 2px;
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      transition: opacity 0.2s;
     }
 
-    .plan-features li::before {
-      content: '·';
+    .volume-btn:hover { opacity: 0.88; }
+
+    /* ── FAQ ── */
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .faq-item {
+      background: var(--navy-light);
+      border: 1px solid var(--border);
+    }
+
+    .faq-question {
+      width: 100%;
+      background: none;
+      border: none;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 400;
+      text-align: left;
+      padding: 1.2rem 1.5rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      transition: color 0.2s;
+    }
+
+    .faq-question:hover { color: var(--gold); }
+
+    .faq-icon {
       color: var(--gold);
       font-size: 1.2rem;
+      font-weight: 300;
+      flex-shrink: 0;
+      transition: transform 0.2s;
     }
 
-    .plan-btn {
-      display: block;
-      text-align: center;
-      font-size: 0.75rem;
-      font-weight: 500;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      padding: 0.9rem;
-      text-decoration: none;
-      transition: all 0.2s;
-      border: 1px solid var(--gold);
-      color: var(--gold);
-    }
+    .faq-item.open .faq-icon { transform: rotate(45deg); }
 
-    .plan-btn:hover, .plan.featured .plan-btn {
-      background: var(--gold);
-      color: var(--black);
-    }
-
-    /* ── CUPOM ── */
-    .coupon-bar {
-      background: var(--gold-dim);
-      border: 1px solid var(--gold);
-      padding: 1.5rem 2rem;
-      text-align: center;
-      margin: 3rem 0 0;
-    }
-
-    .coupon-bar p {
-      font-size: 0.85rem;
+    .faq-answer {
+      display: none;
+      padding: 0 1.5rem 1.2rem;
+      font-size: 0.84rem;
       color: var(--silver);
+      line-height: 1.7;
+      border-top: 1px solid var(--border);
+      padding-top: 1rem;
     }
 
-    .coupon-code {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.5rem;
-      color: var(--gold);
-      letter-spacing: 0.2em;
-      margin-top: 0.25rem;
+    .faq-item.open .faq-answer { display: block; }
+
+    /* ── SUPORTE ── */
+    .suporte-box {
+      background: var(--navy-light);
+      border: 1px solid var(--border);
+      padding: 2rem;
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+      flex-wrap: wrap;
     }
+
+    .suporte-text h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      color: var(--white);
+      margin-bottom: 0.4rem;
+    }
+
+    .suporte-text p {
+      font-size: 0.82rem;
+      color: var(--silver);
+      line-height: 1.6;
+    }
+
+    .suporte-horario {
+      font-size: 0.75rem;
+      color: var(--gold);
+      margin-top: 0.3rem;
+      letter-spacing: 0.05em;
+    }
+
+    .suporte-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: 1px solid var(--gold-border);
+      color: var(--gold);
+      padding: 0.85rem 1.8rem;
+      border-radius: 2px;
+      text-decoration: none;
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+
+    .suporte-btn:hover { background: var(--gold-dim); }
 
     /* ── FOOTER ── */
     footer {
-      position: relative;
-      z-index: 1;
       border-top: 1px solid var(--border);
-      padding: 3rem 2rem;
+      padding: 2.5rem;
       text-align: center;
     }
 
     footer img {
-      width: 200px;
-      margin-bottom: 1rem;
-      opacity: 0.6;
-    }
-
-    .footer-tagline {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 0.85rem;
-      font-weight: 300;
-      letter-spacing: 0.3em;
-      color: var(--silver);
-      text-transform: uppercase;
-      margin-bottom: 1rem;
+      width: 80px;
+      opacity: 0.4;
+      margin-bottom: 0.8rem;
     }
 
     footer p {
       font-size: 0.75rem;
-      color: #444;
+      color: var(--text-soft);
     }
 
-    /* ── ANIMATIONS ── */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
+    .footer-tagline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.8rem;
+      font-weight: 300;
+      letter-spacing: 0.3em;
+      color: var(--silver);
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
     }
 
-    /* ── RESPONSIVE ── */
-    @media (max-width: 768px) {
-      nav { padding: 1rem 1.5rem; }
-      .hero { padding: 7rem 1.5rem 3rem; }
-      section { padding: 4rem 1.5rem; }
-      .divider { margin: 0 1.5rem; }
+    /* ── DIVIDER ── */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 0;
     }
   </style>
 </head>
 <body>
 
-<div class="glow-orb"></div>
-
 <!-- NAV -->
 <nav>
-  <a href="#" class="nav-logo">ARX <span>·</span> LEGALTECH</a>
-  <a href="https://arxlegaltech.fillout.com/t/bRh6vzCtEdus" class="nav-cta" target="_blank">Solicitar análise</a>
+  <span class="nav-logo">ARX</span>
+  <ul class="nav-links">
+    <li><a href="#analises">Análises</a></li>
+    <li><a href="#faq">Suporte</a></li>
+  </ul>
 </nav>
 
 <!-- HERO -->
 <div class="hero">
-  <p class="hero-eyebrow">Direito Imobiliário · Inteligência Artificial · Revisão Especializada</p>
-  <img src="logo_ARX_gold.png" alt="ARX Legaltech" />
-  <h1>A inteligência jurídica <em>que trabalha por você</em></h1>
-  <p class="hero-sub">
-    Análise de viabilidade jurídica imobiliária com IA e revisão por especialista.
-    Relatório white-label em até 24 horas úteis, entregue no seu e-mail.
-  </p>
+  <img src="logo_ARX_gold.png" alt="ARX Legaltech" class="hero-logo" />
+  <h1>Bem-vindo ao <em>Ambiente ARX</em></h1>
+  <p class="hero-sub">Inteligência jurídica de campo para fundamentar o seu parecer</p>
   <div class="hero-actions">
-    <a href="#como-funciona" class="btn-primary">Como funciona</a>
-    <a href="#planos" class="btn-secondary">Como acessar</a>
+    <a href="#analises" class="btn-primary">Solicitar análise</a>
+    <a href="#volume" class="btn-secondary">Volume — 5 ou mais</a>
   </div>
 </div>
 
-<div class="divider"></div>
+<hr class="divider" />
 
-<!-- COMO FUNCIONA -->
-<section id="como-funciona">
-  <p class="section-label">O processo</p>
-  <h2 class="section-title">Da triagem ao relatório<br />em 4 etapas</h2>
-  <p class="section-body">
-    Você envia os documentos. Nós analisamos, revisamos e entregamos.
-    Simples, seguro e rastreável.
-  </p>
+<!-- ANÁLISES -->
+<section id="analises">
+  <h2 class="section-title">Solicitar Análise</h2>
+  <div class="analises-grid">
 
-  <div class="steps">
-    <div class="step">
-      <div class="step-num">01</div>
-      <h3>Envio dos documentos</h3>
-      <p>Acesse o formulário exclusivo, preencha os dados do caso e faça upload dos documentos disponíveis.</p>
+    <div class="analise-card">
+      <div class="analise-nivel">ARX Essential</div>
+      <div class="analise-preco">R$ 280 <span>por análise</span></div>
+      <p class="analise-desc">Diagnóstico de viabilidade, riscos principais, quadro de auditoria e plano de ação.</p>
+      <a href="https://arxlegaltech.fillout.com/essential" class="analise-btn" target="_blank">Solicitar →</a>
     </div>
-    <div class="step">
-      <div class="step-num">02</div>
-      <h3>Análise com IA</h3>
-      <p>Nossa plataforma processa os documentos e realiza a due diligence conforme o Checklist Mestre Imobiliário.</p>
+
+    <div class="analise-card">
+      <div class="analise-nivel">ARX Professional</div>
+      <div class="analise-preco">R$ 480 <span>por análise</span></div>
+      <p class="analise-desc">+ Linha do tempo, fundamentação com Súmulas e esboço de peça processual.</p>
+      <a href="https://arxlegaltech.fillout.com/professional" class="analise-btn" target="_blank">Solicitar →</a>
     </div>
-    <div class="step">
-      <div class="step-num">03</div>
-      <h3>Revisão especializada</h3>
-      <p>Um especialista em direito imobiliário revisa cada análise antes da entrega — sem exceção.</p>
+
+    <div class="analise-card">
+      <div class="analise-nivel">ARX Elite</div>
+      <div class="analise-preco">R$ 680 <span>por análise</span></div>
+      <p class="analise-desc">+ Resumo Executivo, análise de acordo com cenários e diagnóstico de vetor motivacional.</p>
+      <a href="https://arxlegaltech.fillout.com/elite" class="analise-btn" target="_blank">Solicitar →</a>
     </div>
-    <div class="step">
-      <div class="step-num">04</div>
-      <h3>Entrega white-label</h3>
-      <p>Você recebe o relatório em PDF sem identificação da ARX, pronto para apresentar ao seu cliente.</p>
-    </div>
+
   </div>
 </section>
 
-<div class="divider"></div>
+<hr class="divider" />
 
-<!-- DIFERENCIAIS -->
-<section id="diferenciais">
-  <p class="section-label">Por que a ARX</p>
-  <h2 class="section-title">Tecnologia e expertise<br />trabalhando juntas</h2>
-
-  <div class="diffs">
-    <div class="diff">
-      <h3>Revisão humana em cada análise</h3>
-      <p>Nenhum relatório é entregue sem revisão de um especialista em direito imobiliário. IA com supervisão, não IA no lugar do jurista.</p>
+<!-- VOLUME -->
+<section id="volume">
+  <h2 class="section-title">Volume — 5 ou Mais Análises</h2>
+  <div class="volume-box">
+    <div class="volume-text">
+      <h3>Atendimento especial para volumes maiores</h3>
+      <p>Para envios de 5 ou mais análises, entre em contato com nossa consultora.<br />
+      Condições especiais e prazo combinado conforme a demanda do seu escritório.</p>
     </div>
-    <div class="diff">
-      <h3>White-label completo</h3>
-      <p>O relatório chega sem marca da ARX. Você apresenta como trabalho do seu escritório e agrega valor direto ao seu cliente.</p>
-    </div>
-    <div class="diff">
-      <h3>Entrega em até 24h úteis</h3>
-      <p>Prazo claro e respeitado. Você sabe quando o relatório chega e pode planejar sua entrega ao cliente.</p>
-    </div>
-    <div class="diff">
-      <h3>Produto de prateleira para seu escritório</h3>
-      <p>Ofereça análise prévia de viabilidade ao seu cliente por R$ 500 a R$ 1.000. O custo da análise já está coberto na primeira venda.</p>
-    </div>
+    <a href="https://wa.me/5541999999999?text=Olá,%20sou%20membro%20ARX%20e%20gostaria%20de%20solicitar%20atendimento%20para%20volume%20de%20análises." class="volume-btn" target="_blank">
+      Falar com um Consultor ARX →
+    </a>
   </div>
 </section>
 
-<div class="divider"></div>
+<hr class="divider" />
 
-<!-- PRICING -->
-<section id="planos">
-  <p class="section-label">Serviços</p>
-  <h2 class="section-title">Inteligência jurídica<br />no ritmo do seu escritório</h2>
-  <p class="section-body">
-    Sem assinatura. Sem compromisso. Você usa quando precisa,<br />no volume que faz sentido para o seu escritório.
-  </p>
+<!-- FAQ -->
+<section id="faq">
+  <h2 class="section-title">Dúvidas de Uso</h2>
+  <div class="faq-list">
 
-  <div class="pricing-grid">
-    <div class="plan featured">
-      <span class="plan-badge">Primeiro passo</span>
-      <p class="plan-name">Visita de Instrução ARX</p>
-      <p class="plan-price"><span>R$</span> 500</p>
-      <p class="plan-period">pagamento único · inclui kit de boas-vindas</p>
-      <p class="plan-analyses" style="font-size:1rem; color: var(--gold);">R$ 1.440</p>
-      <p class="plan-analyses-label">em análises incluídas</p>
-      <ul class="plan-features">
-        <li>Visita presencial ou call de instrução</li>
-        <li>Kit de boas-vindas — 1 Essential + 1 Professional + 1 Elite</li>
-        <li>Calibração para o seu escritório</li>
-        <li>Suporte no primeiro caso</li>
-      </ul>
-      <a href="https://arxlegaltech.fillout.com/t/bRh6vzCtEdus" class="plan-btn" target="_blank">Solicitar acesso</a>
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        Qual nível de análise devo escolher?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer">
+        <strong>Essential</strong> — para triagem rápida de viabilidade e casos simples.<br/>
+        <strong>Professional</strong> — para casos que vão ao tribunal. Inclui linha do tempo, fundamentação e esboço de peça processual.<br/>
+        <strong>Elite</strong> — para casos complexos que envolvem negociação ou acordo. Inclui todas as camadas anteriores mais análise de acordo e diagnóstico de vetor motivacional.
+      </div>
     </div>
 
-    <div class="plan">
-      <p class="plan-name">Análise ARX</p>
-      <p class="plan-price" style="font-size:1.1rem;">Essential · Professional · Elite</p>
-      <p class="plan-period">três níveis de profundidade</p>
-      <p class="plan-analyses" style="font-size:0.85rem; line-height:1.8;">R$ 280 · R$ 480 · R$ 680</p>
-      <p class="plan-analyses-label">por análise</p>
-      <ul class="plan-features">
-        <li>Relatório white-label em PDF</li>
-        <li>Entrega em até 24h úteis</li>
-        <li>A diferença entre os níveis está no grau de profundidade da análise e nos assistentes incluídos</li>
-      </ul>
-      <a href="https://arxlegaltech.fillout.com/t/bRh6vzCtEdus" class="plan-btn" target="_blank">Solicitar análise</a>
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        Como envio os documentos do caso?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer">
+        Pelo formulário de solicitação — escolha o nível, preencha os dados do caso e faça o upload dos documentos diretamente. O pagamento é realizado no momento do envio. Após a confirmação, o caso entra em processamento imediato.
+      </div>
     </div>
 
-    <div class="plan">
-      <p class="plan-name">Pacotes</p>
-      <p class="plan-price" style="font-size:1.4rem;">5 · 10 · 20 · 30</p>
-      <p class="plan-period">análises</p>
-      <p class="plan-analyses" style="font-size:1rem; color: var(--gold);">até</p>
-      <p class="plan-analyses-label">61% de desconto</p>
-      <ul class="plan-features">
-        <li>De R$ 230 a R$ 110 por análise</li>
-        <li>Relatório white-label em PDF</li>
-        <li>Revisão por especialista</li>
-        <li>Entrega em até 24h úteis</li>
-      </ul>
-      <span class="plan-btn" style="opacity:0.5; cursor:default; display:block; text-align:center; padding:1rem 2rem; font-size:0.75rem; letter-spacing:0.15em; text-transform:uppercase; background: var(--gold); color:#0a0a0a;">Em breve</span>
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        Em quanto tempo recebo o relatório?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer">
+        O prazo padrão é de 24 horas úteis a partir da confirmação do pagamento. Para volumes acima de 10 análises no mesmo mês, o prazo é combinado previamente com a consultora.
+      </div>
     </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        Como recebo o relatório?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer">
+        O relatório é entregue por e-mail no endereço cadastrado no seu perfil de membro. Você recebe duas versões — com identidade ARX e versão neutra para uso no timbrado do seu escritório.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        Posso solicitar análise de casos parados ou antigos?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer">
+        Sim. Casos parados são processados como encaixe — sem prazo fixo de 24 horas. Entre em contato com a consultora para planejar o volume e o prazo conforme a sua necessidade.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        O que fazer com os campos [COMPLETAR] no relatório?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer">
+        Os campos [COMPLETAR] são instruções para o advogado — informações que precisam ser verificadas ou completadas antes de qualquer protocolo. Nunca envie ao cliente ou ao tribunal sem revisar e preencher todos os campos sinalizados.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        O que é o Alerta de Checagem Manual?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer">
+        É uma sinalização de que há um ponto no caso que requer verificação física — geralmente extração de documentos no tribunal ou confirmação de informação não disponível nos documentos enviados. Nunca ignore o Alerta de Checagem Manual antes de protocolar qualquer peça.
+      </div>
+    </div>
+
   </div>
+</section>
 
-  <div class="coupon-bar">
-    <p>Oferta exclusiva para participantes dos eventos da</p>
-    <p class="coupon-code" style="font-size:1rem; letter-spacing:0.05em;">Comissão de Direito Imobiliário e da Construção<br/>OAB — São José dos Pinhais · PR</p>
-    <p style="font-size:0.75rem; color:#555; margin-top:0.5rem;">Cupom de desconto enviado pela Comissão aos membros</p>
+<hr class="divider" />
+
+<!-- SUPORTE -->
+<section>
+  <div class="suporte-box">
+    <div class="suporte-text">
+      <h3>Precisa de ajuda?</h3>
+      <p>Nossa consultora está disponível para dúvidas que vão além do FAQ.</p>
+      <p class="suporte-horario">Atendimento de segunda a sexta · 9h às 18h</p>
+    </div>
+    <a href="https://wa.me/5541999999999?text=Olá,%20sou%20membro%20ARX%20e%20preciso%20de%20suporte." class="suporte-btn" target="_blank">
+      Falar com um Consultor ARX →
+    </a>
   </div>
 </section>
 
 <!-- FOOTER -->
-<!-- CTA ENVIAR CASO -->
-<div style="position:relative;z-index:1;background:#0a0a0a;border-top:1px solid #1a1a1a;border-bottom:1px solid #1a1a1a;padding:5rem 2rem;text-align:center;">
-  <p style="font-size:0.65rem;font-weight:500;letter-spacing:0.5em;text-transform:uppercase;color:#c9a84c;margin-bottom:1rem;">Acesso exclusivo para membros ARX.</p>
-  <h2 style="font-family:Cormorant Garamond,serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:300;margin-bottom:1rem;">Bem-vindo ao Ambiente ARX Legaltech!</h2>
-  <p style="font-size:0.9rem;color:#888;max-width:480px;margin:0 auto 2.5rem;">Se você ainda não se tornou um Membro ARX e tem uma indicação entre em contato conosco.</p>
-  <a
-    href="https://arxlegaltech.fillout.com/t/bRh6vzCtEdus"
-    target="_blank"
-    style="display:inline-block;font-size:0.8rem;font-weight:500;letter-spacing:0.15em;text-transform:uppercase;color:#0a0a0a;background:#c9a84c;border:none;padding:1rem 2.5rem;cursor:pointer;text-decoration:none;transition:opacity 0.2s;"
-    onmouseover="this.style.opacity=0.85"
-    onmouseout="this.style.opacity=1"
-  >
-    Solicitar análise
-  </a>
-</div>
-
 <footer>
   <img src="logo_ARX_gold.png" alt="ARX Legaltech" />
   <p class="footer-tagline">Agilitas et Securitas</p>
-  <p>© 2025 ARX Legaltech · arxlegaltech.com.br · contato@arxlegaltech.com.br</p>
+  <p>© 2025 ARX Legaltech · arxlegaltech.com.br</p>
 </footer>
+
+<script>
+  function toggleFaq(btn) {
+    const item = btn.closest('.faq-item');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
+</script>
 
 </body>
 </html>
