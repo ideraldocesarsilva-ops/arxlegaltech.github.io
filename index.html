@@ -153,9 +153,7 @@
       transition: all 0.2s;
     }
 
-    .btn-secondary:hover {
-      background: var(--gold-dim);
-    }
+    .btn-secondary:hover { background: var(--gold-dim); }
 
     /* ── SEÇÕES ── */
     section {
@@ -172,6 +170,130 @@
       margin-bottom: 2.5rem;
       padding-bottom: 1rem;
       border-bottom: 1px solid var(--gold-border);
+    }
+
+    /* ── ONBOARDING ── */
+    .onboarding-card {
+      background: var(--navy-light);
+      border: 1px solid var(--gold-border);
+      border-top: 2px solid var(--gold);
+      border-radius: 2px;
+      padding: 2.5rem;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .onboarding-badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--navy);
+      background: var(--gold);
+      padding: 0.25rem 0.7rem;
+      border-radius: 2px;
+      margin-bottom: 1rem;
+    }
+
+    .onboarding-titulo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      font-weight: 400;
+      color: var(--white);
+      margin-bottom: 0.6rem;
+    }
+
+    .onboarding-desc {
+      font-size: 0.84rem;
+      color: var(--silver);
+      line-height: 1.7;
+      margin-bottom: 1.2rem;
+      max-width: 520px;
+    }
+
+    .onboarding-inclui {
+      font-size: 0.78rem;
+      color: var(--text-soft);
+      margin-bottom: 0.4rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .onboarding-itens {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 0;
+    }
+
+    .onboarding-item {
+      font-size: 0.78rem;
+      color: var(--gold);
+      border: 1px solid var(--gold-border);
+      padding: 0.3rem 0.8rem;
+      border-radius: 2px;
+    }
+
+    .onboarding-preco-col {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 1rem;
+      min-width: 160px;
+    }
+
+    .onboarding-preco-de {
+      font-size: 0.78rem;
+      color: var(--text-soft);
+      text-decoration: line-through;
+      text-align: right;
+    }
+
+    .onboarding-preco {
+      font-size: 2rem;
+      font-weight: 300;
+      color: var(--white);
+      line-height: 1;
+      text-align: right;
+    }
+
+    .onboarding-preco span {
+      font-size: 0.8rem;
+      color: var(--silver);
+      display: block;
+      margin-top: 0.2rem;
+    }
+
+    .onboarding-btn {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--navy);
+      padding: 0.85rem 1.8rem;
+      border-radius: 2px;
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      transition: opacity 0.2s;
+      text-align: center;
+    }
+
+    .onboarding-btn:hover { opacity: 0.88; }
+
+    @media (max-width: 640px) {
+      .onboarding-card {
+        grid-template-columns: 1fr;
+      }
+      .onboarding-preco-col {
+        align-items: flex-start;
+      }
+      .onboarding-preco { text-align: left; }
+      .onboarding-preco-de { text-align: left; }
     }
 
     /* ── ANÁLISES ── */
@@ -191,9 +313,7 @@
       transition: border-color 0.2s;
     }
 
-    .analise-card:hover {
-      border-top-color: var(--gold);
-    }
+    .analise-card:hover { border-top-color: var(--gold); }
 
     .analise-nivel {
       font-family: 'Cormorant Garamond', serif;
@@ -236,9 +356,7 @@
       transition: all 0.2s;
     }
 
-    .analise-btn:hover {
-      background: var(--gold-dim);
-    }
+    .analise-btn:hover { background: var(--gold-dim); }
 
     /* ── VOLUME ── */
     .volume-box {
@@ -403,10 +521,7 @@
       margin-bottom: 0.8rem;
     }
 
-    footer p {
-      font-size: 0.75rem;
-      color: var(--text-soft);
-    }
+    footer p { font-size: 0.75rem; color: var(--text-soft); }
 
     .footer-tagline {
       font-family: 'Cormorant Garamond', serif;
@@ -432,6 +547,7 @@
 <nav>
   <span class="nav-logo">ARX</span>
   <ul class="nav-links">
+    <li><a href="#onboarding">Onboarding</a></li>
     <li><a href="#analises">Análises</a></li>
     <li><a href="#faq">Suporte</a></li>
   </ul>
@@ -443,10 +559,46 @@
   <h1>Bem-vindo ao <em>Ambiente ARX</em></h1>
   <p class="hero-sub">Inteligência jurídica de campo para fundamentar o seu parecer</p>
   <div class="hero-actions">
-    <a href="#analises" class="btn-primary">Solicitar análise</a>
-    <a href="#volume" class="btn-secondary">Volume — 5 ou mais</a>
+    <a href="#onboarding" class="btn-primary">Começar com Onboarding</a>
+    <a href="#analises" class="btn-secondary">Já sou membro — solicitar análise</a>
   </div>
 </div>
+
+<hr class="divider" />
+
+<!-- ONBOARDING -->
+<section id="onboarding">
+  <h2 class="section-title">Onboarding</h2>
+  <div class="onboarding-card">
+    <div class="onboarding-info">
+      <div class="onboarding-badge">Primeiro acesso</div>
+      <div class="onboarding-titulo">Apresentação do Ambiente ARX</div>
+      <p class="onboarding-desc">
+        Visita presencial ou reunião via Meet para apresentação completa do Ambiente ARX,
+        demonstração do sistema, instruções de uso e orientação sobre como tirar o máximo
+        de cada análise no seu escritório.
+      </p>
+      <div class="onboarding-inclui">Inclui</div>
+      <div class="onboarding-itens">
+        <span class="onboarding-item">1 × ARX Essential</span>
+        <span class="onboarding-item">1 × ARX Professional</span>
+        <span class="onboarding-item">1 × ARX Elite</span>
+      </div>
+    </div>
+    <div class="onboarding-preco-col">
+      <div>
+        <div class="onboarding-preco-de">R$ 1.095,00</div>
+        <div class="onboarding-preco">
+          R$ 547<small style="font-size:1rem">,50</small>
+          <span>pacote de entrada</span>
+        </div>
+      </div>
+      <a href="https://arxlegaltech.fillout.com/onboarding" class="onboarding-btn" target="_blank">
+        Agendar Onboarding →
+      </a>
+    </div>
+  </div>
+</section>
 
 <hr class="divider" />
 
