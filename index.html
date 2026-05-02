@@ -35,7 +35,6 @@
             overflow-x: hidden;
         }
 
-        /* LOGIN GATE */
         #login-gate {
             position: fixed;
             inset: 0;
@@ -65,10 +64,7 @@
             text-align: center;
             font-size: 1rem;
             letter-spacing: 0.2em;
-            transition: border-color 0.3s;
         }
-
-        .login-input:focus { border-color: var(--gold); }
 
         .login-btn {
             width: 100%;
@@ -82,12 +78,8 @@
             cursor: pointer;
             letter-spacing: 0.1em;
             border-radius: 2px;
-            transition: opacity 0.2s;
         }
 
-        .login-btn:hover { opacity: 0.9; }
-
-        /* MAIN APP LAYOUT */
         nav {
             position: fixed;
             top: 0;
@@ -125,13 +117,6 @@
             margin-bottom: 1rem;
         }
 
-        .section-subtitle {
-            color: var(--silver);
-            margin-bottom: 3rem;
-            font-size: 0.95rem;
-            max-width: 600px;
-        }
-
         .vault-card {
             background: var(--navy-light);
             border: 2px dashed var(--gold-border);
@@ -139,24 +124,11 @@
             text-align: center;
             cursor: pointer;
             border-radius: 4px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .vault-card:hover {
-            border-color: var(--gold);
-            background: rgba(201, 168, 76, 0.03);
-            transform: scale(1.005);
         }
 
         .status-panel {
             display: none;
             margin-top: 3rem;
-            animation: fadeIn 0.6s forwards;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
         }
 
         .diagnosis-box {
@@ -183,12 +155,6 @@
             text-align: center;
             border: 1px solid var(--gold-border);
             border-radius: 2px;
-            transition: 0.2s;
-        }
-
-        .download-link:hover {
-            background: var(--gold);
-            color: var(--navy);
         }
 
         .pricing-grid {
@@ -207,14 +173,12 @@
             display: flex;
             flex-direction: column;
             position: relative;
-            transition: 0.4s;
         }
 
         .price-card.active {
             border-color: var(--gold);
             opacity: 1;
             transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
         }
 
         .price-card.active::before {
@@ -228,21 +192,6 @@
             font-size: 0.65rem;
             font-weight: 800;
             padding: 4px 15px;
-            letter-spacing: 0.1em;
-            border-radius: 2px;
-        }
-
-        .tier-name {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.8rem;
-            color: var(--gold);
-            margin-bottom: 0.5rem;
-        }
-
-        .tier-price {
-            font-size: 2.5rem;
-            color: #fff;
-            margin-bottom: 1.5rem;
         }
 
         .tier-btn {
@@ -256,20 +205,6 @@
             text-transform: uppercase;
             font-size: 0.85rem;
             font-weight: 600;
-            letter-spacing: 0.1em;
-            transition: 0.3s;
-        }
-
-        .tier-btn:hover {
-            background: var(--gold);
-            color: var(--navy);
-        }
-
-        .protocolo-box {
-            margin-top: 5rem;
-            padding: 3rem;
-            background: rgba(255,255,255,0.02);
-            border: 1px solid var(--border);
         }
 
         footer {
@@ -286,10 +221,9 @@
     <div id="login-gate">
         <div class="login-box">
             <img src="logo_arx.png" alt="ARX" style="width: 220px; max-width: 90%; height: auto; margin-bottom: 3rem;">
-            
             <input type="password" id="access-key" class="login-input" placeholder="PALAVRA-PASSE" onkeypress="if(event.key === 'Enter') checkAccess()">
             <button onclick="checkAccess()" class="login-btn">Entrar no Ambiente</button>
-            <p id="error-msg" style="color: #ff4d4d; font-size: 0.75rem; margin-top: 1.5rem; display: none;">Acesso restrito.</p>
+            <p id="error-msg" style="color: #ff4d4d; font-size: 0.75rem; margin-top: 1.5rem; display: none;"></p>
         </div>
     </div>
 
@@ -304,14 +238,13 @@
             <p class="section-subtitle">Otimize sua massa documental localmente. Nossa tecnologia fragmenta os dados para garantir estabilidade, sigilo e agilidade no processamento.</p>
 
             <div class="vault-card" id="drop-zone" onclick="document.getElementById('file-input').click()">
-                <p style="color: var(--gold); font-size: 1.1rem; letter-spacing: 0.05em;">Arraste arquivos ou clique para adicionar ao Cofre</p>
+                <p style="color: var(--gold); font-size: 1.1rem; letter-spacing: 0.05em;">Clique ou arraste para adicionar ao Cofre</p>
                 <input type="file" id="file-input" multiple accept="application/pdf,image/jpeg,image/png" style="display: none;" />
             </div>
 
             <div id="file-list-container" style="margin-top: 1.5rem; display: none; text-align: center;">
                 <h4 style="color: var(--gold); font-size: 0.8rem; text-transform: uppercase; margin-bottom: 1rem; text-align: left;">Arquivos no Cofre:</h4>
                 <ul id="file-list-display" style="list-style: none; color: var(--silver); font-size: 0.85rem; background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 4px; text-align: left;"></ul>
-                
                 <button onclick="processAllFiles()" class="login-btn" style="margin-top: 2rem; background: var(--gold); color: var(--navy);">Finalizar e Sintetizar Pacote de Documentos</button>
                 <button onclick="clearVault()" style="background: transparent; border: none; color: #ff4d4d; font-size: 0.7rem; cursor: pointer; margin-top: 1rem; text-decoration: underline;">Limpar Cofre</button>
             </div>
@@ -327,63 +260,50 @@
 
                 <div class="pricing-grid">
                     <div id="tier-standard" class="price-card">
-                        <div class="tier-name">ARX Standard</div>
-                        <div class="tier-price">R$ 380</div>
+                        <div class="tier-name" style="color:var(--gold); font-family:'Cormorant Garamond',serif; font-size:1.8rem;">ARX Standard</div>
+                        <div class="tier-price" style="font-size:2.5rem; color:#fff; margin-bottom:1.5rem;">R$ 380</div>
                         <p style="color: var(--silver); font-size: 0.85rem; margin-bottom: 2rem; flex-grow: 1;">Até 10 lotes (200MB). O motor ideal para o fluxo processual padrão.</p>
                         <a href="https://arxlegaltech.fillout.com/standard" target="_blank" class="tier-btn">Selecionar</a>
                     </div>
                     <div id="tier-plus" class="price-card">
-                        <div class="tier-name">ARX Plus</div>
-                        <div class="tier-price">R$ 430</div>
+                        <div class="tier-name" style="color:var(--gold); font-family:'Cormorant Garamond',serif; font-size:1.8rem;">ARX Plus</div>
+                        <div class="tier-price" style="font-size:2.5rem; color:#fff; margin-bottom:1.5rem;">R$ 430</div>
                         <p style="color: var(--silver); font-size: 0.85rem; margin-bottom: 2rem; flex-grow: 1;">11 a 20 lotes (400MB). Potência extra para pacotes documentais densos.</p>
                         <a href="https://arxlegaltech.fillout.com/plus" target="_blank" class="tier-btn">Selecionar</a>
                     </div>
                     <div id="tier-max" class="price-card">
-                        <div class="tier-name">ARX Max</div>
-                        <div class="tier-price">R$ 480</div>
+                        <div class="tier-name" style="color:var(--gold); font-family:'Cormorant Garamond',serif; font-size:1.8rem;">ARX Max</div>
+                        <div class="tier-price" style="font-size:2.5rem; color:#fff; margin-bottom:1.5rem;">R$ 480</div>
                         <p style="color: var(--silver); font-size: 0.85rem; margin-bottom: 2rem; flex-grow: 1;">21 a 30 lotes (600MB). Desempenho máximo para pacotes documentais de densidade crítica.</p>
                         <a href="https://arxlegaltech.fillout.com/max" target="_blank" class="tier-btn">Selecionar</a>
                     </div>
                 </div>
-
-                <div class="protocolo-box">
-                    <p style="color: var(--gold); text-transform: uppercase; letter-spacing: 0.2em; font-size: 0.9rem; margin-bottom: 1.5rem;">Protocolo de Envio</p>
-                    <ul style="list-style: none; color: var(--silver); font-size: 0.9rem;">
-                        <li style="margin-bottom: 1rem;">• <strong>Mantenha a Ordem:</strong> Não altere o nome dos lotes. A sequência é vital para a precisão cronológica.</li>
-                        <li style="margin-bottom: 1rem;">• <strong>Integridade:</strong> Certifique-se de anexar todos os lotes gerados no formulário final.</li>
-                    </ul>
-                </div>
             </div>
         </section>
-
-        <footer>
-            <p>© 2026 ARX LEGALTECH · AMBIENTE PRIVADO</p>
-        </footer>
+        <footer><p>© 2026 ARX LEGALTECH · AMBIENTE PRIVADO</p></footer>
     </div>
 
     <script>
         const { PDFDocument } = PDFLib;
-        let vaultFiles = []; // Acumulador de arquivos
+        let vaultFiles = [];
 
-        // VALIDAÇÃO DINÂMICA VIA LISTA.TXT
         async function checkAccess() {
             const inputVal = document.getElementById('access-key').value.trim();
             const error = document.getElementById('error-msg');
-
             try {
                 const response = await fetch('lista.txt');
+                if (!response.ok) throw new Error("Erro de conexão");
                 const text = await response.text();
-                const keysAutorizadas = text.split(/\r?\n/).map(k => k.trim()).filter(k => k !== "");
-
-                if (keysAutorizadas.includes(inputVal)) {
+                const keys = text.split(/\r?\n/).map(k => k.trim()).filter(k => k !== "");
+                if (keys.includes(inputVal)) {
                     localStorage.setItem('arx_auth_v45', 'true');
                     renderApp();
                 } else {
+                    error.innerText = "Acesso restrito. Verifique sua chave.";
                     error.style.display = 'block';
-                    document.getElementById('access-key').value = '';
                 }
             } catch (err) {
-                error.innerText = "Erro na verificação de Securitas.";
+                error.innerText = "Erro: Certifique-se de que lista.txt está no GitHub.";
                 error.style.display = 'block';
             }
         }
@@ -393,34 +313,14 @@
             document.getElementById('main-app').style.display = 'block';
         }
 
-        window.onload = () => { 
-            if(localStorage.getItem('arx_auth_v45') === 'true') renderApp(); 
-        };
-
-        // GESTÃO ACUMULATIVA DO COFRE
-        const dropZone = document.getElementById('drop-zone');
-        const fileInput = document.getElementById('file-input');
+        window.onload = () => { if(localStorage.getItem('arx_auth_v45') === 'true') renderApp(); };
 
         function handleFiles(files) {
-            for (let f of files) {
-                vaultFiles.push(f);
-            }
-            updateFileList();
-        }
-
-        function updateFileList() {
+            for (let f of files) { vaultFiles.push(f); }
             const container = document.getElementById('file-list-container');
             const display = document.getElementById('file-list-display');
-            
-            if (vaultFiles.length > 0) {
-                container.style.display = 'block';
-                display.innerHTML = vaultFiles.map((f, index) => 
-                    `<li style="margin-bottom: 5px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 5px; display: flex; justify-content: space-between;">
-                        <span>${f.name}</span>
-                        <span style="opacity:0.5; font-size:0.7rem;">(${(f.size/1024/1024).toFixed(2)} MB)</span>
-                    </li>`
-                ).join('');
-            }
+            container.style.display = 'block';
+            display.innerHTML = vaultFiles.map(f => `<li style="margin-bottom: 5px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 5px; display: flex; justify-content: space-between;"><span>${f.name}</span><span style="opacity:0.5; font-size:0.7rem;">(${(f.size/1024/1024).toFixed(2)} MB)</span></li>`).join('');
         }
 
         function clearVault() {
@@ -429,19 +329,14 @@
             document.getElementById('status-area').style.display = 'none';
         }
 
-        // SINTETIZADOR INTELIGENTE (PESO + PÁGINAS)
         async function processAllFiles() {
             if (vaultFiles.length === 0) return;
-
             const statusArea = document.getElementById('status-area');
             const loteText = document.getElementById('lote-count-text');
             const downloadGrid = document.getElementById('download-links');
-
             statusArea.style.display = 'block';
-            // TEXTO ATUALIZADO: "dossiê" -> "pacote de documentos"
-            loteText.innerText = "Iniciando síntese volumétrica do pacote de documentos...";
+            loteText.innerText = "Iniciando síntese volumétrica...";
             downloadGrid.innerHTML = "";
-            
             try {
                 const master = await PDFDocument.create();
                 for (const f of vaultFiles) {
@@ -456,64 +351,40 @@
                         pages.forEach(p => master.addPage(p));
                     }
                 }
-
-                let slots = 0;
-                let currentPageIndex = 0;
-                const totalPages = master.getPageCount();
-                const MAX_BYTES = 20 * 1024 * 1024; // 20MB
-                const MAX_PAGES_PER_LOTE = 500; 
-
-                while (currentPageIndex < totalPages) {
+                let slots = 0, currentIndex = 0;
+                const total = master.getPageCount(), MAX_BYTES = 20 * 1024 * 1024, MAX_PAGES = 500;
+                while (currentIndex < total) {
                     const chunk = await PDFDocument.create();
-                    let pagesInCurrentChunk = 0;
-
-                    while (currentPageIndex < totalPages && pagesInCurrentChunk < MAX_PAGES_PER_LOTE) {
-                        const [copiedPage] = await chunk.copyPages(master, [currentPageIndex]);
-                        chunk.addPage(copiedPage);
-                        
-                        currentPageIndex++;
-                        pagesInCurrentChunk++;
-
-                        // Verificação de peso a cada 20 páginas para performance
-                        if (pagesInCurrentChunk % 20 === 0) {
-                            const tempBytes = await chunk.save();
-                            if (tempBytes.length > MAX_BYTES) break; 
+                    let chunkPages = 0;
+                    while (currentIndex < total && chunkPages < MAX_PAGES) {
+                        const [p] = await chunk.copyPages(master, [currentIndex]);
+                        chunk.addPage(p);
+                        currentIndex++; chunkPages++;
+                        if (chunkPages % 20 === 0) {
+                            const bytes = await chunk.save();
+                            if (bytes.length > MAX_BYTES) break;
                         }
                     }
-
-                    const finalBytes = await chunk.save();
+                    const final = await chunk.save();
                     slots++;
-                    createLink(finalBytes, `LOTE_ARX_${slots}.pdf`);
+                    const blob = new Blob([final], { type: 'application/pdf' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url; a.download = `LOTE_ARX_${slots}.pdf`; a.className = 'download-link';
+                    a.innerHTML = `<strong>Baixar LOTE_${slots}</strong>`;
+                    downloadGrid.appendChild(a);
                 }
-                
-                // TEXTO ATUALIZADO: "Dossiê" -> "Pacote de documentos"
-                loteText.innerText = `Pacote de documentos de ${totalPages} páginas organizado em ${slots} lotes otimizados.`;
-                highlightTier(slots);
+                loteText.innerText = `Pacote de documentos de ${total} páginas organizado em ${slots} lotes otimizados.`;
+                document.querySelectorAll('.price-card').forEach(c => c.classList.remove('active'));
+                if (slots <= 10) document.getElementById('tier-standard').classList.add('active');
+                else if (slots <= 20) document.getElementById('tier-plus').classList.add('active');
+                else document.getElementById('tier-max').classList.add('active');
                 statusArea.scrollIntoView({ behavior: 'smooth' });
-
-            } catch(err) {
-                console.error(err);
-                loteText.innerText = "Erro na síntese. Verifique a integridade dos arquivos.";
-            }
+            } catch(e) { loteText.innerText = "Erro na síntese."; }
         }
 
-        function createLink(bytes, name) {
-            const blob = new Blob([bytes], { type: 'application/pdf' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url; a.download = name; a.className = 'download-link';
-            a.innerHTML = `<strong>Baixar ${name}</strong>`;
-            document.getElementById('download-links').appendChild(a);
-        }
-
-        function highlightTier(slots) {
-            document.querySelectorAll('.price-card').forEach(c => c.classList.remove('active'));
-            if (slots <= 10) document.getElementById('tier-standard').classList.add('active');
-            else if (slots <= 20) document.getElementById('tier-plus').classList.add('active');
-            else document.getElementById('tier-max').classList.add('active');
-        }
-
-        // EVENTOS DE INTERFACE
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('file-input');
         dropZone.ondragover = (e) => { e.preventDefault(); dropZone.style.borderColor = 'var(--gold)'; };
         dropZone.ondragleave = () => { dropZone.style.borderColor = 'var(--gold-border)'; };
         dropZone.ondrop = (e) => { e.preventDefault(); handleFiles(e.dataTransfer.files); };
