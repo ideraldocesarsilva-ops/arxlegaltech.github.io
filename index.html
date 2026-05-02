@@ -24,35 +24,45 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: var(--navy); color: var(--text); font-family: 'Inter', sans-serif; font-weight: 300; line-height: 1.6; }
 
-        /* RECEPÇÃO */
+        /* PORTÃO DE ENTRADA */
         #gate-container { position: fixed; inset: 0; background: var(--navy); z-index: 9999; display: flex; align-items: center; justify-content: center; }
         .intro-box { max-width: 800px; width: 90%; text-align: center; }
         .choice-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-top: 4rem; }
-        .choice-card { background: var(--navy-light); border: 1px solid var(--gold-border); padding: 3rem 2rem; border-radius: 4px; cursor: pointer; transition: 0.4s; text-decoration: none; display: flex; flex-direction: column; align-items: center; color: var(--text) !important; }
+        
+        .choice-card { 
+            background: var(--navy-light); border: 1px solid var(--gold-border); 
+            padding: 3rem 2rem; border-radius: 4px; cursor: pointer; transition: 0.4s; 
+            text-decoration: none; display: flex; flex-direction: column; align-items: center; 
+            color: var(--text) !important;
+        }
         .choice-card:hover { border-color: var(--gold); transform: translateY(-5px); background: rgba(201,168,76,0.03); }
         .choice-card h3 { font-family: 'Cormorant Garamond', serif; color: var(--gold); font-size: 1.8rem; margin-bottom: 1rem; }
         .choice-card p { font-size: 0.85rem; color: var(--silver); margin-bottom: 2rem; }
 
-        /* BOTÃO DE AÇÃO */
+        /* BOTÃO DE AÇÃO UNIVERSAL */
         .btn-action { 
-            width: 100%; padding: 1.2rem; font-weight: 600; text-transform: uppercase; border-radius: 2px; letter-spacing: 0.1em; font-size: 0.85rem;
-            display: flex; align-items: center; justify-content: center;
-            background-color: #c9a84c !important; color: #080c14 !important; border: none !important; text-decoration: none !important; cursor: pointer;
+            width: 100%; display: flex; align-items: center; justify-content: center;
+            padding: 1.2rem; border: none !important; border-radius: 2px;
+            background-color: #c9a84c !important; color: #080c14 !important;
+            font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.85rem;
+            cursor: pointer; text-decoration: none !important;
         }
 
-        /* LOGIN */
+        /* ÁREA DE LOGIN */
         #login-form-area { display: none; text-align: center; max-width: 400px; width: 100%; }
         .login-input { width: 100%; background: var(--navy-light); border: 1px solid var(--gold-border); color: #fff; padding: 1.2rem; margin-top: 2rem; border-radius: 2px; text-align: center; outline: none; letter-spacing: 0.2em; }
         .remember-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 1.5rem; color: var(--silver); font-size: 0.75rem; cursor: pointer; }
-        .remember-container input { accent-color: var(--gold); }
         .back-link { display: block; margin-top: 1.5rem; color: var(--silver); font-size: 0.7rem; text-decoration: underline; cursor: pointer; }
 
-        /* APP INTERNO */
-        nav { position: fixed; top: 0; width: 100%; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 2.5rem; background: rgba(8, 12, 20, 0.95); border-bottom: 1px solid var(--border); backdrop-filter: blur(10px); min-height: 80px;}
+        /* NAVEGAÇÃO INTERNA */
+        nav { position: fixed; top: 0; width: 100%; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 2.5rem; background: rgba(8, 12, 20, 0.95); border-bottom: 1px solid var(--border); backdrop-filter: blur(10px); min-height: 80px; }
         .nav-logo { font-family: 'Cormorant Garamond', serif; color: var(--gold); font-weight: 600; font-size: 0.85rem; line-height: 1.4; max-width: 75%; }
+        
         section { padding: 8rem 2rem 4rem; max-width: 1100px; margin: 0 auto; }
         .section-title { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; color: var(--gold); margin-bottom: 1rem; }
         .vault-card { background: var(--navy-light); border: 2px dashed var(--gold-border); padding: 5rem 2rem; text-align: center; cursor: pointer; border-radius: 4px; }
+
+        /* PAINEL DE RESULTADOS */
         .status-panel { display: none; margin-top: 3rem; }
         .diagnosis-box { background: var(--navy-light); padding: 2.5rem; border-left: 3px solid var(--gold); margin-bottom: 2rem; }
         .download-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin: 2rem 0; }
@@ -64,9 +74,6 @@
         .price-card.active::before { content: 'MODELO RECOMENDADO'; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--gold); color: var(--navy); font-size: 0.65rem; font-weight: 800; padding: 4px 15px; border-radius: 2px; }
         .tier-btn { display: block; width: 100%; text-align: center; padding: 1.2rem; border: 1px solid var(--gold); color: var(--gold); text-decoration: none; font-size: 0.85rem; font-weight: 600; margin-top: auto; }
 
-        .support-section { margin-top: 6rem; border-top: 1px solid var(--border); padding-top: 4rem; }
-        .contact-row { display: flex; justify-content: center; gap: 2rem; margin-top: 4rem; flex-wrap: wrap; }
-        .contact-btn { display: flex; align-items: center; gap: 12px; background: var(--navy-light); border: 1px solid var(--gold-border); color: var(--gold); padding: 1rem 2rem; text-decoration: none; font-size: 0.85rem; border-radius: 4px; transition: 0.3s; }
         footer { text-align: center; padding: 6rem 2rem; border-top: 1px solid var(--border); color: var(--silver); font-size: 0.75rem; }
     </style>
 </head>
@@ -121,7 +128,7 @@
             </div>
 
             <div id="status-area" class="status-panel">
-                <div class="diagnosis-box"><h3 id="diag-title" style="color: var(--gold); font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; margin-bottom: 1rem;">Diagnóstico de Capacidade</h3><p id="lote-count-text" style="font-size: 1.1rem; color: #fff;"></p></div>
+                <div class="diagnosis-box"><h3 style="color: var(--gold); font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; margin-bottom: 1rem;">Diagnóstico de Capacidade</h3><p id="lote-count-text" style="font-size: 1.1rem; color: #fff;"></p></div>
                 <div id="download-links" class="download-grid"></div>
                 <div style="background: rgba(201,168,76,0.05); border: 1px solid var(--gold-border); padding: 1.5rem; border-radius: 4px; margin-bottom: 3.5rem;">
                     <p style="color: var(--silver); font-size: 0.85rem; line-height: 1.6;">Reconstrução técnica ativa. Consideramos o peso original para determinar o modelo adequado.</p>
@@ -133,11 +140,9 @@
                 </div>
             </div>
 
-            <div class="support-section">
-                <div class="contact-row">
-                    <a href="https://wa.me/5543988102220" target="_blank" class="contact-btn"><span>Fale no WhatsApp</span></a>
-                    <a href="mailto:contato@arxlegaltech.com.br" class="contact-btn"><span>Contato via E-mail</span></a>
-                </div>
+            <div style="margin-top: 6rem; border-top: 1px solid var(--border); padding-top: 4rem; display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
+                <a href="https://wa.me/5543988102220" target="_blank" style="display: flex; align-items: center; gap: 12px; background: var(--navy-light); border: 1px solid var(--gold-border); color: var(--gold); padding: 1rem 2rem; text-decoration: none; font-size: 0.85rem; border-radius: 4px;">Fale no WhatsApp</a>
+                <a href="mailto:contato@arxlegaltech.com.br" style="display: flex; align-items: center; gap: 12px; background: var(--navy-light); border: 1px solid var(--gold-border); color: var(--gold); padding: 1rem 2rem; text-decoration: none; font-size: 0.85rem; border-radius: 4px;">Contato via E-mail</a>
             </div>
         </section>
         <footer><p>© 2026 ARX LEGALTECH · AMBIENTE PRIVADO</p></footer>
@@ -154,9 +159,14 @@
             const inputVal = document.getElementById('access-key').value.trim();
             const rememberMe = document.getElementById('remember-me').checked;
             const error = document.getElementById('error-msg');
+            
             try {
-                const [respPaid, respDemo] = await Promise.all([fetch('lista.txt'), fetch('lista-demo.txt')]);
-                const textPaid = await respPaid.text(); const textDemo = await respDemo.text();
+                let textPaid = ""; let textDemo = "";
+                
+                // FETCH RESILIENTE: Se um falhar, o código não morre.
+                try { const r1 = await fetch('lista.txt'); if(r1.ok) textPaid = await r1.text(); } catch(e){}
+                try { const r2 = await fetch('lista-demo.txt'); if(r2.ok) textDemo = await r2.text(); } catch(e){}
+
                 const findInList = (text, input) => {
                     const lines = text.split(/\r?\n/).filter(l => l.trim());
                     for (let line of lines) {
@@ -165,18 +175,21 @@
                     }
                     return null;
                 };
+
                 let data = findInList(textPaid, inputVal);
                 if (data) { login(inputVal, data.name, data.referrer, data.gender, "paid", rememberMe); return; }
+
                 data = findInList(textDemo, inputVal);
                 if (data) { login(inputVal, data.name, data.referrer, data.gender, "demo", rememberMe); return; }
+
                 error.innerText = "Chave não localizada."; error.style.display = 'block';
-            } catch (e) { error.innerText = "Erro de conexão."; }
+            } catch (e) { error.innerText = "Erro técnico. Verifique as listas."; error.style.display = 'block'; }
         }
 
         function login(key, name, referrer, gender, type, persist) {
             const authData = { type, key, name, referrer, gender };
-            if (persist) localStorage.setItem('arx_auth_final', JSON.stringify(authData));
-            sessionStorage.setItem('arx_session', JSON.stringify(authData));
+            if (persist) localStorage.setItem('arx_auth_v7', JSON.stringify(authData));
+            sessionStorage.setItem('arx_session_v7', JSON.stringify(authData));
             renderApp(authData);
         }
 
@@ -189,6 +202,7 @@
             const possessivo = isFem ? "nossa" : "nosso";
             const substantivo = isFem ? "convidada" : "convidado";
             const welcomeMsg = document.getElementById('welcome-msg');
+            
             if (data.type === 'demo') {
                 if (data.referrer) welcomeMsg.innerText = `${saudacao} ${data.name}! Você é ${artigo} ${substantivo} do Membro ${data.referrer} para experimentar a Análise ARX!`;
                 else welcomeMsg.innerText = `${saudacao} ${data.name}! Você é ${possessivo} ${substantivo} para experimentar a Análise ARX!`;
@@ -199,4 +213,42 @@
         }
 
         window.onload = () => { 
-            const saved = localStorage.getItem('arx_auth_final') || sessionStorage.getItem('arx_session');
+            const saved = localStorage.getItem('arx_auth_v7') || sessionStorage.getItem('arx_session_v7');
+            if(saved) renderApp(JSON.parse(saved)); 
+        };
+
+        function handleFiles(files) {
+            for (let f of files) { vaultFiles.push(f); }
+            const container = document.getElementById('file-list-container');
+            const display = document.getElementById('file-list-display');
+            container.style.display = 'block';
+            display.innerHTML = vaultFiles.map(f => `<li style="margin-bottom:8px; display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:5px;"><span>${f.name}</span><span style="opacity:0.5;">(${(f.size/1024/1024).toFixed(2)} MB)</span></li>`).join('');
+        }
+
+        function clearVault() { localStorage.clear(); sessionStorage.clear(); location.reload(); }
+
+        async function processAllFiles() {
+            if (vaultFiles.length === 0) return;
+            const statusArea = document.getElementById('status-area');
+            const loteText = document.getElementById('lote-count-text');
+            const downloadGrid = document.getElementById('download-links');
+            statusArea.style.display = 'block'; loteText.innerText = "Sintetizando lotes..."; downloadGrid.innerHTML = "";
+            try {
+                const master = await PDFDocument.create();
+                for (const f of vaultFiles) {
+                    const buf = await f.arrayBuffer();
+                    if (f.type.startsWith('image/')) {
+                        const img = f.type === 'image/png' ? await master.embedPng(buf) : await master.embedJpg(buf);
+                        const page = master.addPage([img.width, img.height]); page.drawImage(img, { x: 0, y: 0, width: img.width, height: img.height });
+                    } else {
+                        const pdf = await PDFDocument.load(buf); const pages = await master.copyPages(pdf, pdf.getPageIndices()); pages.forEach(p => master.addPage(p));
+                    }
+                }
+                let slots = 0, currentIndex = 0; const total = master.getPageCount(), MAX_BYTES = 18 * 1024 * 1024;
+                while (currentIndex < total) {
+                    const chunk = await PDFDocument.create(); let chunkPages = 0;
+                    while (currentIndex < total) {
+                        const [p] = await chunk.copyPages(master, [currentIndex]); chunk.addPage(p);
+                        currentIndex++; chunkPages++; const bytes = await chunk.save(); if (bytes.length > MAX_BYTES || chunkPages >= 500) break;
+                    }
+                    const final = await chunk.save(); slots++; const url = URL.createObjectURL(new Blob([final],
