@@ -35,6 +35,11 @@
 
         #login-form-area { display: none; text-align: center; max-width: 400px; width: 100%; }
         .login-input { width: 100%; background: var(--navy-light); border: 1px solid var(--gold-border); color: #fff; padding: 1.2rem; margin-top: 2rem; border-radius: 2px; text-align: center; outline: none; letter-spacing: 0.2em; }
+        
+        /* ESTILO DO CHECKBOX */
+        .remember-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 1.5rem; color: var(--silver); font-size: 0.75rem; cursor: pointer; }
+        .remember-container input { accent-color: var(--gold); cursor: pointer; }
+
         .login-btn-fixed { width: 100%; display: block; margin-top: 1rem; padding: 1.2rem; border: none; border-radius: 2px; cursor: pointer; text-transform: uppercase; font-weight: 600; background-color: #c9a84c !important; color: #080c14 !important; }
         .back-link { display: block; margin-top: 1.5rem; color: var(--silver); font-size: 0.7rem; text-decoration: underline; cursor: pointer; }
 
@@ -50,7 +55,6 @@
         .download-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin: 2rem 0; }
         .download-link { display: block; background: var(--gold-dim); color: var(--gold); padding: 1rem; text-decoration: none; font-size: 0.8rem; text-align: center; border: 1px solid var(--gold-border); border-radius: 2px; }
 
-        /* PRECIFICAÇÃO */
         .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 3rem; }
         .price-card { background: var(--navy-light); border: 1px solid var(--border); padding: 3rem 2rem; border-radius: 2px; opacity: 0.4; transition: 0.5s; position: relative; display: flex; flex-direction: column; }
         .price-card.active { border-color: var(--gold); opacity: 1; transform: translateY(-8px); box-shadow: 0 15px 40px rgba(0,0,0,0.6); }
@@ -64,12 +68,7 @@
         .faq-item p { color: var(--silver); font-size: 0.85rem; }
 
         .contact-row { display: flex; justify-content: center; gap: 2rem; margin-top: 4rem; flex-wrap: wrap; }
-        .contact-btn { 
-            display: flex; align-items: center; gap: 12px; 
-            background: var(--navy-light); border: 1px solid var(--gold-border); 
-            color: var(--gold); padding: 1rem 2rem; text-decoration: none; 
-            font-size: 0.85rem; border-radius: 4px; transition: 0.3s;
-        }
+        .contact-btn { display: flex; align-items: center; gap: 12px; background: var(--navy-light); border: 1px solid var(--gold-border); color: var(--gold); padding: 1rem 2rem; text-decoration: none; font-size: 0.85rem; border-radius: 4px; transition: 0.3s; }
         .contact-btn:hover { border-color: var(--gold); background: var(--gold-dim); }
 
         footer { text-align: center; padding: 6rem 2rem; border-top: 1px solid var(--border); color: var(--silver); font-size: 0.75rem; }
@@ -96,6 +95,12 @@
         <div id="login-form-area">
             <img src="logo_arx.png" alt="ARX" style="width: 180px; margin-bottom: 2rem;">
             <input type="password" id="access-key" class="login-input" placeholder="CHAVE DE ACESSO" onkeypress="if(event.key === 'Enter') checkAccess()">
+            
+            <label class="remember-container">
+                <input type="checkbox" id="remember-me">
+                Não solicitar mais chave de acesso neste navegador
+            </label>
+
             <button onclick="checkAccess()" class="login-btn-fixed">Entrar no Ambiente</button>
             <span onclick="hideLoginForm()" class="back-link">Voltar para a recepção</span>
             <p id="error-msg" style="color: #ff4d4d; font-size: 0.75rem; margin-top: 1.5rem; display: none;"></p>
@@ -156,29 +161,17 @@
                 <div class="faq-grid">
                     <div class="faq-item">
                         <h4>Por que meus arquivos foram divididos em lotes?</h4>
-                        <p>Para garantir estabilidade no upload e processamento. Arquivos muito densos podem sofrer corrupção em conexões instáveis; o fatiamento garante que cada dado chegue íntegro ao motor de análise.</p>
+                        <p>Para garantir estabilidade no upload e processamento. O fatiamento garante que cada dado chegue íntegro ao motor de análise.</p>
                     </div>
                     <div class="faq-item">
                         <h4>Meus documentos estão seguros?</h4>
-                        <p>Sim. A síntese é realizada localmente no seu navegador. Os dados só são transmitidos após a sua autorização final, protegidos por criptografia de ponta a ponta.</p>
-                    </div>
-                    <div class="faq-item">
-                        <h4>O que é a Reconstrução Técnica de PDF?</h4>
-                        <p>É uma limpeza profunda que elimina metadados inúteis, corrige camadas de texto sobrepostas e reconstrói a tabela de referências, tornando o arquivo juridicamente mais robusto para análise.</p>
-                    </div>
-                    <div class="faq-item">
-                        <h4>Como recebo o resultado da Análise ARX?</h4>
-                        <p>Após o envio dos lotes pelo formulário, nossa inteligência processa a massa documental e entrega o relatório técnico diretamente no e-mail cadastrado no seu Onboarding.</p>
+                        <p>Sim. A síntese é realizada localmente no seu navegador. Os dados só são transmitidos após a sua autorização final.</p>
                     </div>
                 </div>
 
                 <div class="contact-row">
-                    <a href="https://wa.me/5543988102220" target="_blank" class="contact-btn">
-                        <span>Fale com a ARX no WhatsApp</span>
-                    </a>
-                    <a href="mailto:contato@arxlegaltech.com.br" class="contact-btn">
-                        <span>Contato ARX via E-mail</span>
-                    </a>
+                    <a href="https://wa.me/5543988102220" target="_blank" class="contact-btn"><span>Fale no WhatsApp</span></a>
+                    <a href="mailto:contato@arxlegaltech.com.br" class="contact-btn"><span>Contato via E-mail</span></a>
                 </div>
             </div>
         </section>
@@ -188,65 +181,69 @@
     <script>
         const { PDFDocument } = PDFLib;
         let vaultFiles = [];
+        let tempAuth = null; // Memória temporária para sessões sem checkbox
 
         function showLoginForm() { document.getElementById('choice-view').style.display = 'none'; document.getElementById('login-form-area').style.display = 'block'; }
         function hideLoginForm() { document.getElementById('choice-view').style.display = 'block'; document.getElementById('login-form-area').style.display = 'none'; }
 
         async function checkAccess() {
             const inputVal = document.getElementById('access-key').value.trim();
+            const rememberMe = document.getElementById('remember-me').checked;
             const error = document.getElementById('error-msg');
             try {
                 const [respPaid, respDemo] = await Promise.all([fetch('lista.txt'), fetch('lista-demo.txt')]);
                 const [textPaid, textDemo] = await Promise.all([respPaid.text(), respDemo.text()]);
+                
                 const findInList = (text, input) => {
                     const lines = text.split(/\r?\n/).filter(l => l.trim());
                     for (let line of lines) {
                         const parts = line.split(';');
-                        const key = parts[0].trim();
-                        const name = parts[1] ? parts[1].trim() : "";
-                        const referrer = parts[2] ? parts[2].trim() : null;
-                        if (key === input) return { name, referrer };
+                        if (parts[0].trim() === input) return { name: parts[1]?.trim() || "", referrer: parts[2]?.trim() || null };
                     }
                     return null;
                 };
+
                 let data = findInList(textPaid, inputVal);
-                if (data) { login(inputVal, data.name, data.referrer, "paid"); return; }
+                if (data) { login(inputVal, data.name, data.referrer, "paid", rememberMe); return; }
+
                 data = findInList(textDemo, inputVal);
-                if (data) { login(inputVal, data.name, data.referrer, "demo"); return; }
+                if (data) { login(inputVal, data.name, data.referrer, "demo", rememberMe); return; }
+
                 error.innerText = "Chave não localizada."; error.style.display = 'block';
-            } catch (e) { error.innerText = "Erro de Securitas."; error.style.display = 'block'; }
+            } catch (e) { error.innerText = "Erro de conexão."; }
         }
 
-        function login(key, name, referrer, type) {
-            localStorage.setItem('arx_auth', type);
-            localStorage.setItem('arx_key', key);
-            localStorage.setItem('arx_name', name);
-            localStorage.setItem('arx_referrer', referrer);
-            renderApp();
+        function login(key, name, referrer, type, persist) {
+            const authData = { type, key, name, referrer };
+            if (persist) {
+                // SALVA PERMANENTEMENTE NO NAVEGADOR
+                localStorage.setItem('arx_auth_v67', JSON.stringify(authData));
+            } else {
+                // SALVA APENAS PARA ESTA SESSÃO (TAB)
+                tempAuth = authData;
+            }
+            renderApp(authData);
         }
 
-        function renderApp() {
+        function renderApp(data) {
             document.getElementById('gate-container').style.display = 'none';
             document.getElementById('main-app').style.display = 'block';
-            const name = localStorage.getItem('arx_name');
-            const referrer = localStorage.getItem('arx_referrer');
-            const type = localStorage.getItem('arx_auth');
+            
             const welcomeMsg = document.getElementById('welcome-msg');
-            if (type === 'demo') {
-                if (referrer && referrer !== "null" && referrer !== "") {
-                    welcomeMsg.innerText = `Bem-vindo ${name}! Você é um convidado do Membro ${referrer} para experimentar a Análise ARX!`;
-                } else {
-                    welcomeMsg.innerText = `Bem-vindo ${name}! Você é nosso convidado para experimentar a Análise ARX!`;
-                }
+            if (data.type === 'demo') {
+                welcomeMsg.innerText = data.referrer ? `Bem-vindo ${data.name}! Convidado do Membro ${data.referrer}.` : `Bem-vindo ${data.name}! Você é nosso convidado.`;
                 document.getElementById('link-standard').href = "https://arxlegaltech.fillout.com/standard-demo";
                 document.getElementById('link-plus').href = "https://arxlegaltech.fillout.com/plus-demo";
                 document.getElementById('link-max').href = "https://arxlegaltech.fillout.com/max-demo";
             } else {
-                welcomeMsg.innerText = `Bem-vindo, ${name}`;
+                welcomeMsg.innerText = `Bem-vindo, ${data.name}`;
             }
         }
 
-        window.onload = () => { if(localStorage.getItem('arx_auth')) renderApp(); };
+        window.onload = () => { 
+            const saved = localStorage.getItem('arx_auth_v67');
+            if(saved) renderApp(JSON.parse(saved)); 
+        };
 
         function handleFiles(files) {
             for (let f of files) { vaultFiles.push(f); }
@@ -310,10 +307,4 @@
         }
 
         const dropZone = document.getElementById('drop-zone');
-        dropZone.ondragover = (e) => { e.preventDefault(); dropZone.style.borderColor = 'var(--gold)'; };
-        dropZone.ondragleave = () => { dropZone.style.borderColor = 'var(--gold-border)'; };
-        dropZone.ondrop = (e) => { e.preventDefault(); handleFiles(e.dataTransfer.files); };
-        document.getElementById('file-input').onchange = (e) => { handleFiles(e.target.files); };
-    </script>
-</body>
-</html>
+        dropZone.ond
