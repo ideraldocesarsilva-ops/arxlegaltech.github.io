@@ -39,7 +39,6 @@
         .choice-card h3 { font-family: 'Cormorant Garamond', serif; color: var(--gold); font-size: 1.8rem; margin-bottom: 1rem; }
         .choice-card p { font-size: 0.85rem; color: var(--silver); margin-bottom: 2rem; }
 
-        /* BOTÃO DE AÇÃO UNIVERSAL */
         .btn-action { 
             width: 100%; display: flex; align-items: center; justify-content: center;
             padding: 1.2rem; border: none !important; border-radius: 2px;
@@ -48,13 +47,11 @@
             cursor: pointer; text-decoration: none !important;
         }
 
-        /* ÁREA DE LOGIN */
         #login-form-area { display: none; text-align: center; max-width: 400px; width: 100%; }
         .login-input { width: 100%; background: var(--navy-light); border: 1px solid var(--gold-border); color: #fff; padding: 1.2rem; margin-top: 2rem; border-radius: 2px; text-align: center; outline: none; letter-spacing: 0.2em; }
         .remember-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 1.5rem; color: var(--silver); font-size: 0.75rem; cursor: pointer; }
         .back-link { display: block; margin-top: 1.5rem; color: var(--silver); font-size: 0.7rem; text-decoration: underline; cursor: pointer; }
 
-        /* NAVEGAÇÃO INTERNA */
         nav { position: fixed; top: 0; width: 100%; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 2.5rem; background: rgba(8, 12, 20, 0.95); border-bottom: 1px solid var(--border); backdrop-filter: blur(10px); min-height: 80px; }
         .nav-logo { font-family: 'Cormorant Garamond', serif; color: var(--gold); font-weight: 600; font-size: 0.85rem; line-height: 1.4; max-width: 75%; }
         
@@ -62,7 +59,6 @@
         .section-title { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; color: var(--gold); margin-bottom: 1rem; }
         .vault-card { background: var(--navy-light); border: 2px dashed var(--gold-border); padding: 5rem 2rem; text-align: center; cursor: pointer; border-radius: 4px; }
 
-        /* PAINEL DE RESULTADOS */
         .status-panel { display: none; margin-top: 3rem; }
         .diagnosis-box { background: var(--navy-light); padding: 2.5rem; border-left: 3px solid var(--gold); margin-bottom: 2rem; }
         .download-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin: 2rem 0; }
@@ -145,7 +141,9 @@
                 <a href="mailto:contato@arxlegaltech.com.br" style="display: flex; align-items: center; gap: 12px; background: var(--navy-light); border: 1px solid var(--gold-border); color: var(--gold); padding: 1rem 2rem; text-decoration: none; font-size: 0.85rem; border-radius: 4px;">Contato via E-mail</a>
             </div>
         </section>
-        <footer><p>© 2026 ARX LEGALTECH · AMBIENTE PRIVADO</p></footer>
+        <footer>
+            <p>© 2026 ARX LEGALTECH · AMBIENTE PRIVADO · <span style="opacity: 0.4; font-size: 0.6rem;">v7.0.1</span></p>
+        </footer>
     </div>
 
     <script>
@@ -162,8 +160,6 @@
             
             try {
                 let textPaid = ""; let textDemo = "";
-                
-                // FETCH RESILIENTE: Se um falhar, o código não morre.
                 try { const r1 = await fetch('lista.txt'); if(r1.ok) textPaid = await r1.text(); } catch(e){}
                 try { const r2 = await fetch('lista-demo.txt'); if(r2.ok) textDemo = await r2.text(); } catch(e){}
 
@@ -183,7 +179,7 @@
                 if (data) { login(inputVal, data.name, data.referrer, data.gender, "demo", rememberMe); return; }
 
                 error.innerText = "Chave não localizada."; error.style.display = 'block';
-            } catch (e) { error.innerText = "Erro técnico. Verifique as listas."; error.style.display = 'block'; }
+            } catch (e) { error.innerText = "Erro técnico."; error.style.display = 'block'; }
         }
 
         function login(key, name, referrer, gender, type, persist) {
@@ -251,4 +247,24 @@
                         const [p] = await chunk.copyPages(master, [currentIndex]); chunk.addPage(p);
                         currentIndex++; chunkPages++; const bytes = await chunk.save(); if (bytes.length > MAX_BYTES || chunkPages >= 500) break;
                     }
-                    const final = await chunk.save(); slots++; const url = URL.createObjectURL(new Blob([final],
+                    const final = await chunk.save(); slots++; const url = URL.createObjectURL(new Blob([final], { type: 'application/pdf' }));
+                    const a = document.createElement('a'); a.href = url; a.download = `LOTE_ARX_${slots}.pdf`; a.className = 'download-link';
+                    a.innerHTML = `<strong>Baixar LOTE_${slots}</strong>`; downloadGrid.appendChild(a);
+                }
+                loteText.innerText = `Pacote organizado em ${slots} lotes.`;
+                const pesoOriginalMB = vaultFiles.reduce((acc, f) => acc + f.size, 0) / (1024 * 1024);
+                document.querySelectorAll('.price-card').forEach(c => c.classList.remove('active'));
+                if (pesoOriginalMB <= 200) document.getElementById('tier-standard').classList.add('active');
+                else if (pesoOriginalMB <= 400) document.getElementById('tier-plus').classList.add('active');
+                else document.getElementById('tier-max').classList.add('active');
+                statusArea.scrollIntoView({ behavior: 'smooth' });
+            } catch(e) { loteText.innerText = "Erro na síntese."; }
+        }
+
+        const dropZone = document.getElementById('drop-zone');
+        dropZone.ondragover = (e) => { e.preventDefault(); dropZone.style.borderColor = 'var(--gold)'; };
+        dropZone.ondragleave = () => { dropZone.style.borderColor = 'var(--gold-border)'; };
+        dropZone.ondrop = (e) => { e.preventDefault(); handleFiles(e.dataTransfer.files); };
+        document.getElementById('file-input').onchange = (e) => { handleFiles(e.target.files); };
+    </script>
+</body>
