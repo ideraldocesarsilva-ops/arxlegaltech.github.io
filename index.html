@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex, nofollow" />
-    <title>Ambiente ARX | Exclusivo para Membros</title>
+    <title>Ambiente ARX | Portal de Inteligência Jurídica</title>
     
     <link rel="icon" type="image/png" href="favicon_arx.png">
     <link rel="apple-touch-icon" href="favicon_arx.png">
@@ -25,14 +25,47 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: var(--navy); color: var(--text); font-family: 'Inter', sans-serif; font-weight: 300; line-height: 1.6; }
 
-        #login-gate { position: fixed; inset: 0; background: var(--navy); z-index: 9999; display: flex; align-items: center; justify-content: center; }
-        .login-box { max-width: 400px; width: 90%; text-align: center; }
-        .login-input { width: 100%; background: var(--navy-light); border: 1px solid var(--gold-border); color: #fff; padding: 1.2rem; margin-top: 2rem; border-radius: 2px; text-align: center; outline: none; letter-spacing: 0.2em; font-size: 0.8rem; }
-        .login-btn { width: 100%; background: var(--gold); color: var(--navy); border: none; padding: 1.2rem; margin-top: 1rem; font-weight: 600; text-transform: uppercase; cursor: pointer; border-radius: 2px; }
+        /* GATE CONTAINER (INTRO + LOGIN) */
+        #gate-container {
+            position: fixed; inset: 0; background: var(--navy); z-index: 9999;
+            display: flex; align-items: center; justify-content: center;
+        }
 
+        .intro-box { max-width: 800px; width: 90%; text-align: center; }
+        
+        .choice-grid { 
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 2rem; margin-top: 4rem; 
+        }
+
+        .choice-card {
+            background: var(--navy-light); border: 1px solid var(--gold-border);
+            padding: 3rem 2rem; border-radius: 4px; cursor: pointer;
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); text-decoration: none;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        .choice-card:hover { border-color: var(--gold); transform: translateY(-5px); background: rgba(201,168,76,0.03); }
+
+        .choice-card h3 { font-family: 'Cormorant Garamond', serif; color: var(--gold); font-size: 1.8rem; margin-bottom: 1rem; }
+        .choice-card p { font-size: 0.85rem; color: var(--silver); margin-bottom: 2rem; }
+
+        .btn-action {
+            width: 100%; background: var(--gold); color: var(--navy);
+            border: none; padding: 1.2rem; font-weight: 600;
+            text-transform: uppercase; cursor: pointer; border-radius: 2px;
+            letter-spacing: 0.1em; font-size: 0.85rem;
+        }
+
+        /* LOGIN BOX (HIDDEN INITIALLY) */
+        #login-form-area { display: none; text-align: center; max-width: 400px; width: 100%; }
+        .login-input { width: 100%; background: var(--navy-light); border: 1px solid var(--gold-border); color: #fff; padding: 1.2rem; margin-top: 2rem; border-radius: 2px; text-align: center; outline: none; letter-spacing: 0.2em; font-size: 0.8rem; }
+        .back-link { display: block; margin-top: 1.5rem; color: var(--silver); font-size: 0.7rem; text-decoration: underline; cursor: pointer; }
+
+        /* MAIN APP */
         nav { position: fixed; top: 0; width: 100%; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 2.5rem; background: rgba(8, 12, 20, 0.95); border-bottom: 1px solid var(--border); backdrop-filter: blur(10px); }
         .nav-logo { font-family: 'Cormorant Garamond', serif; color: var(--gold); font-weight: 600; text-transform: uppercase; font-size: 1.1rem; }
-
+        
         section { padding: 8rem 2rem 4rem; max-width: 1100px; margin: 0 auto; min-height: 100vh; }
         .section-title { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; color: var(--gold); margin-bottom: 1rem; }
         .vault-card { background: var(--navy-light); border: 2px dashed var(--gold-border); padding: 5rem 2rem; text-align: center; cursor: pointer; border-radius: 4px; }
@@ -46,18 +79,38 @@
         .price-card { background: var(--navy-light); border: 1px solid var(--border); padding: 3rem 2rem; border-radius: 2px; opacity: 0.4; transition: 0.5s; position: relative; display: flex; flex-direction: column; }
         .price-card.active { border-color: var(--gold); opacity: 1; transform: translateY(-8px); box-shadow: 0 15px 40px rgba(0,0,0,0.6); }
         .price-card.active::before { content: 'MODELO RECOMENDADO'; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--gold); color: var(--navy); font-size: 0.65rem; font-weight: 800; padding: 4px 15px; border-radius: 2px; }
-        .tier-btn { display: block; width: 100%; text-align: center; padding: 1.2rem; border: 1px solid var(--gold); color: var(--gold); text-decoration: none; font-size: 0.85rem; font-weight: 600; margin-top: auto; text-transform: uppercase; }
+        .tier-btn { display: block; width: 100%; text-align: center; padding: 1.2rem; border: 1px solid var(--gold); color: var(--gold); text-decoration: none; font-size: 0.85rem; font-weight: 600; margin-top: auto; }
 
         footer { text-align: center; padding: 6rem 2rem; border-top: 1px solid var(--border); color: var(--silver); font-size: 0.75rem; }
     </style>
 </head>
 <body>
 
-    <div id="login-gate">
-        <div class="login-box">
-            <img src="logo_arx.png" alt="ARX" style="width: 220px; margin-bottom: 3rem;">
-            <input type="password" id="access-key" class="login-input" placeholder="INSIRA SUA CHAVE DE ACESSO" onkeypress="if(event.key === 'Enter') checkAccess()">
-            <button onclick="checkAccess()" class="login-btn">Entrar no Ambiente</button>
+    <div id="gate-container">
+        <div id="choice-view" class="intro-box">
+            <img src="logo_arx.png" alt="ARX" style="width: 240px; margin-bottom: 2rem;">
+            <p style="color: var(--silver); font-size: 0.9rem; letter-spacing: 0.1em; text-transform: uppercase;">Agilitas et Securitas</p>
+            
+            <div class="choice-grid">
+                <a href="https://arxlegaltech.fillout.com/onboarding" target="_blank" class="choice-card">
+                    <h3>Onboarding</h3>
+                    <p>Contrate o treinamento estratégico e domine a metodologia de inteligência ARX.</p>
+                    <div class="btn-action">Contratar Agora</div>
+                </a>
+
+                <div onclick="showLoginForm()" class="choice-card">
+                    <h3>Membros</h3>
+                    <p>Acesse o ambiente privado para síntese de documentos e diagnósticos processuais.</p>
+                    <div class="btn-action">Acessar Ambiente</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="login-form-area">
+            <img src="logo_arx.png" alt="ARX" style="width: 180px; margin-bottom: 2rem;">
+            <input type="password" id="access-key" class="login-input" placeholder="CHAVE DE ACESSO" onkeypress="if(event.key === 'Enter') checkAccess()">
+            <button onclick="checkAccess()" class="login-btn">Validar Securitas</button>
+            <span onclick="hideLoginForm()" class="back-link">Voltar para a recepção</span>
             <p id="error-msg" style="color: #ff4d4d; font-size: 0.75rem; margin-top: 1.5rem; display: none;"></p>
         </div>
     </div>
@@ -65,12 +118,12 @@
     <div id="main-app" style="display:none;">
         <nav>
             <span class="nav-logo" id="welcome-msg">Ambiente ARX</span>
-            <span style="font-size: 0.65rem; color: var(--gold); text-transform: uppercase;">Agilitas et Securitas</span>
+            <span style="font-size: 0.65rem; color: var(--gold); text-transform: uppercase;">Logado em Ambiente Seguro</span>
         </nav>
 
         <section>
             <h2 class="section-title">Preparação de arquivos para envio.</h2>
-            <p style="color: var(--silver); margin-bottom: 3rem; max-width: 600px;">Sintetize sua massa documental localmente. Nossa tecnologia garante que seus dados sejam processados com sigilo absoluto e alta performance.</p>
+            <p style="color: var(--silver); margin-bottom: 3rem; max-width: 600px;">Fragmentação local ativa. Seus dados são processados com sigilo absoluto antes do upload.</p>
 
             <div class="vault-card" id="drop-zone" onclick="document.getElementById('file-input').click()">
                 <p style="color: var(--gold); font-size: 1.1rem;">Clique ou arraste para adicionar ao Cofre</p>
@@ -80,37 +133,38 @@
             <div id="file-list-container" style="margin-top: 2rem; display: none;">
                 <h4 style="color: var(--gold); font-size: 0.8rem; text-transform: uppercase; margin-bottom: 1rem;">Arquivos no Cofre:</h4>
                 <ul id="file-list-display" style="list-style: none; color: var(--silver); font-size: 0.85rem; background: rgba(255,255,255,0.03); padding: 1.5rem; border-radius: 4px;"></ul>
-                <button onclick="processAllFiles()" class="login-btn" style="margin-top: 2rem;">Finalizar e Sintetizar Pacote de Documentos</button>
-                <button onclick="clearVault()" style="background: transparent; border: none; color: #ff4d4d; font-size: 0.7rem; cursor: pointer; margin-top: 1.5rem; width: 100%; text-decoration: underline;">Limpar Cofre e Encerrar Sessão</button>
+                <button onclick="processAllFiles()" class="login-btn" style="margin-top: 2rem;">Finalizar e Sintetizar Pacote</button>
+                <button onclick="clearVault()" style="background: transparent; border: none; color: #ff4d4d; font-size: 0.7rem; cursor: pointer; margin-top: 1.5rem; width: 100%; text-decoration: underline;">Limpar e Encerrar Sessão</button>
             </div>
 
             <div id="status-area" class="status-panel">
                 <div class="diagnosis-box">
                     <h3 style="color: var(--gold); font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; margin-bottom: 1rem;">Diagnóstico de Capacidade</h3>
                     <p id="lote-count-text" style="font-size: 1.1rem; color: #fff;"></p>
-                    <p style="font-size: 0.85rem; color: var(--silver); margin-top: 0.5rem;">Descarregue os ficheiros abaixo e anexe-os no formulário de análise.</p>
                 </div>
                 <div id="download-links" class="download-grid"></div>
+                
                 <div style="background: rgba(201,168,76,0.05); border: 1px solid var(--gold-border); padding: 1.5rem; border-radius: 4px; margin-bottom: 3.5rem;">
-                    <p style="color: var(--silver); font-size: 0.85rem; line-height: 1.6;">O sistema ARX realiza uma 'limpeza' profunda nos metadados e reconstrói a estrutura do PDF. Isso elimina camadas de texto corrompidas ou falhas de OCR, resultando em arquivos tecnicamente mais robustos e seguros. Consideramos o tamanho original para determinar seu modelo de Análise ARX.</p>
+                    <p style="color: var(--silver); font-size: 0.85rem; line-height: 1.6;">O sistema ARX reconstrói a estrutura do PDF para eliminar OCRs mal feitos e metadados corrompidos. O arquivo final é tecnicamente mais 'robusto' e seguro para análise jurídica. Consideramos o peso original para determinar o modelo adequado.</p>
                 </div>
+
                 <div class="pricing-grid">
                     <div id="tier-standard" class="price-card">
                         <div style="color:var(--gold); font-family:'Cormorant Garamond',serif; font-size:1.8rem;">ARX Standard</div>
                         <div style="font-size:2.5rem; color:#fff; margin: 1rem 0;">R$ 380</div>
-                        <p style="color: var(--silver); font-size: 0.85rem; margin-bottom: 2rem; flex-grow: 1;">Até 200MB originais. O motor ideal para o fluxo processual padrão.</p>
+                        <p style="color: var(--silver); font-size: 0.8rem; margin-bottom: 2rem; flex-grow: 1;">Até 200MB originais.</p>
                         <a id="link-standard" href="https://arxlegaltech.fillout.com/standard" target="_blank" class="tier-btn">Selecionar</a>
                     </div>
                     <div id="tier-plus" class="price-card">
                         <div style="color:var(--gold); font-family:'Cormorant Garamond',serif; font-size:1.8rem;">ARX Plus</div>
                         <div style="font-size:2.5rem; color:#fff; margin: 1rem 0;">R$ 430</div>
-                        <p style="color: var(--silver); font-size: 0.85rem; margin-bottom: 2rem; flex-grow: 1;">201 a 400MB originais. Potência extra para pacotes densos.</p>
-                        <a id="link-plus" href="https://arxlegaltech.fillout.com/plus" target="_blank" class="tier-btn">Selecionar</a>
+                        <p style="color: var(--silver); font-size: 0.8rem; margin-bottom: 2rem; flex-grow: 1;">201 a 400MB originais.</p>
+                        <a id="link-plus" href="https://arxlegaltech.fillout.com/plu" target="_blank" class="tier-btn">Selecionar</a>
                     </div>
                     <div id="tier-max" class="price-card">
                         <div style="color:var(--gold); font-family:'Cormorant Garamond',serif; font-size:1.8rem;">ARX Max</div>
                         <div style="font-size:2.5rem; color:#fff; margin: 1rem 0;">R$ 480</div>
-                        <p style="color: var(--silver); font-size: 0.85rem; margin-bottom: 2rem; flex-grow: 1;">Acima de 400MB. Desempenho máximo para densidade crítica.</p>
+                        <p style="color: var(--silver); font-size: 0.8rem; margin-bottom: 2rem; flex-grow: 1;">Acima de 400MB.</p>
                         <a id="link-max" href="https://arxlegaltech.fillout.com/max" target="_blank" class="tier-btn">Selecionar</a>
                     </div>
                 </div>
@@ -123,19 +177,27 @@
         const { PDFDocument } = PDFLib;
         let vaultFiles = [];
 
+        // FUNÇÕES DO PORTÃO DE ENTRADA
+        function showLoginForm() {
+            document.getElementById('choice-view').style.display = 'none';
+            document.getElementById('login-form-area').style.display = 'block';
+        }
+
+        function hideLoginForm() {
+            document.getElementById('choice-view').style.display = 'block';
+            document.getElementById('login-form-area').style.display = 'none';
+            document.getElementById('error-msg').style.display = 'none';
+        }
+
         async function checkAccess() {
             const inputVal = document.getElementById('access-key').value.trim();
             const error = document.getElementById('error-msg');
             try {
-                // VERIFICA LISTA PAGA
-                const respPaid = await fetch('lista.txt');
-                const textPaid = await respPaid.text();
-                const keysPaid = textPaid.split(/\r?\n/).map(k => k.trim()).filter(k => k !== "");
-
-                // VERIFICA LISTA DEMO
-                const respDemo = await fetch('lista-demo.txt');
-                const textDemo = await respDemo.text();
-                const keysDemo = textDemo.split(/\r?\n/).map(k => k.trim()).filter(k => k !== "");
+                const [respPaid, respDemo] = await Promise.all([fetch('lista.txt'), fetch('lista-demo.txt')]);
+                const [textPaid, textDemo] = await Promise.all([respPaid.text(), respDemo.text()]);
+                
+                const keysPaid = textPaid.split(/\r?\n/).map(k => k.trim()).filter(k => k);
+                const keysDemo = textDemo.split(/\r?\n/).map(k => k.trim()).filter(k => k);
 
                 if (keysPaid.includes(inputVal)) {
                     localStorage.setItem('arx_auth', 'paid');
@@ -149,25 +211,19 @@
                     error.innerText = "Chave de acesso não localizada."; error.style.display = 'block';
                 }
             } catch (e) {
-                error.innerText = "Erro de conexão com as chaves de Securitas."; error.style.display = 'block';
+                error.innerText = "Erro de conexão de Securitas."; error.style.display = 'block';
             }
         }
 
         function renderApp() {
-            document.getElementById('login-gate').style.display = 'none';
+            document.getElementById('gate-container').style.display = 'none';
             document.getElementById('main-app').style.display = 'block';
-            
             const key = localStorage.getItem('arx_key') || "";
             const isDemo = localStorage.getItem('arx_auth') === 'demo';
-            
-            // EXTRAÇÃO DE NOME PERSONALIZADO (Ex: ARX-XXXX-DrMSantos)
             if (key.includes('-')) {
                 const parts = key.split('-');
-                const name = parts[parts.length - 1];
-                document.getElementById('welcome-msg').innerText = `Bem-vindo, ${name}`;
+                document.getElementById('welcome-msg').innerText = `Bem-vindo, ${parts[parts.length - 1]}`;
             }
-
-            // SE FOR DEMO, TROCA OS LINKS PARA OS FORMULÁRIOS SEM PAGAMENTO
             if (isDemo) {
                 document.getElementById('link-standard').href = "https://arxlegaltech.fillout.com/standard-demo";
                 document.getElementById('link-plus').href = "https://arxlegaltech.fillout.com/plus-demo";
@@ -193,7 +249,7 @@
             const loteText = document.getElementById('lote-count-text');
             const downloadGrid = document.getElementById('download-links');
             statusArea.style.display = 'block';
-            loteText.innerText = "Sintetizando pacote de documentos...";
+            loteText.innerText = "Sintetizando lotes...";
             downloadGrid.innerHTML = "";
             try {
                 const master = await PDFDocument.create();
@@ -228,7 +284,7 @@
                     a.innerHTML = `<strong>Baixar LOTE_${slots}</strong>`;
                     downloadGrid.appendChild(a);
                 }
-                loteText.innerText = `Pacote de documentos de ${total} páginas organizado em ${slots} lotes otimizados.`;
+                loteText.innerText = `Pacote de documentos de ${total} páginas organizado em ${slots} lotes.`;
                 const pesoOriginalMB = vaultFiles.reduce((acc, f) => acc + f.size, 0) / (1024 * 1024);
                 document.querySelectorAll('.price-card').forEach(c => c.classList.remove('active'));
                 if (pesoOriginalMB <= 200) document.getElementById('tier-standard').classList.add('active');
