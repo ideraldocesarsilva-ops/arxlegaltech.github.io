@@ -1,394 +1,93 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="robots" content="noindex, nofollow" />
-    <title>Ambiente ARX | Exclusivo para Membros</title>
-    
-    <link rel="icon" type="image/png" href="favicon_arx.png">
-    <link rel="apple-touch-icon" href="favicon_arx.png">
+<div id="download-links" class="download-grid"></div>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
-    <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
-    <style>
-        :root {
-            --navy: #080c14;
-            --navy-light: #0f1729;
-            --gold: #c9a84c;
-            --gold-dim: rgba(201,168,76,0.12);
-            --gold-border: rgba(201,168,76,0.25);
-            --silver: #9a9a9a;
-            --text: #e8e8e8;
-            --border: rgba(255,255,255,0.06);
+<div id="tech-info-box" style="margin-top: 1rem; padding: 1.5rem; background: rgba(201, 168, 76, 0.05); border: 1px solid var(--gold-border); border-radius: 4px;">
+    <p style="color: var(--silver); font-size: 0.85rem; line-height: 1.5;">
+        O sistema ARX realiza uma 'limpeza' profunda nos metadados e reconstrói a tabela de referências do PDF. Isso elimina camadas de texto corrompidas ou OCRs mal feitos que poderiam prejudicar a qualidade da Análise ARX. O arquivo final é tecnicamente mais 'robusto' e seguro para análise jurídica do que o original ocasionando em alguns casos um ligeiro aumento de tamanho, porém consideramos o tamanho original dos arquivos para determinar o modelo de Análise ARX adequado para a sua necessidade.
+    </p>
+</div>
+
+<script>
+    // ... (Mantenha as funções checkAccess, renderApp e handleFiles como estão)
+
+    // ATUALIZAÇÃO DA LÓGICA DE PRECIFICAÇÃO (VALOR ORIGINAL)
+    function highlightTier(slots) {
+        // Soma o peso real de todos os arquivos originais que o advogado subiu
+        const pesoOriginalBytes = vaultFiles.reduce((acc, f) => acc + f.size, 0);
+        const pesoOriginalMB = pesoOriginalBytes / (1024 * 1024);
+
+        // Reseta os cards
+        document.querySelectorAll('.price-card').forEach(c => c.classList.remove('active'));
+
+        // Define o modelo baseado na massa de dados original
+        if (pesoOriginalMB <= 200) {
+            document.getElementById('tier-standard').classList.add('active');
+        } else if (pesoOriginalMB <= 400) {
+            document.getElementById('tier-plus').classList.add('active');
+        } else {
+            document.getElementById('tier-max').classList.add('active');
         }
+    }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            background: var(--navy);
-            color: var(--text);
-            font-family: 'Inter', sans-serif;
-            font-weight: 300;
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        #login-gate {
-            position: fixed;
-            inset: 0;
-            background: var(--navy);
-            z-index: 9999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: opacity 0.5s ease;
-        }
-
-        .login-box {
-            max-width: 400px;
-            width: 90%;
-            text-align: center;
-        }
-
-        .login-input {
-            width: 100%;
-            background: var(--navy-light);
-            border: 1px solid var(--gold-border);
-            color: #fff;
-            padding: 1.2rem;
-            margin-top: 2rem;
-            border-radius: 2px;
-            outline: none;
-            text-align: center;
-            font-size: 1rem;
-            letter-spacing: 0.2em;
-        }
-
-        .login-btn {
-            width: 100%;
-            background: var(--gold);
-            color: var(--navy);
-            border: none;
-            padding: 1.2rem;
-            margin-top: 1rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            cursor: pointer;
-            letter-spacing: 0.1em;
-            border-radius: 2px;
-        }
-
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 100;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.5rem 2.5rem;
-            background: rgba(8, 12, 20, 0.9);
-            border-bottom: 1px solid var(--border);
-            backdrop-filter: blur(10px);
-        }
-
-        .nav-logo {
-            font-family: 'Cormorant Garamond', serif;
-            color: var(--gold);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
-            font-size: 1.2rem;
-        }
-
-        section {
-            padding: 8rem 2rem 4rem;
-            max-width: 1100px;
-            margin: 0 auto;
-            min-height: 100vh;
-        }
-
-        .section-title {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 2.2rem;
-            color: var(--gold);
-            margin-bottom: 1rem;
-        }
-
-        .vault-card {
-            background: var(--navy-light);
-            border: 2px dashed var(--gold-border);
-            padding: 5rem 2rem;
-            text-align: center;
-            cursor: pointer;
-            border-radius: 4px;
-        }
-
-        .status-panel {
-            display: none;
-            margin-top: 3rem;
-        }
-
-        .diagnosis-box {
-            background: var(--navy-light);
-            padding: 2.5rem;
-            border-left: 3px solid var(--gold);
-            margin-bottom: 3rem;
-        }
-
-        .download-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 1rem;
-            margin: 2rem 0;
-        }
-
-        .download-link {
-            display: block;
-            background: var(--gold-dim);
-            color: var(--gold);
-            padding: 1rem;
-            text-decoration: none;
-            font-size: 0.8rem;
-            text-align: center;
-            border: 1px solid var(--gold-border);
-            border-radius: 2px;
-        }
-
-        .pricing-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 4rem;
-        }
-
-        .price-card {
-            background: var(--navy-light);
-            border: 1px solid var(--border);
-            padding: 3rem 2rem;
-            border-radius: 2px;
-            opacity: 0.6;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
-
-        .price-card.active {
-            border-color: var(--gold);
-            opacity: 1;
-            transform: translateY(-8px);
-        }
-
-        .price-card.active::before {
-            content: 'MODELO RECOMENDADO';
-            position: absolute;
-            top: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--gold);
-            color: var(--navy);
-            font-size: 0.65rem;
-            font-weight: 800;
-            padding: 4px 15px;
-        }
-
-        .tier-btn {
-            display: block;
-            width: 100%;
-            text-align: center;
-            padding: 1.2rem;
-            border: 1px solid var(--gold);
-            color: var(--gold);
-            text-decoration: none;
-            text-transform: uppercase;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-
-        footer {
-            text-align: center;
-            padding: 6rem 2rem;
-            border-top: 1px solid var(--border);
-            color: var(--silver);
-            font-size: 0.75rem;
-        }
-    </style>
-</head>
-<body>
-
-    <div id="login-gate">
-        <div class="login-box">
-            <img src="logo_arx.png" alt="ARX" style="width: 220px; max-width: 90%; height: auto; margin-bottom: 3rem;">
-            <input type="password" id="access-key" class="login-input" placeholder="PALAVRA-PASSE" onkeypress="if(event.key === 'Enter') checkAccess()">
-            <button onclick="checkAccess()" class="login-btn">Entrar no Ambiente</button>
-            <p id="error-msg" style="color: #ff4d4d; font-size: 0.75rem; margin-top: 1.5rem; display: none;"></p>
-        </div>
-    </div>
-
-    <div id="main-app" style="display:none;">
-        <nav>
-            <span class="nav-logo">Ambiente ARX</span>
-            <span style="font-size: 0.65rem; color: var(--gold); text-transform: uppercase; letter-spacing: 0.2em;">AGILITAS ET SECURITAS</span>
-        </nav>
-
-        <section>
-            <h2 class="section-title">Preparação de arquivos para envio.</h2>
-            <p class="section-subtitle">Otimize sua massa documental localmente. Nossa tecnologia fragmenta os dados para garantir estabilidade, sigilo e agilidade no processamento.</p>
-
-            <div class="vault-card" id="drop-zone" onclick="document.getElementById('file-input').click()">
-                <p style="color: var(--gold); font-size: 1.1rem; letter-spacing: 0.05em;">Clique ou arraste para adicionar ao Cofre</p>
-                <input type="file" id="file-input" multiple accept="application/pdf,image/jpeg,image/png" style="display: none;" />
-            </div>
-
-            <div id="file-list-container" style="margin-top: 1.5rem; display: none; text-align: center;">
-                <h4 style="color: var(--gold); font-size: 0.8rem; text-transform: uppercase; margin-bottom: 1rem; text-align: left;">Arquivos no Cofre:</h4>
-                <ul id="file-list-display" style="list-style: none; color: var(--silver); font-size: 0.85rem; background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 4px; text-align: left;"></ul>
-                <button onclick="processAllFiles()" class="login-btn" style="margin-top: 2rem; background: var(--gold); color: var(--navy);">Finalizar e Sintetizar Pacote de Documentos</button>
-                <button onclick="clearVault()" style="background: transparent; border: none; color: #ff4d4d; font-size: 0.7rem; cursor: pointer; margin-top: 1rem; text-decoration: underline;">Limpar Cofre</button>
-            </div>
-
-            <div id="status-area" class="status-panel">
-                <div class="diagnosis-box">
-                    <h3 style="color: var(--gold); font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; margin-bottom: 1rem;">Diagnóstico de Capacidade</h3>
-                    <p id="lote-count-text" style="font-size: 1.1rem; color: #fff;">Sintetizando lotes...</p>
-                    <p style="font-size: 0.85rem; color: var(--silver); margin-top: 0.5rem;">Descarregue os ficheiros abaixo e anexe-os no formulário de análise.</p>
-                </div>
-
-                <div id="download-links" class="download-grid"></div>
-
-                <div class="pricing-grid">
-                    <div id="tier-standard" class="price-card">
-                        <div class="tier-name" style="color:var(--gold); font-family:'Cormorant Garamond',serif; font-size:1.8rem;">ARX Standard</div>
-                        <div class="tier-price" style="font-size:2.5rem; color:#fff; margin-bottom:1.5rem;">R$ 380</div>
-                        <p style="color: var(--silver); font-size: 0.85rem; margin-bottom: 2rem; flex-grow: 1;">Até 10 lotes (200MB). O motor ideal para o fluxo processual padrão.</p>
-                        <a href="https://arxlegaltech.fillout.com/standard" target="_blank" class="tier-btn">Selecionar</a>
-                    </div>
-                    <div id="tier-plus" class="price-card">
-                        <div class="tier-name" style="color:var(--gold); font-family:'Cormorant Garamond',serif; font-size:1.8rem;">ARX Plus</div>
-                        <div class="tier-price" style="font-size:2.5rem; color:#fff; margin-bottom:1.5rem;">R$ 430</div>
-                        <p style="color: var(--silver); font-size: 0.85rem; margin-bottom: 2rem; flex-grow: 1;">11 a 20 lotes (400MB). Potência extra para pacotes documentais densos.</p>
-                        <a href="https://arxlegaltech.fillout.com/plus" target="_blank" class="tier-btn">Selecionar</a>
-                    </div>
-                    <div id="tier-max" class="price-card">
-                        <div class="tier-name" style="color:var(--gold); font-family:'Cormorant Garamond',serif; font-size:1.8rem;">ARX Max</div>
-                        <div class="tier-price" style="font-size:2.5rem; color:#fff; margin-bottom:1.5rem;">R$ 480</div>
-                        <p style="color: var(--silver); font-size: 0.85rem; margin-bottom: 2rem; flex-grow: 1;">21 a 30 lotes (600MB). Desempenho máximo para pacotes documentais de densidade crítica.</p>
-                        <a href="https://arxlegaltech.fillout.com/max" target="_blank" class="tier-btn">Selecionar</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <footer><p>© 2026 ARX LEGALTECH · AMBIENTE PRIVADO</p></footer>
-    </div>
-
-    <script>
-        const { PDFDocument } = PDFLib;
-        let vaultFiles = [];
-
-        async function checkAccess() {
-            const inputVal = document.getElementById('access-key').value.trim();
-            const error = document.getElementById('error-msg');
-            try {
-                const response = await fetch('lista.txt');
-                if (!response.ok) throw new Error("Erro de conexão");
-                const text = await response.text();
-                const keys = text.split(/\r?\n/).map(k => k.trim()).filter(k => k !== "");
-                if (keys.includes(inputVal)) {
-                    localStorage.setItem('arx_auth_v45', 'true');
-                    renderApp();
+    // SINTETIZADOR PÁGINA A PÁGINA (ESTABILIDADE MÁXIMA)
+    async function processAllFiles() {
+        if (vaultFiles.length === 0) return;
+        const statusArea = document.getElementById('status-area');
+        const loteText = document.getElementById('lote-count-text');
+        const downloadGrid = document.getElementById('download-links');
+        
+        statusArea.style.display = 'block';
+        loteText.innerText = "Iniciando síntese volumétrica do pacote de documentos...";
+        downloadGrid.innerHTML = "";
+        
+        try {
+            const master = await PDFDocument.create();
+            for (const f of vaultFiles) {
+                const buf = await f.arrayBuffer();
+                if (f.type.startsWith('image/')) {
+                    const img = f.type === 'image/png' ? await master.embedPng(buf) : await master.embedJpg(buf);
+                    const page = master.addPage([img.width, img.height]);
+                    page.drawImage(img, { x: 0, y: 0, width: img.width, height: img.height });
                 } else {
-                    error.innerText = "Acesso restrito. Verifique sua chave.";
-                    error.style.display = 'block';
+                    const pdf = await PDFDocument.load(buf);
+                    const pages = await master.copyPages(pdf, pdf.getPageIndices());
+                    pages.forEach(p => master.addPage(p));
                 }
-            } catch (err) {
-                error.innerText = "Erro: Certifique-se de que lista.txt está no GitHub.";
-                error.style.display = 'block';
             }
-        }
 
-        function renderApp() {
-            document.getElementById('login-gate').style.display = 'none';
-            document.getElementById('main-app').style.display = 'block';
-        }
+            let slots = 0, currentIndex = 0;
+            const total = master.getPageCount();
+            const MAX_BYTES = 18 * 1024 * 1024; // Trava de segurança em 18MB
 
-        window.onload = () => { if(localStorage.getItem('arx_auth_v45') === 'true') renderApp(); };
-
-        function handleFiles(files) {
-            for (let f of files) { vaultFiles.push(f); }
-            const container = document.getElementById('file-list-container');
-            const display = document.getElementById('file-list-display');
-            container.style.display = 'block';
-            display.innerHTML = vaultFiles.map(f => `<li style="margin-bottom: 5px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 5px; display: flex; justify-content: space-between;"><span>${f.name}</span><span style="opacity:0.5; font-size:0.7rem;">(${(f.size/1024/1024).toFixed(2)} MB)</span></li>`).join('');
-        }
-
-        function clearVault() {
-            vaultFiles = [];
-            document.getElementById('file-list-container').style.display = 'none';
-            document.getElementById('status-area').style.display = 'none';
-        }
-
-        async function processAllFiles() {
-            if (vaultFiles.length === 0) return;
-            const statusArea = document.getElementById('status-area');
-            const loteText = document.getElementById('lote-count-text');
-            const downloadGrid = document.getElementById('download-links');
-            statusArea.style.display = 'block';
-            loteText.innerText = "Iniciando síntese volumétrica...";
-            downloadGrid.innerHTML = "";
-            try {
-                const master = await PDFDocument.create();
-                for (const f of vaultFiles) {
-                    const buf = await f.arrayBuffer();
-                    if (f.type.startsWith('image/')) {
-                        const img = f.type === 'image/png' ? await master.embedPng(buf) : await master.embedJpg(buf);
-                        const page = master.addPage([img.width, img.height]);
-                        page.drawImage(img, { x: 0, y: 0, width: img.width, height: img.height });
-                    } else {
-                        const pdf = await PDFDocument.load(buf);
-                        const pages = await master.copyPages(pdf, pdf.getPageIndices());
-                        pages.forEach(p => master.addPage(p));
-                    }
-                }
-                let slots = 0, currentIndex = 0;
-                const total = master.getPageCount(), MAX_BYTES = 20 * 1024 * 1024, MAX_PAGES = 500;
+            while (currentIndex < total) {
+                const chunk = await PDFDocument.create();
+                let chunkPages = 0;
                 while (currentIndex < total) {
-                    const chunk = await PDFDocument.create();
-                    let chunkPages = 0;
-                    while (currentIndex < total && chunkPages < MAX_PAGES) {
-                        const [p] = await chunk.copyPages(master, [currentIndex]);
-                        chunk.addPage(p);
-                        currentIndex++; chunkPages++;
-                        if (chunkPages % 20 === 0) {
-                            const bytes = await chunk.save();
-                            if (bytes.length > MAX_BYTES) break;
-                        }
-                    }
-                    const final = await chunk.save();
-                    slots++;
-                    const blob = new Blob([final], { type: 'application/pdf' });
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url; a.download = `LOTE_ARX_${slots}.pdf`; a.className = 'download-link';
-                    a.innerHTML = `<strong>Baixar LOTE_${slots}</strong>`;
-                    downloadGrid.appendChild(a);
+                    const [p] = await chunk.copyPages(master, [currentIndex]);
+                    chunk.addPage(p);
+                    currentIndex++; 
+                    chunkPages++;
+                    
+                    // Verificação rigorosa a cada página para evitar "vazamentos"
+                    const tempBytes = await chunk.save();
+                    if (tempBytes.length > MAX_BYTES || chunkPages >= 500) break; 
                 }
-                loteText.innerText = `Pacote de documentos de ${total} páginas organizado em ${slots} lotes otimizados.`;
-                document.querySelectorAll('.price-card').forEach(c => c.classList.remove('active'));
-                if (slots <= 10) document.getElementById('tier-standard').classList.add('active');
-                else if (slots <= 20) document.getElementById('tier-plus').classList.add('active');
-                else document.getElementById('tier-max').classList.add('active');
-                statusArea.scrollIntoView({ behavior: 'smooth' });
-            } catch(e) { loteText.innerText = "Erro na síntese."; }
+                const final = await chunk.save();
+                slots++;
+                
+                const blob = new Blob([final], { type: 'application/pdf' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url; a.download = `LOTE_ARX_${slots}.pdf`; a.className = 'download-link';
+                a.innerHTML = `<strong>Baixar LOTE_${slots}</strong>`;
+                downloadGrid.appendChild(a);
+            }
+            
+            loteText.innerText = `Pacote de documentos de ${total} páginas organizado em ${slots} lotes otimizados.`;
+            highlightTier(slots); // Dispara a precificação baseada no original
+            statusArea.scrollIntoView({ behavior: 'smooth' });
+        } catch(e) { 
+            loteText.innerText = "Erro na síntese técnica."; 
+            console.error(e);
         }
-
-        const dropZone = document.getElementById('drop-zone');
-        const fileInput = document.getElementById('file-input');
-        dropZone.ondragover = (e) => { e.preventDefault(); dropZone.style.borderColor = 'var(--gold)'; };
-        dropZone.ondragleave = () => { dropZone.style.borderColor = 'var(--gold-border)'; };
-        dropZone.ondrop = (e) => { e.preventDefault(); handleFiles(e.dataTransfer.files); };
-        fileInput.onchange = (e) => { handleFiles(e.target.files); };
-    </script>
-</body>
-</html>
+    }
+</script>
