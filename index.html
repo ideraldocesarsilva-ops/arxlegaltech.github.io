@@ -318,4 +318,206 @@
 
             <div id="status-area" class="status-panel">
                 <div class="diagnosis-box">
-                    <h3 style="color: var(--gold); font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; margin-bottom: 1rem;">Diagnóstico
+                    <h3 style="color: var(--gold); font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; margin-bottom: 1rem;">Diagnóstico de Capacidade</h3>
+                    <p id="lote-count-text" style="font-size: 1.1rem; color: #fff;">Sintetizando lotes...</p>
+                    <p style="font-size: 0.85rem; color: var(--silver); margin-top: 0.5rem;">Descarregue os ficheiros abaixo e anexe-os no formulário de análise.</p>
+                </div>
+
+                <div id="download-links" class="download-grid"></div>
+
+                <div class="pricing-grid">
+                    <div id="tier-standard" class="price-card">
+                        <div class="tier-name">ARX Standard</div>
+                        <div class="tier-price">R$ 380</div>
+                        <p style="color: var(--silver); font-size: 0.85rem; margin-bottom: 2rem; flex-grow: 1;">Até 10 lotes (200MB). O motor ideal para o fluxo processual padrão.</p>
+                        <a href="https://arxlegaltech.fillout.com/standard" target="_blank" class="tier-btn">Selecionar</a>
+                    </div>
+                    <div id="tier-plus" class="price-card">
+                        <div class="tier-name">ARX Plus</div>
+                        <div class="tier-price">R$ 430</div>
+                        <p style="color: var(--silver); font-size: 0.85rem; margin-bottom: 2rem; flex-grow: 1;">11 a 20 lotes (400MB). Potência extra para pacotes documentais densos.</p>
+                        <a href="https://arxlegaltech.fillout.com/plus" target="_blank" class="tier-btn">Selecionar</a>
+                    </div>
+                    <div id="tier-max" class="price-card">
+                        <div class="tier-name">ARX Max</div>
+                        <div class="tier-price">R$ 480</div>
+                        <p style="color: var(--silver); font-size: 0.85rem; margin-bottom: 2rem; flex-grow: 1;">21 a 30 lotes (600MB). Desempenho máximo para pacotes documentais de densidade crítica.</p>
+                        <a href="https://arxlegaltech.fillout.com/max" target="_blank" class="tier-btn">Selecionar</a>
+                    </div>
+                </div>
+
+                <div class="protocolo-box">
+                    <p style="color: var(--gold); text-transform: uppercase; letter-spacing: 0.2em; font-size: 0.9rem; margin-bottom: 1.5rem;">Protocolo de Envio</p>
+                    <ul style="list-style: none; color: var(--silver); font-size: 0.9rem;">
+                        <li style="margin-bottom: 1rem;">• <strong>Mantenha a Ordem:</strong> Não altere o nome dos lotes. A sequência é vital para a precisão cronológica.</li>
+                        <li style="margin-bottom: 1rem;">• <strong>Integridade:</strong> Certifique-se de anexar todos os lotes gerados no formulário final.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>© 2026 ARX LEGALTECH · AMBIENTE PRIVADO</p>
+        </footer>
+    </div>
+
+    <script>
+        const { PDFDocument } = PDFLib;
+        let vaultFiles = []; // Acumulador de arquivos
+
+        // VALIDAÇÃO DINÂMICA VIA LISTA.TXT
+        async function checkAccess() {
+            const inputVal = document.getElementById('access-key').value.trim();
+            const error = document.getElementById('error-msg');
+
+            try {
+                const response = await fetch('lista.txt');
+                const text = await response.text();
+                const keysAutorizadas = text.split(/\r?\n/).map(k => k.trim()).filter(k => k !== "");
+
+                if (keysAutorizadas.includes(inputVal)) {
+                    localStorage.setItem('arx_auth_v45', 'true');
+                    renderApp();
+                } else {
+                    error.style.display = 'block';
+                    document.getElementById('access-key').value = '';
+                }
+            } catch (err) {
+                error.innerText = "Erro na verificação de Securitas.";
+                error.style.display = 'block';
+            }
+        }
+
+        function renderApp() {
+            document.getElementById('login-gate').style.display = 'none';
+            document.getElementById('main-app').style.display = 'block';
+        }
+
+        window.onload = () => { 
+            if(localStorage.getItem('arx_auth_v45') === 'true') renderApp(); 
+        };
+
+        // GESTÃO ACUMULATIVA DO COFRE
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('file-input');
+
+        function handleFiles(files) {
+            for (let f of files) {
+                vaultFiles.push(f);
+            }
+            updateFileList();
+        }
+
+        function updateFileList() {
+            const container = document.getElementById('file-list-container');
+            const display = document.getElementById('file-list-display');
+            
+            if (vaultFiles.length > 0) {
+                container.style.display = 'block';
+                display.innerHTML = vaultFiles.map((f, index) => 
+                    `<li style="margin-bottom: 5px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 5px; display: flex; justify-content: space-between;">
+                        <span>${f.name}</span>
+                        <span style="opacity:0.5; font-size:0.7rem;">(${(f.size/1024/1024).toFixed(2)} MB)</span>
+                    </li>`
+                ).join('');
+            }
+        }
+
+        function clearVault() {
+            vaultFiles = [];
+            document.getElementById('file-list-container').style.display = 'none';
+            document.getElementById('status-area').style.display = 'none';
+        }
+
+        // SINTETIZADOR INTELIGENTE (PESO + PÁGINAS)
+        async function processAllFiles() {
+            if (vaultFiles.length === 0) return;
+
+            const statusArea = document.getElementById('status-area');
+            const loteText = document.getElementById('lote-count-text');
+            const downloadGrid = document.getElementById('download-links');
+
+            statusArea.style.display = 'block';
+            // TEXTO ATUALIZADO: "dossiê" -> "pacote de documentos"
+            loteText.innerText = "Iniciando síntese volumétrica do pacote de documentos...";
+            downloadGrid.innerHTML = "";
+            
+            try {
+                const master = await PDFDocument.create();
+                for (const f of vaultFiles) {
+                    const buf = await f.arrayBuffer();
+                    if (f.type.startsWith('image/')) {
+                        const img = f.type === 'image/png' ? await master.embedPng(buf) : await master.embedJpg(buf);
+                        const page = master.addPage([img.width, img.height]);
+                        page.drawImage(img, { x: 0, y: 0, width: img.width, height: img.height });
+                    } else {
+                        const pdf = await PDFDocument.load(buf);
+                        const pages = await master.copyPages(pdf, pdf.getPageIndices());
+                        pages.forEach(p => master.addPage(p));
+                    }
+                }
+
+                let slots = 0;
+                let currentPageIndex = 0;
+                const totalPages = master.getPageCount();
+                const MAX_BYTES = 20 * 1024 * 1024; // 20MB
+                const MAX_PAGES_PER_LOTE = 500; 
+
+                while (currentPageIndex < totalPages) {
+                    const chunk = await PDFDocument.create();
+                    let pagesInCurrentChunk = 0;
+
+                    while (currentPageIndex < totalPages && pagesInCurrentChunk < MAX_PAGES_PER_LOTE) {
+                        const [copiedPage] = await chunk.copyPages(master, [currentPageIndex]);
+                        chunk.addPage(copiedPage);
+                        
+                        currentPageIndex++;
+                        pagesInCurrentChunk++;
+
+                        // Verificação de peso a cada 20 páginas para performance
+                        if (pagesInCurrentChunk % 20 === 0) {
+                            const tempBytes = await chunk.save();
+                            if (tempBytes.length > MAX_BYTES) break; 
+                        }
+                    }
+
+                    const finalBytes = await chunk.save();
+                    slots++;
+                    createLink(finalBytes, `LOTE_ARX_${slots}.pdf`);
+                }
+                
+                // TEXTO ATUALIZADO: "Dossiê" -> "Pacote de documentos"
+                loteText.innerText = `Pacote de documentos de ${totalPages} páginas organizado em ${slots} lotes otimizados.`;
+                highlightTier(slots);
+                statusArea.scrollIntoView({ behavior: 'smooth' });
+
+            } catch(err) {
+                console.error(err);
+                loteText.innerText = "Erro na síntese. Verifique a integridade dos arquivos.";
+            }
+        }
+
+        function createLink(bytes, name) {
+            const blob = new Blob([bytes], { type: 'application/pdf' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; a.download = name; a.className = 'download-link';
+            a.innerHTML = `<strong>Baixar ${name}</strong>`;
+            document.getElementById('download-links').appendChild(a);
+        }
+
+        function highlightTier(slots) {
+            document.querySelectorAll('.price-card').forEach(c => c.classList.remove('active'));
+            if (slots <= 10) document.getElementById('tier-standard').classList.add('active');
+            else if (slots <= 20) document.getElementById('tier-plus').classList.add('active');
+            else document.getElementById('tier-max').classList.add('active');
+        }
+
+        // EVENTOS DE INTERFACE
+        dropZone.ondragover = (e) => { e.preventDefault(); dropZone.style.borderColor = 'var(--gold)'; };
+        dropZone.ondragleave = () => { dropZone.style.borderColor = 'var(--gold-border)'; };
+        dropZone.ondrop = (e) => { e.preventDefault(); handleFiles(e.dataTransfer.files); };
+        fileInput.onchange = (e) => { handleFiles(e.target.files); };
+    </script>
+</body>
+</html>
