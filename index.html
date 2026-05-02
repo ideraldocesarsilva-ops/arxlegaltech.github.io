@@ -1,300 +1,78 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="robots" content="noindex, nofollow" />
-    <title>Ambiente ARX | Portal de Inteligência Jurídica</title>
-    
-    <link rel="icon" type="image/png" href="favicon_arx.png">
-    <link rel="apple-touch-icon" href="favicon_arx.png">
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
-    <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
-    
-    <style>
-        :root {
-            --navy: #080c14; --navy-light: #0f1729;
-            --gold: #c9a84c; --gold-dim: rgba(201,168,76,0.12);
-            --gold-border: rgba(201,168,76,0.25);
-            --silver: #9a9a9a; --text: #e8e8e8;
-            --border: rgba(255,255,255,0.06);
-        }
+<script>
+    // ... (Funções showLoginForm, hideLoginForm, clearVault permanecem iguais)
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: var(--navy); color: var(--text); font-family: 'Inter', sans-serif; font-weight: 300; line-height: 1.6; }
-
-        /* RECEPÇÃO E ESCOLHAS */
-        #gate-container { position: fixed; inset: 0; background: var(--navy); z-index: 9999; display: flex; align-items: center; justify-content: center; }
-        .intro-box { max-width: 800px; width: 90%; text-align: center; }
-        .choice-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-top: 4rem; }
-        
-        .choice-card { 
-            background: var(--navy-light); border: 1px solid var(--gold-border); 
-            padding: 3rem 2rem; border-radius: 4px; cursor: pointer; 
-            transition: 0.4s; text-decoration: none; display: flex; flex-direction: column; align-items: center; 
-            color: var(--text) !important; /* Mata o roxo de link visitado */
-        }
-        .choice-card:hover { border-color: var(--gold); transform: translateY(-5px); background: rgba(201,168,76,0.03); }
-        .choice-card h3 { font-family: 'Cormorant Garamond', serif; color: var(--gold); font-size: 1.8rem; margin-bottom: 1rem; }
-        .choice-card p { font-size: 0.85rem; color: var(--silver); margin-bottom: 2rem; text-decoration: none !important; }
-
-        /* BOTÃO DE AÇÃO (ESTILO FORÇADO) */
-        .btn-action { 
-            width: 100%; padding: 1.2rem; font-weight: 600; 
-            text-transform: uppercase; border-radius: 2px; letter-spacing: 0.1em; font-size: 0.85rem;
-            display: flex; align-items: center; justify-content: center;
-            background-color: #c9a84c !important; color: #080c14 !important;
-            border: none !important; text-decoration: none !important;
-        }
-
-        /* LOGIN AREA */
-        #login-form-area { display: none; text-align: center; max-width: 400px; width: 100%; }
-        .login-input { width: 100%; background: var(--navy-light); border: 1px solid var(--gold-border); color: #fff; padding: 1.2rem; margin-top: 2rem; border-radius: 2px; text-align: center; outline: none; letter-spacing: 0.2em; }
-        .remember-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 1.5rem; color: var(--silver); font-size: 0.75rem; cursor: pointer; }
-        .remember-container input { accent-color: var(--gold); }
-        .back-link { display: block; margin-top: 1.5rem; color: var(--silver); font-size: 0.7rem; text-decoration: underline; cursor: pointer; }
-
-        /* APP INTERNO */
-        nav { position: fixed; top: 0; width: 100%; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 2.5rem; background: rgba(8, 12, 20, 0.95); border-bottom: 1px solid var(--border); backdrop-filter: blur(10px); min-height: 80px;}
-        .nav-logo { font-family: 'Cormorant Garamond', serif; color: var(--gold); font-weight: 600; font-size: 0.85rem; line-height: 1.4; max-width: 75%; }
-        section { padding: 8rem 2rem 4rem; max-width: 1100px; margin: 0 auto; }
-        .section-title { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; color: var(--gold); margin-bottom: 1rem; }
-        .vault-card { background: var(--navy-light); border: 2px dashed var(--gold-border); padding: 5rem 2rem; text-align: center; cursor: pointer; border-radius: 4px; }
-        .status-panel { display: none; margin-top: 3rem; }
-        .diagnosis-box { background: var(--navy-light); padding: 2.5rem; border-left: 3px solid var(--gold); margin-bottom: 2rem; }
-        .download-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin: 2rem 0; }
-        .download-link { display: block; background: var(--gold-dim); color: var(--gold); padding: 1rem; text-decoration: none; font-size: 0.8rem; text-align: center; border: 1px solid var(--gold-border); border-radius: 2px; }
-        
-        .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 3rem; }
-        .price-card { background: var(--navy-light); border: 1px solid var(--border); padding: 3rem 2rem; border-radius: 2px; opacity: 0.4; transition: 0.5s; position: relative; display: flex; flex-direction: column; }
-        .price-card.active { border-color: var(--gold); opacity: 1; transform: translateY(-8px); box-shadow: 0 15px 40px rgba(0,0,0,0.6); }
-        .price-card.active::before { content: 'MODELO RECOMENDADO'; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--gold); color: var(--navy); font-size: 0.65rem; font-weight: 800; padding: 4px 15px; border-radius: 2px; }
-        .tier-btn { display: block; width: 100%; text-align: center; padding: 1.2rem; border: 1px solid var(--gold); color: var(--gold); text-decoration: none; font-size: 0.85rem; font-weight: 600; margin-top: auto; }
-
-        .support-section { margin-top: 6rem; border-top: 1px solid var(--border); padding-top: 4rem; }
-        .contact-row { display: flex; justify-content: center; gap: 2rem; margin-top: 4rem; flex-wrap: wrap; }
-        .contact-btn { display: flex; align-items: center; gap: 12px; background: var(--navy-light); border: 1px solid var(--gold-border); color: var(--gold); padding: 1rem 2rem; text-decoration: none; font-size: 0.85rem; border-radius: 4px; transition: 0.3s; }
-        footer { text-align: center; padding: 6rem 2rem; border-top: 1px solid var(--border); color: var(--silver); font-size: 0.75rem; }
-    </style>
-</head>
-<body>
-
-    <div id="gate-container">
-        <div id="choice-view" class="intro-box">
-            <img src="logo_arx.png" alt="ARX" style="width: 240px; margin-bottom: 2rem;">
-            <p style="color: var(--silver); font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 3rem;">Agilitas et Securitas</p>
+    async function checkAccess() {
+        const inputVal = document.getElementById('access-key').value.trim();
+        const rememberMe = document.getElementById('remember-me').checked;
+        const error = document.getElementById('error-msg');
+        try {
+            const [respPaid, respDemo] = await Promise.all([fetch('lista.txt'), fetch('lista-demo.txt')]);
+            const [textPaid, textDemo] = await Promise.all([respPaid.text(), respDemo.text()]);
             
-            <div class="choice-grid">
-                <a href="https://arxlegaltech.fillout.com/onboarding" target="_blank" class="choice-card">
-                    <h3>Onboarding</h3>
-                    <p>Contrate o treinamento estratégico e domine a metodologia ARX.</p>
-                    <div class="btn-action">Contratar Agora</div>
-                </a>
-
-                <div onclick="showLoginForm()" class="choice-card">
-                    <h3>Membros</h3>
-                    <p>Acesse o ambiente privado para síntese e diagnósticos processuais.</p>
-                    <div class="btn-action">Acessar Ambiente</div>
-                </div>
-            </div>
-        </div>
-
-        <div id="login-form-area">
-            <img src="logo_arx.png" alt="ARX" style="width: 180px; margin-bottom: 2rem;">
-            <input type="password" id="access-key" class="login-input" placeholder="CHAVE DE ACESSO" onkeypress="if(event.key === 'Enter') checkAccess()">
-            
-            <label class="remember-container">
-                <input type="checkbox" id="remember-me">
-                Não solicitar mais chave neste navegador
-            </label>
-
-            <button onclick="checkAccess()" class="btn-action" style="margin-top: 1.5rem;">Validar Securitas</button>
-            <span onclick="hideLoginForm()" class="back-link">Voltar para a recepção</span>
-            <p id="error-msg" style="color: #ff4d4d; font-size: 0.75rem; margin-top: 1.5rem; display: none;"></p>
-        </div>
-    </div>
-
-    <div id="main-app" style="display:none;">
-        <nav>
-            <span class="nav-logo" id="welcome-msg">Ambiente ARX</span>
-            <span style="font-size: 0.6rem; color: var(--gold); text-transform: uppercase; text-align: right; letter-spacing: 0.1em;">Agilitas et Securitas</span>
-        </nav>
-
-        <section>
-            <h2 class="section-title">Preparação de arquivos para envio.</h2>
-            <div class="vault-card" id="drop-zone" onclick="document.getElementById('file-input').click()">
-                <p style="color: var(--gold); font-size: 1.1rem;">Clique ou arraste para adicionar ao Cofre</p>
-                <input type="file" id="file-input" multiple accept="application/pdf,image/jpeg,image/png" style="display: none;" />
-            </div>
-
-            <div id="file-list-container" style="margin-top: 2rem; display: none;">
-                <h4 style="color: var(--gold); font-size: 0.8rem; text-transform: uppercase; margin-bottom: 1rem;">Arquivos no Cofre:</h4>
-                <ul id="file-list-display" style="list-style: none; color: var(--silver); font-size: 0.85rem; background: rgba(255,255,255,0.03); padding: 1.5rem; border-radius: 4px;"></ul>
-                <button onclick="processAllFiles()" class="btn-action" style="margin-top: 2rem;">Sintetizar Pacote de Documentos</button>
-                <button onclick="clearVault()" style="background: transparent; border: none; color: #ff4d4d; font-size: 0.7rem; cursor: pointer; margin-top: 1.5rem; width: 100%; text-decoration: underline;">Limpar e Encerrar Sessão</button>
-            </div>
-
-            <div id="status-area" class="status-panel">
-                <div class="diagnosis-box">
-                    <h3 style="color: var(--gold); font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; margin-bottom: 1rem;">Diagnóstico de Capacidade</h3>
-                    <p id="lote-count-text" style="font-size: 1.1rem; color: #fff;"></p>
-                </div>
-                <div id="download-links" class="download-grid"></div>
-                <div style="background: rgba(201,168,76,0.05); border: 1px solid var(--gold-border); padding: 1.5rem; border-radius: 4px; margin-bottom: 3.5rem;">
-                    <p style="color: var(--silver); font-size: 0.85rem; line-height: 1.6;">Reconstrução técnica ativa. Consideramos o peso original para determinar o modelo adequado.</p>
-                </div>
-
-                <div class="pricing-grid">
-                    <div id="tier-standard" class="price-card">
-                        <div style="color:var(--gold); font-family:'Cormorant Garamond',serif; font-size:1.8rem;">ARX Standard</div>
-                        <div style="font-size:2.5rem; color:#fff; margin: 1rem 0;">R$ 380</div>
-                        <a id="link-standard" href="https://arxlegaltech.fillout.com/standard" target="_blank" class="tier-btn">Selecionar</a>
-                    </div>
-                    <div id="tier-plus" class="price-card">
-                        <div style="color:var(--gold); font-family:'Cormorant Garamond',serif; font-size:1.8rem;">ARX Plus</div>
-                        <div style="font-size:2.5rem; color:#fff; margin: 1rem 0;">R$ 430</div>
-                        <a id="link-plus" href="https://arxlegaltech.fillout.com/plu" target="_blank" class="tier-btn">Selecionar</a>
-                    </div>
-                    <div id="tier-max" class="price-card">
-                        <div style="color:var(--gold); font-family:'Cormorant Garamond',serif; font-size:1.8rem;">ARX Max</div>
-                        <div style="font-size:2.5rem; color:#fff; margin: 1rem 0;">R$ 480</div>
-                        <a id="link-max" href="https://arxlegaltech.fillout.com/max" target="_blank" class="tier-btn">Selecionar</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="support-section">
-                <div class="contact-row">
-                    <a href="https://wa.me/5543988102220" target="_blank" class="contact-btn"><span>Fale no WhatsApp</span></a>
-                    <a href="mailto:contato@arxlegaltech.com.br" class="contact-btn"><span>Contato via E-mail</span></a>
-                </div>
-            </div>
-        </section>
-        <footer><p>© 2026 ARX LEGALTECH · AMBIENTE PRIVADO</p></footer>
-    </div>
-
-    <script>
-        const { PDFDocument } = PDFLib;
-        let vaultFiles = [];
-
-        function showLoginForm() { document.getElementById('choice-view').style.display = 'none'; document.getElementById('login-form-area').style.display = 'block'; }
-        function hideLoginForm() { document.getElementById('choice-view').style.display = 'block'; document.getElementById('login-form-area').style.display = 'none'; }
-
-        async function checkAccess() {
-            const inputVal = document.getElementById('access-key').value.trim();
-            const rememberMe = document.getElementById('remember-me').checked;
-            const error = document.getElementById('error-msg');
-            try {
-                const [respPaid, respDemo] = await Promise.all([fetch('lista.txt'), fetch('lista-demo.txt')]);
-                const [textPaid, textDemo] = await Promise.all([respPaid.text(), respDemo.text()]);
-                const findInList = (text, input) => {
-                    const lines = text.split(/\r?\n/).filter(l => l.trim());
-                    for (let line of lines) {
-                        const parts = line.split(';');
-                        if (parts[0].trim() === input) return { name: parts[1]?.trim() || "", referrer: parts[2]?.trim() || null };
+            const findInList = (text, input) => {
+                const lines = text.split(/\r?\n/).filter(l => l.trim());
+                for (let line of lines) {
+                    const parts = line.split(';');
+                    if (parts[0].trim() === input) {
+                        return { 
+                            name: parts[1]?.trim() || "Membro", 
+                            referrer: parts[2]?.trim() || null,
+                            gender: parts[3]?.trim().toUpperCase() || "H" // H como padrão
+                        };
                     }
-                    return null;
-                };
-                let data = findInList(textPaid, inputVal);
-                if (data) { login(inputVal, data.name, data.referrer, "paid", rememberMe); return; }
-                data = findInList(textDemo, inputVal);
-                if (data) { login(inputVal, data.name, data.referrer, "demo", rememberMe); return; }
-                error.innerText = "Chave não localizada."; error.style.display = 'block';
-            } catch (e) { error.innerText = "Erro de conexão."; }
-        }
+                }
+                return null;
+            };
 
-        function login(key, name, referrer, type, persist) {
-            const authData = { type, key, name, referrer };
-            if (persist) localStorage.setItem('arx_auth_v68', JSON.stringify(authData));
-            renderApp(authData);
-        }
+            let data = findInList(textPaid, inputVal);
+            if (data) { login(inputVal, data.name, data.referrer, data.gender, "paid", rememberMe); return; }
 
-        function renderApp(data) {
-            document.getElementById('gate-container').style.display = 'none';
-            document.getElementById('main-app').style.display = 'block';
-            const welcomeMsg = document.getElementById('welcome-msg');
-            if (data.type === 'demo') {
-                welcomeMsg.innerText = data.referrer ? `Bem-vindo ${data.name}! Convidado do Membro ${data.referrer}.` : `Bem-vindo ${data.name}! Você é nosso convidado.`;
-                document.getElementById('link-standard').href = "https://arxlegaltech.fillout.com/standard-demo";
-                document.getElementById('link-plus').href = "https://arxlegaltech.fillout.com/plus-demo";
-                document.getElementById('link-max').href = "https://arxlegaltech.fillout.com/max-demo";
+            data = findInList(textDemo, inputVal);
+            if (data) { login(inputVal, data.name, data.referrer, data.gender, "demo", rememberMe); return; }
+
+            error.innerText = "Chave não localizada."; error.style.display = 'block';
+        } catch (e) { error.innerText = "Erro de conexão."; }
+    }
+
+    function login(key, name, referrer, gender, type, persist) {
+        const authData = { type, key, name, referrer, gender };
+        if (persist) localStorage.setItem('arx_auth_v69', JSON.stringify(authData));
+        sessionStorage.setItem('arx_temp_auth', JSON.stringify(authData));
+        renderApp(authData);
+    }
+
+    function renderApp(data) {
+        document.getElementById('gate-container').style.display = 'none';
+        document.getElementById('main-app').style.display = 'block';
+        
+        const welcomeMsg = document.getElementById('welcome-msg');
+        
+        // LÓGICA DE GÊNERO (PNL APLICADA À INTERFACE)
+        const isFem = (data.gender === 'M');
+        const saudacao = isFem ? "Bem-vinda" : "Bem-vindo";
+        const artigo = isFem ? "uma" : "um";
+        const possessivo = isFem ? "nossa" : "nosso";
+        const substantivo = isFem ? "convidada" : "convidado";
+
+        if (data.type === 'demo') {
+            if (data.referrer && data.referrer !== "null" && data.referrer !== "") {
+                welcomeMsg.innerText = `${saudacao} ${data.name}! Você é ${artigo} ${substantivo} do Membro ${data.referrer} para experimentar a Análise ARX!`;
             } else {
-                welcomeMsg.innerText = `Bem-vindo, ${data.name}`;
+                welcomeMsg.innerText = `${saudacao} ${data.name}! Você é ${possessivo} ${substantivo} para experimentar a Análise ARX!`;
             }
+            // Atualiza links demo
+            document.getElementById('link-standard').href = "https://arxlegaltech.fillout.com/standard-demo";
+            document.getElementById('link-plus').href = "https://arxlegaltech.fillout.com/plus-demo";
+            document.getElementById('link-max').href = "https://arxlegaltech.fillout.com/max-demo";
+        } else {
+            welcomeMsg.innerText = `${saudacao}, ${data.name}`;
         }
+    }
 
-        window.onload = () => { 
-            const saved = localStorage.getItem('arx_auth_v68');
-            if(saved) renderApp(JSON.parse(saved)); 
-        };
+    window.onload = () => { 
+        const saved = localStorage.getItem('arx_auth_v69') || sessionStorage.getItem('arx_temp_auth');
+        if(saved) renderApp(JSON.parse(saved)); 
+    };
 
-        function handleFiles(files) {
-            for (let f of files) { vaultFiles.push(f); }
-            const container = document.getElementById('file-list-container');
-            const display = document.getElementById('file-list-display');
-            container.style.display = 'block';
-            display.innerHTML = vaultFiles.map(f => `<li style="margin-bottom:8px; display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:5px;"><span>${f.name}</span><span style="opacity:0.5;">(${(f.size/1024/1024).toFixed(2)} MB)</span></li>`).join('');
-        }
-
-        function clearVault() { localStorage.clear(); location.reload(); }
-
-        async function processAllFiles() {
-            if (vaultFiles.length === 0) return;
-            const statusArea = document.getElementById('status-area');
-            const loteText = document.getElementById('lote-count-text');
-            const downloadGrid = document.getElementById('download-links');
-            statusArea.style.display = 'block';
-            loteText.innerText = "Sintetizando lotes...";
-            downloadGrid.innerHTML = "";
-            try {
-                const master = await PDFDocument.create();
-                for (const f of vaultFiles) {
-                    const buf = await f.arrayBuffer();
-                    if (f.type.startsWith('image/')) {
-                        const img = f.type === 'image/png' ? await master.embedPng(buf) : await master.embedJpg(buf);
-                        const page = master.addPage([img.width, img.height]);
-                        page.drawImage(img, { x: 0, y: 0, width: img.width, height: img.height });
-                    } else {
-                        const pdf = await PDFDocument.load(buf);
-                        const pages = await master.copyPages(pdf, pdf.getPageIndices());
-                        pages.forEach(p => master.addPage(p));
-                    }
-                }
-                let slots = 0, currentIndex = 0;
-                const total = master.getPageCount(), MAX_BYTES = 18 * 1024 * 1024;
-                while (currentIndex < total) {
-                    const chunk = await PDFDocument.create();
-                    let chunkPages = 0;
-                    while (currentIndex < total) {
-                        const [p] = await chunk.copyPages(master, [currentIndex]);
-                        chunk.addPage(p);
-                        currentIndex++; chunkPages++;
-                        const bytes = await chunk.save();
-                        if (bytes.length > MAX_BYTES || chunkPages >= 500) break;
-                    }
-                    const final = await chunk.save();
-                    slots++;
-                    const url = URL.createObjectURL(new Blob([final], { type: 'application/pdf' }));
-                    const a = document.createElement('a'); a.href = url; a.download = `LOTE_ARX_${slots}.pdf`; a.className = 'download-link';
-                    a.innerHTML = `<strong>Baixar LOTE_${slots}</strong>`;
-                    downloadGrid.appendChild(a);
-                }
-                loteText.innerText = `Pacote organizado em ${slots} lotes.`;
-                const pesoOriginalMB = vaultFiles.reduce((acc, f) => acc + f.size, 0) / (1024 * 1024);
-                document.querySelectorAll('.price-card').forEach(c => c.classList.remove('active'));
-                if (pesoOriginalMB <= 200) document.getElementById('tier-standard').classList.add('active');
-                else if (pesoOriginalMB <= 400) document.getElementById('tier-plus').classList.add('active');
-                else document.getElementById('tier-max').classList.add('active');
-                statusArea.scrollIntoView({ behavior: 'smooth' });
-            } catch(e) { loteText.innerText = "Erro na síntese."; }
-        }
-
-        const dropZone = document.getElementById('drop-zone');
-        dropZone.ondragover = (e) => { e.preventDefault(); dropZone.style.borderColor = 'var(--gold)'; };
-        dropZone.ondragleave = () => { dropZone.style.borderColor = 'var(--gold-border)'; };
-        dropZone.ondrop = (e) => { e.preventDefault(); handleFiles(e.dataTransfer.files); };
-        document.getElementById('file-input').onchange = (e) => { handleFiles(e.target.files); };
-    </script>
-</body>
-</html>
+    // ... (Mantenha o restante das funções de síntese e drag-and-drop iguais)
+</script>
