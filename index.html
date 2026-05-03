@@ -43,7 +43,7 @@
             padding: 1.2rem; border: none !important; border-radius: 2px;
             background-color: #c9a84c !important; color: #080c14 !important;
             font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.85rem;
-            cursor: pointer; text-decoration: none !important;
+            cursor: pointer; text-decoration: none !important; pointer-events: none; /* Deixa o clique passar para o card pai */
         }
 
         #login-form-area { display: none; text-align: center; max-width: 400px; width: 100%; }
@@ -52,40 +52,25 @@
 
         /* APP INTERNO */
         #main-app { flex-grow: 1; display: none; }
-        nav { position: fixed; top: 0; width: 100%; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 2.5rem; background: rgba(8, 12, 20, 0.95); border-bottom: 1px solid var(--border); backdrop-filter: blur(10px); min-height: 100px; }
+        nav { position: fixed; top: 0; width: 100%; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 2.5rem; background: rgba(8, 12, 20, 0.95); border-bottom: 1px solid var(--border); backdrop-filter: blur(10px); min-height: 110px; }
         
-        /* SAUDAÇÃO AJUSTADA - FONTE MAIOR E MAIS LEVÍVEL */
+        /* SAUDAÇÃO PREMIUM - v7.0.3 */
         .nav-logo { 
             font-family: 'Cormorant Garamond', serif; 
             color: var(--gold); 
             font-weight: 400; 
-            font-size: 1.6rem; /* Aumentado significativamente para ser notado */
+            font-size: 1.8rem; /* Aumentado para máximo impacto */
             line-height: 1.2; 
             max-width: 80%;
             font-style: italic;
         }
         
-        section { padding: 10rem 2rem 4rem; max-width: 1100px; margin: 0 auto; }
+        section { padding: 12rem 2rem 4rem; max-width: 1100px; margin: 0 auto; }
         .section-title { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; color: var(--gold); margin-bottom: 1rem; }
         
-        /* ESTILO TOOLTIP E INSTRUÇÕES */
         .instruction-box { background: var(--navy-light); border: 1px solid var(--gold-border); padding: 2rem; border-radius: 4px; margin-bottom: 2rem; }
         .instruction-box h3 { color: var(--gold); font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; margin-bottom: 0.5rem; }
         .instruction-box p { color: var(--silver); font-size: 0.85rem; margin-bottom: 1rem; }
-
-        .tooltip {
-            position: relative; display: inline-flex; align-items: center; justify-content: center;
-            width: 20px; height: 20px; border-radius: 50%; background: var(--gold-dim);
-            border: 1px solid var(--gold-border); color: var(--gold); font-size: 0.75rem;
-            cursor: help; margin-left: 10px; vertical-align: middle;
-        }
-        .tooltip .tooltip-text {
-            visibility: hidden; width: 260px; background-color: var(--navy); color: #fff;
-            text-align: left; border-radius: 4px; padding: 1rem; position: absolute; z-index: 10;
-            bottom: 130%; left: 50%; margin-left: -130px; border: 1px solid var(--gold-border);
-            opacity: 0; transition: opacity 0.3s; font-size: 0.75rem; line-height: 1.5;
-        }
-        .tooltip:hover .tooltip-text { visibility: visible; opacity: 1; }
 
         .vault-card { background: var(--navy-light); border: 2px dashed var(--gold-border); padding: 5rem 2rem; text-align: center; cursor: pointer; border-radius: 4px; transition: 0.3s; }
         .vault-card:hover { border-color: var(--gold); }
@@ -117,10 +102,11 @@
                     <p>Contrate o treinamento estratégico e domine a metodologia ARX.</p>
                     <div class="btn-action">Contratar Agora</div>
                 </a>
+                
                 <div onclick="showLoginForm()" class="choice-card">
                     <h3>Membros</h3>
                     <p>Acesse o ambiente privado para síntese e diagnósticos.</p>
-                    <div class="btn-action" onclick="showLoginForm()">Acessar Ambiente</div>
+                    <div class="btn-action">Acessar Ambiente</div>
                 </div>
             </div>
         </div>
@@ -129,13 +115,13 @@
             <img src="logo_arx.png" alt="ARX" style="width: 180px; margin-bottom: 2rem;">
             <input type="password" id="access-key" class="login-input" placeholder="CHAVE DE ACESSO" onkeypress="if(event.key === 'Enter') checkAccess()">
             <label class="remember-container"><input type="checkbox" id="remember-me"> Não solicitar mais chave neste navegador</label>
-            <button onclick="checkAccess()" class="btn-action" style="margin-top: 1.5rem; max-width: 400px;">Validar Securitas</button>
+            <button onclick="checkAccess()" class="btn-action" style="margin-top: 1.5rem; max-width: 400px; pointer-events: auto;">Validar Securitas</button>
             <span onclick="hideLoginForm()" style="display: block; margin-top: 1.5rem; color: var(--silver); font-size: 0.7rem; text-decoration: underline; cursor: pointer;">Voltar para a recepção</span>
             <p id="error-msg" style="color: #ff4d4d; font-size: 0.75rem; margin-top: 1.5rem; display: none;"></p>
         </div>
 
         <footer class="gate-footer">
-            <p>© 2026 ARX LEGALTECH · AMBIENTE PRIVADO · <span style="opacity: 0.4; font-size: 0.6rem;">v7.0.2</span></p>
+            <p>© 2026 ARX LEGALTECH · AMBIENTE PRIVADO · <span style="opacity: 0.4; font-size: 0.6rem;">v7.0.3</span></p>
         </footer>
     </div>
 
@@ -149,7 +135,7 @@
             <div class="instruction-box">
                 <h3>Protocolo de Higienização de Dados ARX</h3>
                 <p>Para garantir a precisão cirúrgica da Inteligência Artificial e evitar alucinações jurídicas, seus documentos precisam passar por higienização de metadados.</p>
-                <p style="font-size: 0.8rem;">1. Adicione os arquivos no Cofre. <br> 2. Clique em 'Sintetizar'. <br> 3. Baixe o pacote limpo e envie no formulário de análise.</p>
+                <p style="font-size: 0.8rem; margin-top: 10px;">1. Adicione os arquivos no Cofre. <br> 2. Clique em 'Sintetizar'. <br> 3. Baixe o pacote limpo e envie no formulário de análise.</p>
             </div>
 
             <div class="vault-card" id="drop-zone" onclick="document.getElementById('file-input').click()">
@@ -160,17 +146,10 @@
             <div id="file-list-container" style="margin-top: 2rem; display: none;">
                 <h4 style="color: var(--gold); font-size: 0.8rem; text-transform: uppercase; margin-bottom: 1rem;">Arquivos no Cofre:</h4>
                 <ul id="file-list-display" style="list-style: none; color: var(--silver); font-size: 0.85rem; background: rgba(255,255,255,0.03); padding: 1.5rem; border-radius: 4px;"></ul>
-                <button onclick="processAllFiles()" class="btn-action" style="margin-top: 2rem;">Sintetizar Pacote de Documentos</button>
+                <button onclick="processAllFiles()" class="btn-action" style="margin-top: 2rem; pointer-events: auto;">Sintetizar Pacote de Documentos</button>
                 <button onclick="clearVault()" class="btn-ghost">Limpar cofre e reiniciar sessão</button>
             </div>
 
             <div id="status-area" class="status-panel">
                 <div class="diagnosis-box">
-                    <h3 style="color: var(--gold); font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; margin-bottom: 1rem;">Diagnóstico de Capacidade</h3>
-                    <p id="lote-count-text" style="font-size: 1.1rem; color: #fff;"></p>
-                </div>
-                <div id="download-links" class="download-grid"></div>
-                
-                <div class="pricing-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 3rem;">
-                    <div id="tier-standard" class="price-card"><div style="color:var(--gold); font-family:'Cormorant Garamond',serif; font-size:1.8rem;">ARX Standard</div><div style="font-size:2.5rem; color:#fff; margin: 1rem 0;">R$ 380</div><a id="link-standard" href="https://arxlegaltech.fillout.com/standard" target="_blank" class="tier-btn">Selecionar</a></div>
-                    <div id="tier-plus" class="price-card"><div style="color:var(--gold); font-family:'Cormorant Garamond',serif; font-size:1.8rem;">ARX Plus</div><div style="font-size:2.5rem; color:#fff; margin: 1rem 0;">R$ 4
+                    <h3 style="color: var(--gold); font-family: 'Cormorant Garamond', serif; font-size: 1.
