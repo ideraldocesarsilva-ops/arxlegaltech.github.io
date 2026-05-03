@@ -57,12 +57,73 @@
         
         section { padding: 8rem 2rem 4rem; max-width: 1100px; margin: 0 auto; }
         .section-title { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; color: var(--gold); margin-bottom: 1rem; }
-        .vault-card { background: var(--navy-light); border: 2px dashed var(--gold-border); padding: 5rem 2rem; text-align: center; cursor: pointer; border-radius: 4px; }
+        .vault-card { background: var(--navy-light); border: 2px dashed var(--gold-border); padding: 5rem 2rem; text-align: center; cursor: pointer; border-radius: 4px; transition: border-color 0.3s; }
+        .vault-card:hover { border-color: var(--gold); }
+
+        /* TOOLTIP CSS */
+        .tooltip {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--gold-dim);
+            border: 1px solid var(--gold-border);
+            color: var(--gold);
+            font-size: 0.75rem;
+            font-family: 'Inter', sans-serif;
+            cursor: help;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 260px;
+            background-color: var(--navy);
+            color: #fff;
+            text-align: left;
+            border-radius: 4px;
+            padding: 1rem;
+            position: absolute;
+            z-index: 10;
+            bottom: 130%;
+            left: 50%;
+            margin-left: -130px;
+            border: 1px solid var(--gold-border);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.75rem;
+            line-height: 1.5;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            font-weight: normal;
+            text-transform: none;
+            letter-spacing: normal;
+        }
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* INSTRUCTION BOX CSS */
+        .instruction-box {
+            background: var(--navy-light);
+            border: 1px solid var(--gold-border);
+            padding: 2rem;
+            border-radius: 4px;
+            margin-bottom: 2rem;
+        }
+        .instruction-box h3 { color: var(--gold); font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; margin-bottom: 0.5rem; }
+        .instruction-box p { color: var(--silver); font-size: 0.85rem; margin-bottom: 1rem; }
+        .instruction-box ol { color: var(--text); font-size: 0.85rem; padding-left: 1.2rem; line-height: 1.8; }
+        .instruction-box li strong { color: var(--gold); }
 
         .status-panel { display: none; margin-top: 3rem; }
         .diagnosis-box { background: var(--navy-light); padding: 2.5rem; border-left: 3px solid var(--gold); margin-bottom: 2rem; }
         .download-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin: 2rem 0; }
-        .download-link { display: block; background: var(--gold-dim); color: var(--gold); padding: 1rem; text-decoration: none; font-size: 0.8rem; text-align: center; border: 1px solid var(--gold-border); border-radius: 2px; }
+        .download-link { display: block; background: var(--gold-dim); color: var(--gold); padding: 1rem; text-decoration: none; font-size: 0.8rem; text-align: center; border: 1px solid var(--gold-border); border-radius: 2px; transition: 0.3s; }
+        .download-link:hover { background: var(--gold); color: var(--navy); }
         
         .price-card { background: var(--navy-light); border: 1px solid var(--border); padding: 3rem 2rem; border-radius: 2px; opacity: 0.4; transition: 0.5s; position: relative; display: flex; flex-direction: column; }
         .price-card.active { border-color: var(--gold); opacity: 1; transform: translateY(-8px); box-shadow: 0 15px 40px rgba(0,0,0,0.6); }
@@ -70,11 +131,21 @@
 
         footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--border); color: var(--silver); font-size: 0.75rem; width: 100%; background: var(--navy); }
         .gate-footer { position: absolute; bottom: 0; left: 0; }
+        
+        /* GHOST BUTTON CSS */
+        .btn-ghost {
+            background: transparent; border: none; color: var(--silver); 
+            font-size: 0.8rem; cursor: pointer; text-decoration: underline; 
+            transition: color 0.3s; padding: 0.5rem;
+        }
+        .btn-ghost:hover { color: #fff; }
     </style>
 </head>
 <body>
 
+    <!-- GATE CONTAINER (Mantido inalterado) -->
     <div id="gate-container">
+        <!-- ... [O conteúdo do gate-container permanece o mesmo do seu código original] ... -->
         <div id="choice-view" class="intro-box">
             <img src="logo_arx.png" alt="ARX" style="width: 240px; margin-bottom: 2rem;">
             <p style="color: var(--silver); font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 3rem;">Agilitas et Securitas</p>
@@ -106,6 +177,7 @@
         </footer>
     </div>
 
+    <!-- APP INTERNO -->
     <div id="main-app">
         <nav>
             <span class="nav-logo" id="welcome-msg">Ambiente ARX</span>
@@ -114,16 +186,40 @@
 
         <section>
             <h2 class="section-title">Preparação de arquivos para envio.</h2>
+            
+            <!-- NOVA CAIXA DE INSTRUÇÕES (O Porquê) -->
+            <div class="instruction-box">
+                <h3>Protocolo de Higienização de Dados ARX</h3>
+                <p>Para garantir a precisão cirúrgica da Inteligência Artificial e evitar alucinações jurídicas, seus documentos precisam ser limpos e unificados.</p>
+                <ol>
+                    <li><strong>Suba seus PDFs abaixo.</strong> Nosso sistema removerá metadados sujos, ruídos e ajustará a formatação.</li>
+                    <li><strong>Baixe o Pacote Otimizado.</strong> Este é o formato de alta performance exigido pelos nossos servidores.</li>
+                    <li><strong>Prossiga para o Formulário de Seleção</strong> mais abaixo e anexe o pacote limpo para iniciar a sua auditoria.</li>
+                </ol>
+            </div>
+
+            <!-- ÁREA DE DROP COM TOOLTIP -->
             <div class="vault-card" id="drop-zone" onclick="document.getElementById('file-input').click()">
-                <p style="color: var(--gold); font-size: 1.1rem;">Clique ou arraste para adicionar ao Cofre</p>
+                <p style="color: var(--gold); font-size: 1.1rem; display: flex; align-items: center; justify-content: center;">
+                    Clique ou arraste para adicionar ao Cofre
+                    <span class="tooltip">?
+                        <span class="tooltip-text">Anexe aqui os documentos originais do caso (matrículas, contratos, laudos, petições). Tamanhos grandes serão comprimidos e unificados em um único lote otimizado.</span>
+                    </span>
+                </p>
                 <input type="file" id="file-input" multiple accept="application/pdf,image/jpeg,image/png" style="display: none;" />
             </div>
 
             <div id="file-list-container" style="margin-top: 2rem; display: none;">
                 <h4 style="color: var(--gold); font-size: 0.8rem; text-transform: uppercase; margin-bottom: 1rem;">Arquivos no Cofre:</h4>
                 <ul id="file-list-display" style="list-style: none; color: var(--silver); font-size: 0.85rem; background: rgba(255,255,255,0.03); padding: 1.5rem; border-radius: 4px;"></ul>
-                <button onclick="processAllFiles()" class="btn-action" style="margin-top: 2rem;">Sintetizar Pacote de Documentos</button>
-                <button onclick="clearVault()" style="background: transparent; border: none; color: #ff4d4d; font-size: 0.7rem; cursor: pointer; margin-top: 1.5rem; width: 100%; text-decoration: underline;">Limpar e Encerrar Sessão</button>
+                
+                <!-- BOTÃO DE SINTETIZAR COM TOOLTIP -->
+                <button onclick="processAllFiles()" class="btn-action" style="margin-top: 2rem; position: relative;">
+                    Sintetizar Pacote de Documentos
+                    <span class="tooltip" style="background: rgba(8, 12, 20, 0.15); border-color: rgba(8, 12, 20, 0.3); color: var(--navy);">?
+                        <span class="tooltip-text" style="background: var(--navy-light); border-color: var(--gold-border); color: #fff;">Este botão funde todos os arquivos em um único pacote limpo. Após clicar, aguarde o carregamento e baixe o arquivo na seção abaixo.</span>
+                    </span>
+                </button>
             </div>
 
             <div id="status-area" class="status-panel">
@@ -135,8 +231,13 @@
                     <div id="tier-max" class="price-card"><div style="color:var(--gold); font-family:'Cormorant Garamond',serif; font-size:1.8rem;">ARX Max</div><div style="font-size:2.5rem; color:#fff; margin: 1rem 0;">R$ 480</div><a id="link-max" href="https://arxlegaltech.fillout.com/max" target="_blank" class="tier-btn">Selecionar</a></div>
                 </div>
             </div>
+            
+            <!-- BOTÃO LIMPAR REPOSICIONADO E DISCRETO -->
+            <div style="margin-top: 5rem; text-align: center; border-top: 1px solid var(--border); padding-top: 2rem;">
+                <button onclick="clearVault()" class="btn-ghost">Limpar cofre e reiniciar sessão</button>
+            </div>
 
-            <div style="margin-top: 6rem; border-top: 1px solid var(--border); padding-top: 4rem; display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
+            <div style="margin-top: 3rem; display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
                 <a href="https://wa.me/5543988102220" target="_blank" style="display: flex; align-items: center; gap: 12px; background: var(--navy-light); border: 1px solid var(--gold-border); color: var(--gold); padding: 1rem 2rem; text-decoration: none; font-size: 0.85rem; border-radius: 4px;">Fale no WhatsApp</a>
                 <a href="mailto:contato@arxlegaltech.com.br" style="display: flex; align-items: center; gap: 12px; background: var(--navy-light); border: 1px solid var(--gold-border); color: var(--gold); padding: 1rem 2rem; text-decoration: none; font-size: 0.85rem; border-radius: 4px;">Contato via E-mail</a>
             </div>
@@ -148,6 +249,7 @@
     </div>
 
     <script>
+        // ... [Todo o seu bloco de JavaScript permanece exatamente igual ao código fornecido] ...
         const { PDFDocument } = PDFLib;
         let vaultFiles = [];
 
@@ -246,4 +348,5 @@
                 while (currentIndex < total) {
                     const chunk = await PDFDocument.create(); let chunkPages = 0;
                     while (currentIndex < total) {
-                        const [p] =
+                        const [p] = 
+                        // ... O resto da sua lógica de processamento JavaScript continua aqui
