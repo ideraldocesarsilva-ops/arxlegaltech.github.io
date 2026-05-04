@@ -76,12 +76,14 @@
 
         .status-panel { display: none; margin-top: 3rem; }
         .diagnosis-box { background: var(--navy-light); padding: 2.5rem; border-left: 3px solid var(--gold); margin-bottom: 2rem; }
-        .download-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin: 2rem 0; }
-        .download-link { display: block; background: var(--gold-dim); color: var(--gold); padding: 1rem; text-decoration: none; font-size: 0.8rem; text-align: center; border: 1px solid var(--gold-border); border-radius: 2px; }
         
-        .price-card { background: var(--navy-light); border: 1px solid var(--border); padding: 3rem 2rem; border-radius: 2px; opacity: 0.4; transition: 0.5s; position: relative; display: flex; flex-direction: column; }
-        .price-card.active { border-color: var(--gold); opacity: 1; transform: translateY(-8px); box-shadow: 0 15px 40px rgba(0,0,0,0.6); }
+        /* PRICE CARDS v7.0.6 - BLOQUEIO INICIAL */
+        .price-card { background: var(--navy-light); border: 1px solid var(--border); padding: 3rem 2rem; border-radius: 2px; opacity: 0.3; transition: 0.5s; position: relative; display: flex; flex-direction: column; pointer-events: none; }
+        .price-card.active { border-color: var(--gold); opacity: 1; transform: translateY(-8px); box-shadow: 0 15px 40px rgba(0,0,0,0.6); pointer-events: auto; }
         .tier-btn { display: block; width: 100%; text-align: center; padding: 1.2rem; border: 1px solid var(--gold); color: var(--gold); text-decoration: none; font-size: 0.85rem; font-weight: 600; margin-top: auto; }
+
+        .download-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin: 2rem 0; }
+        .download-link { display: block; background: var(--gold); color: var(--navy); padding: 1rem; text-decoration: none; font-size: 0.85rem; font-weight: 600; text-align: center; border-radius: 2px; box-shadow: 0 5px 15px rgba(201,168,76,0.3); }
 
         .btn-ghost { background: transparent; border: none; color: var(--silver); font-size: 0.8rem; cursor: pointer; text-decoration: underline; margin-top: 2rem; width: 100%; transition: 0.3s; }
         .btn-ghost:hover { color: #fff; }
@@ -121,7 +123,7 @@
         </div>
 
         <footer class="gate-footer">
-            <p>© 2026 ARX LEGALTECH · AMBIENTE PRIVADO · <span style="opacity: 0.4; font-size: 0.6rem;">v7.0.5</span></p>
+            <p>© 2026 ARX LEGALTECH · AMBIENTE PRIVADO · <span style="opacity: 0.4; font-size: 0.6rem;">v7.0.6</span></p>
         </footer>
     </div>
 
@@ -135,7 +137,7 @@
             <div class="instruction-box">
                 <h3>Protocolo de Higienização de Dados ARX</h3>
                 <p>Para garantir a precisão cirúrgica da Inteligência Artificial e evitar alucinações jurídicas, seus documentos precisam passar por higienização de metadados.</p>
-                <p style="font-size: 0.8rem; margin-top: 10px;">1. Adicione os arquivos no Cofre. <br> 2. Clique em 'Sintetizar'. <br> 3. Baixe o pacote limpo e envie no formulário de análise.</p>
+                <p style="font-size: 0.8rem; margin-top: 10px;">1. Adicione os arquivos no Cofre. <br> 2. Clique em 'Sintetizar'. <br> 3. Baixe o pacote limpo e escolha o modelo de análise abaixo.</p>
             </div>
 
             <div class="vault-card" id="drop-zone" onclick="document.getElementById('file-input').click()">
@@ -158,31 +160,41 @@
                 <div id="download-links" class="download-grid"></div>
                 
                 <div class="pricing-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 3rem;">
-                    <div id="tier-standard" class="price-card"><div style="color:var(--gold); font-family:'Cormorant Garamond',serif; font-size:1.8rem;">ARX Standard</div><div style="font-size:2.5rem; color:#fff; margin: 1rem 0;">R$ 380</div><a id="link-standard" href="https://arxlegaltech.fillout.com/standard" target="_blank" class="tier-btn">Selecionar</a></div>
-                    <div id="tier-plus" class="price-card"><div style="color:var(--gold); font-family:'Cormorant Garamond',serif; font-size:1.8rem;">ARX Plus</div><div style="font-size:2.5rem; color:#fff; margin: 1rem 0;">R$ 430</div><a id="link-plus" href="https://arxlegaltech.fillout.com/plus" target="_blank" class="tier-btn">Selecionar</a></div>
-                    <div id="tier-max" class="price-card"><div style="color:var(--gold); font-family:'Cormorant Garamond',serif; font-size:1.8rem;">ARX Max</div><div style="font-size:2.5rem; color:#fff; margin: 1rem 0;">R$ 480</div><a id="link-max" href="https://arxlegaltech.fillout.com/max" target="_blank" class="tier-btn">Selecionar</a></div>
+                    <div id="tier-standard" class="price-card">
+                        <div style="color:var(--gold); font-family:'Cormorant Garamond',serif; font-size:1.8rem;">ARX Essential</div>
+                        <p style="font-size: 0.75rem; color: var(--silver); margin-top: 0.5rem;">Riscos, Auditoria e Plano de Ação.</p>
+                        <div style="font-size:2.5rem; color:#fff; margin: 1rem 0;">R$ 280</div>
+                        <a id="link-standard" href="https://arxlegaltech.fillout.com/standard" target="_blank" class="tier-btn">Selecionar Essential</a>
+                    </div>
+                    <div id="tier-plus" class="price-card">
+                        <div style="color:var(--gold); font-family:'Cormorant Garamond',serif; font-size:1.8rem;">ARX Professional</div>
+                        <p style="font-size: 0.75rem; color: var(--silver); margin-top: 0.5rem;">+ Linha do Tempo e Esboço de Peça.</p>
+                        <div style="font-size:2.5rem; color:#fff; margin: 1rem 0;">R$ 365</div>
+                        <a id="link-plus" href="https://arxlegaltech.fillout.com/plus" target="_blank" class="tier-btn">Selecionar Professional</a>
+                    </div>
+                    <div id="tier-max" class="price-card">
+                        <div style="color:var(--gold); font-family:'Cormorant Garamond',serif; font-size:1.8rem;">ARX Elite</div>
+                        <p style="font-size: 0.75rem; color: var(--silver); margin-top: 0.5rem;">+ Resumo PNL e Vetores Motivacionais.</p>
+                        <div style="font-size:2.5rem; color:#fff; margin: 1rem 0;">R$ 450</div>
+                        <a id="link-max" href="https://arxlegaltech.fillout.com/max" target="_blank" class="tier-btn">Selecionar Elite</a>
+                    </div>
                 </div>
             </div>
         </section>
         
         <footer>
-            <p>© 2026 ARX LEGALTECH · AMBIENTE PRIVADO · <span style="opacity: 0.4; font-size: 0.6rem;">v7.0.5</span></p>
+            <p>© 2026 ARX LEGALTECH · AMBIENTE PRIVADO · <span style="opacity: 0.4; font-size: 0.6rem;">v7.0.6</span></p>
         </footer>
     </div>
 
     <script>
         const { PDFDocument } = PDFLib;
         let vaultFiles = [];
+        let totalPagesInLote = 0;
 
         function showLoginForm() { 
             document.getElementById('choice-view').style.display = 'none'; 
-            
-            // Corrige o layout da tela de login para manter centralizado
-            const loginArea = document.getElementById('login-form-area');
-            loginArea.style.display = 'flex';
-            loginArea.style.flexDirection = 'column';
-            loginArea.style.alignItems = 'center';
-            loginArea.style.justifyContent = 'center';
+            document.getElementById('login-form-area').style.display = 'flex';
         }
 
         function hideLoginForm() { 
@@ -231,14 +243,7 @@
             document.getElementById('main-app').style.display = 'block';
             const isFem = (data.gender === 'M');
             const saudacao = isFem ? "Bem-vinda" : "Bem-vindo";
-            
             document.getElementById('welcome-msg').innerText = `${saudacao}, ${data.name}`;
-            
-            if (data.type === 'demo') {
-                document.getElementById('link-standard').href = "https://arxlegaltech.fillout.com/standard-demo";
-                document.getElementById('link-plus').href = "https://arxlegaltech.fillout.com/plus-demo";
-                document.getElementById('link-max').href = "https://arxlegaltech.fillout.com/max-demo";
-            }
             window.scrollTo(0,0);
         }
 
@@ -263,7 +268,7 @@
             const statusArea = document.getElementById('status-area');
             const loteText = document.getElementById('lote-count-text');
             const downloadGrid = document.getElementById('download-links');
-            statusArea.style.display = 'block'; loteText.innerText = "Sintetizando lotes..."; downloadGrid.innerHTML = "";
+            statusArea.style.display = 'block'; loteText.innerText = "Sintetizando documentos para auditoria..."; downloadGrid.innerHTML = "";
             
             try {
                 const master = await PDFDocument.create();
@@ -280,19 +285,40 @@
                     }
                 }
 
+                totalPagesInLote = master.getPageCount();
                 const pdfBytes = await master.save();
                 const blob = new Blob([pdfBytes], { type: 'application/pdf' });
                 const url = URL.createObjectURL(blob);
                 
-                loteText.innerText = "Seu pacote higienizado está pronto para download.";
-                downloadGrid.innerHTML = `<a href="${url}" download="PACOTE_ARX_OTIMIZADO.pdf" class="download-link" onclick="activateTiers()">BAIXAR PACOTE HIGIENIZADO</a>`;
+                loteText.innerText = `Lote de ${totalPagesInLote} páginas higienizado. Baixe para liberar a análise estratégica.`;
+                downloadGrid.innerHTML = `<a href="${url}" download="PACOTE_ARX_AUDITORIA.pdf" class="download-link" onclick="activateTiers()">BAIXAR PACOTE DE AUDITORIA</a>`;
             } catch (e) {
                 loteText.innerText = "Erro ao processar documentos.";
             }
         }
 
+        // v7.0.6 - LÓGICA DE ILUMINAÇÃO SELETIVA
         function activateTiers() {
-            document.querySelectorAll('.price-card').forEach(card => card.classList.add('active'));
+            // Remove qualquer classe active pré-existente
+            document.querySelectorAll('.price-card').forEach(card => card.classList.remove('active'));
+
+            // Lógica de recomendação baseada no tamanho do lote
+            let recommendedTier = 'tier-max'; // Default para Elite (Elite é o padrão para casos reais)
+            
+            if (totalPagesInLote <= 5) {
+                recommendedTier = 'tier-standard';
+            } else if (totalPagesInLote <= 20) {
+                recommendedTier = 'tier-plus';
+            }
+
+            // Destaca apenas o plano recomendado
+            document.getElementById(recommendedTier).classList.add('active');
+            
+            // Permite que os outros sejam clicados também, mas sem o destaque visual
+            document.querySelectorAll('.price-card').forEach(card => {
+                card.style.pointerEvents = 'auto';
+                card.style.opacity = '1'; // Torna todos visíveis, mas o 'active' tem a borda e o transform
+            });
         }
     </script>
 </body>
