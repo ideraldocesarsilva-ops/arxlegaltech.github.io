@@ -24,7 +24,6 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: var(--navy); color: var(--text); font-family: 'Inter', sans-serif; font-weight: 300; line-height: 1.6; display: flex; flex-direction: column; min-height: 100vh; }
 
-        /* GATE CONTAINER */
         #gate-container { position: fixed; inset: 0; background: var(--navy); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .intro-box { max-width: 800px; width: 90%; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         .choice-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-top: 4rem; width: 100%; }
@@ -50,9 +49,8 @@
         .login-input { width: 100%; background: var(--navy-light); border: 1px solid var(--gold-border); color: #fff; padding: 1.2rem; margin-top: 2rem; border-radius: 2px; text-align: center; outline: none; letter-spacing: 0.2em; }
         .remember-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 1.5rem; color: var(--silver); font-size: 0.75rem; cursor: pointer; }
 
-        /* APP INTERNO */
         #main-app { flex-grow: 1; display: none; }
-        nav { position: fixed; top: 0; width: 100%; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 2.5rem; background: rgba(8, 12, 20, 0.95); border-bottom: 1px solid var(--border); backdrop-filter: blur(10px); min-height: 110px; }
+        nav { position: fixed; top: 0; width: 100%; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 2.5rem; background: rgba(8, 12, 20, 0.95); border-bottom: 1px solid var(--border); backdrop-filter: blur(10px); min-height: 115px; }
         
         .nav-logo { 
             font-family: 'Cormorant Garamond', serif; 
@@ -60,36 +58,34 @@
             font-weight: 400; 
             font-size: 1.8rem; 
             line-height: 1.2; 
-            max-width: 80%;
+            max-width: 85%;
             font-style: italic;
         }
         
-        section { padding: 12rem 2rem 4rem; max-width: 1100px; margin: 0 auto; }
+        section { padding: 13rem 2rem 4rem; max-width: 1100px; margin: 0 auto; }
         .section-title { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; color: var(--gold); margin-bottom: 1rem; }
         
         .instruction-box { background: var(--navy-light); border: 1px solid var(--gold-border); padding: 2rem; border-radius: 4px; margin-bottom: 2rem; }
         .instruction-box h3 { color: var(--gold); font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; margin-bottom: 0.5rem; }
-        .instruction-box p { color: var(--silver); font-size: 0.85rem; margin-bottom: 1rem; }
 
         .vault-card { background: var(--navy-light); border: 2px dashed var(--gold-border); padding: 5rem 2rem; text-align: center; cursor: pointer; border-radius: 4px; transition: 0.3s; }
         .vault-card:hover { border-color: var(--gold); }
 
-        .status-panel { display: none; margin-top: 3rem; }
-        .diagnosis-box { background: var(--navy-light); padding: 2.5rem; border-left: 3px solid var(--gold); margin-bottom: 2rem; }
-        
-        /* PRICE CARDS v7.0.6 - BLOQUEIO INICIAL */
-        .price-card { background: var(--navy-light); border: 1px solid var(--border); padding: 3rem 2rem; border-radius: 2px; opacity: 0.3; transition: 0.5s; position: relative; display: flex; flex-direction: column; pointer-events: none; }
-        .price-card.active { border-color: var(--gold); opacity: 1; transform: translateY(-8px); box-shadow: 0 15px 40px rgba(0,0,0,0.6); pointer-events: auto; }
-        .tier-btn { display: block; width: 100%; text-align: center; padding: 1.2rem; border: 1px solid var(--gold); color: var(--gold); text-decoration: none; font-size: 0.85rem; font-weight: 600; margin-top: auto; }
+        /* v7.0.8 - LÓGICA DE CARDS */
+        .price-card { 
+            background: var(--navy-light); border: 1px solid var(--border); padding: 3rem 2rem; 
+            border-radius: 2px; opacity: 0.25; transition: 0.6s; position: relative; 
+            display: flex; flex-direction: column; pointer-events: none; 
+        }
+        .price-card.unlocked { opacity: 0.6; pointer-events: auto; } /* Liberado após download, mas sem brilho */
+        .price-card.active { border-color: var(--gold); opacity: 1 !important; transform: translateY(-10px); box-shadow: 0 15px 50px rgba(0,0,0,0.7); }
 
-        .download-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin: 2rem 0; }
-        .download-link { display: block; background: var(--gold); color: var(--navy); padding: 1rem; text-decoration: none; font-size: 0.85rem; font-weight: 600; text-align: center; border-radius: 2px; box-shadow: 0 5px 15px rgba(201,168,76,0.3); }
+        .download-link { display: block; background: var(--gold); color: var(--navy); padding: 1.2rem; text-decoration: none; font-size: 0.85rem; font-weight: 600; text-align: center; border-radius: 2px; box-shadow: 0 5px 20px rgba(201,168,76,0.2); transition: 0.3s; }
+        .download-link:hover { transform: scale(1.02); }
 
-        .btn-ghost { background: transparent; border: none; color: var(--silver); font-size: 0.8rem; cursor: pointer; text-decoration: underline; margin-top: 2rem; width: 100%; transition: 0.3s; }
-        .btn-ghost:hover { color: #fff; }
+        .btn-ghost { background: transparent; border: none; color: var(--silver); font-size: 0.8rem; cursor: pointer; text-decoration: underline; margin-top: 2rem; width: 100%; }
 
         footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--border); color: var(--silver); font-size: 0.75rem; width: 100%; background: var(--navy); }
-        .gate-footer { position: absolute; bottom: 0; left: 0; }
     </style>
 </head>
 <body>
@@ -101,14 +97,11 @@
             <div class="choice-grid">
                 <a href="https://arxlegaltech.fillout.com/onboarding" target="_blank" class="choice-card">
                     <h3>Onboarding</h3>
-                    <p>Contrate o treinamento estratégico e domine a metodologia ARX.</p>
                     <div class="btn-action">Contratar Agora</div>
                 </a>
-                
                 <div class="choice-card" onclick="showLoginForm()">
                     <h3>Membros</h3>
-                    <p>Acesse o ambiente privado para síntese e diagnósticos.</p>
-                    <div class="btn-action" onclick="event.stopPropagation(); showLoginForm();">Acessar Ambiente</div>
+                    <div class="btn-action">Acessar Ambiente</div>
                 </div>
             </div>
         </div>
@@ -118,12 +111,12 @@
             <input type="password" id="access-key" class="login-input" placeholder="CHAVE DE ACESSO" onkeypress="if(event.key === 'Enter') checkAccess()">
             <label class="remember-container"><input type="checkbox" id="remember-me"> Não solicitar mais chave neste navegador</label>
             <button onclick="checkAccess()" class="btn-action" style="margin-top: 1.5rem; max-width: 400px;">Validar Securitas</button>
-            <span onclick="hideLoginForm()" style="display: block; margin-top: 1.5rem; color: var(--silver); font-size: 0.7rem; text-decoration: underline; cursor: pointer;">Voltar para a recepção</span>
+            <span onclick="hideLoginForm()" style="display: block; margin-top: 1.5rem; color: var(--silver); font-size: 0.7rem; text-decoration: underline; cursor: pointer;">Voltar</span>
             <p id="error-msg" style="color: #ff4d4d; font-size: 0.75rem; margin-top: 1.5rem; display: none;"></p>
         </div>
 
-        <footer class="gate-footer">
-            <p>© 2026 ARX LEGALTECH · AMBIENTE PRIVADO · <span style="opacity: 0.4; font-size: 0.6rem;">v7.0.6</span></p>
+        <footer style="position: absolute; bottom: 0;">
+            <p>© 2026 ARX LEGALTECH · v7.0.8</p>
         </footer>
     </div>
 
@@ -136,8 +129,7 @@
         <section>
             <div class="instruction-box">
                 <h3>Protocolo de Higienização de Dados ARX</h3>
-                <p>Para garantir a precisão cirúrgica da Inteligência Artificial e evitar alucinações jurídicas, seus documentos precisam passar por higienização de metadados.</p>
-                <p style="font-size: 0.8rem; margin-top: 10px;">1. Adicione os arquivos no Cofre. <br> 2. Clique em 'Sintetizar'. <br> 3. Baixe o pacote limpo e escolha o modelo de análise abaixo.</p>
+                <p style="font-size: 0.8rem; margin-top: 10px;">1. Adicione os arquivos no Cofre. <br> 2. Clique em 'Sintetizar'. <br> 3. Baixe o pacote para liberar a análise estratégica.</p>
             </div>
 
             <div class="vault-card" id="drop-zone" onclick="document.getElementById('file-input').click()">
@@ -149,41 +141,38 @@
                 <h4 style="color: var(--gold); font-size: 0.8rem; text-transform: uppercase; margin-bottom: 1rem;">Arquivos no Cofre:</h4>
                 <ul id="file-list-display" style="list-style: none; color: var(--silver); font-size: 0.85rem; background: rgba(255,255,255,0.03); padding: 1.5rem; border-radius: 4px;"></ul>
                 <button onclick="processAllFiles()" class="btn-action" style="margin-top: 2rem;">Sintetizar Pacote de Documentos</button>
-                <button onclick="clearVault()" class="btn-ghost">Limpar cofre e reiniciar sessão</button>
+                <button onclick="clearVault()" class="btn-ghost">Limpar e reiniciar</button>
             </div>
 
-            <div id="status-area" class="status-panel">
-                <div class="diagnosis-box">
-                    <h3 style="color: var(--gold); font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; margin-bottom: 1rem;">Diagnóstico de Capacidade</h3>
+            <div id="status-area" style="display: none; margin-top: 3rem;">
+                <div style="background: var(--navy-light); padding: 2.5rem; border-left: 3px solid var(--gold); margin-bottom: 2rem;">
+                    <h3 style="color: var(--gold); font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; margin-bottom: 1rem;">Crivo de Capacidade</h3>
                     <p id="lote-count-text" style="font-size: 1.1rem; color: #fff;"></p>
                 </div>
-                <div id="download-links" class="download-grid"></div>
+                <div id="download-links" style="margin: 2rem 0;"></div>
                 
                 <div class="pricing-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 3rem;">
                     <div id="tier-standard" class="price-card">
                         <div style="color:var(--gold); font-family:'Cormorant Garamond',serif; font-size:1.8rem;">ARX Essential</div>
-                        <p style="font-size: 0.75rem; color: var(--silver); margin-top: 0.5rem;">Riscos, Auditoria e Plano de Ação.</p>
                         <div style="font-size:2.5rem; color:#fff; margin: 1rem 0;">R$ 280</div>
-                        <a id="link-standard" href="https://arxlegaltech.fillout.com/standard" target="_blank" class="tier-btn">Selecionar Essential</a>
+                        <a href="https://arxlegaltech.fillout.com/standard" target="_blank" class="btn-action">Selecionar</a>
                     </div>
                     <div id="tier-plus" class="price-card">
                         <div style="color:var(--gold); font-family:'Cormorant Garamond',serif; font-size:1.8rem;">ARX Professional</div>
-                        <p style="font-size: 0.75rem; color: var(--silver); margin-top: 0.5rem;">+ Linha do Tempo e Esboço de Peça.</p>
                         <div style="font-size:2.5rem; color:#fff; margin: 1rem 0;">R$ 365</div>
-                        <a id="link-plus" href="https://arxlegaltech.fillout.com/plus" target="_blank" class="tier-btn">Selecionar Professional</a>
+                        <a href="https://arxlegaltech.fillout.com/plus" target="_blank" class="btn-action">Selecionar</a>
                     </div>
                     <div id="tier-max" class="price-card">
                         <div style="color:var(--gold); font-family:'Cormorant Garamond',serif; font-size:1.8rem;">ARX Elite</div>
-                        <p style="font-size: 0.75rem; color: var(--silver); margin-top: 0.5rem;">+ Resumo PNL e Vetores Motivacionais.</p>
                         <div style="font-size:2.5rem; color:#fff; margin: 1rem 0;">R$ 450</div>
-                        <a id="link-max" href="https://arxlegaltech.fillout.com/max" target="_blank" class="tier-btn">Selecionar Elite</a>
+                        <a href="https://arxlegaltech.fillout.com/max" target="_blank" class="btn-action">Selecionar</a>
                     </div>
                 </div>
             </div>
         </section>
         
         <footer>
-            <p>© 2026 ARX LEGALTECH · AMBIENTE PRIVADO · <span style="opacity: 0.4; font-size: 0.6rem;">v7.0.6</span></p>
+            <p>© 2026 ARX LEGALTECH · v7.0.8</p>
         </footer>
     </div>
 
@@ -192,26 +181,16 @@
         let vaultFiles = [];
         let totalPagesInLote = 0;
 
-        function showLoginForm() { 
-            document.getElementById('choice-view').style.display = 'none'; 
-            document.getElementById('login-form-area').style.display = 'flex';
-        }
-
-        function hideLoginForm() { 
-            document.getElementById('choice-view').style.display = 'flex'; 
-            document.getElementById('login-form-area').style.display = 'none'; 
-        }
+        function showLoginForm() { document.getElementById('choice-view').style.display = 'none'; document.getElementById('login-form-area').style.display = 'flex'; }
+        function hideLoginForm() { document.getElementById('choice-view').style.display = 'flex'; document.getElementById('login-form-area').style.display = 'none'; }
 
         async function checkAccess() {
             const inputVal = document.getElementById('access-key').value.trim();
             const rememberMe = document.getElementById('remember-me').checked;
-            const error = document.getElementById('error-msg');
-            
             try {
                 let textPaid = ""; let textDemo = "";
                 try { const r1 = await fetch('lista.txt'); if(r1.ok) textPaid = await r1.text(); } catch(e){}
                 try { const r2 = await fetch('lista-demo.txt'); if(r2.ok) textDemo = await r2.text(); } catch(e){}
-
                 const findInList = (text, input) => {
                     const lines = text.split(/\r?\n/).filter(l => l.trim());
                     for (let line of lines) {
@@ -220,30 +199,24 @@
                     }
                     return null;
                 };
-
-                let data = findInList(textPaid, inputVal);
-                if (data) { login(inputVal, data.name, data.referrer, data.gender, "paid", rememberMe); return; }
-
-                data = findInList(textDemo, inputVal);
-                if (data) { login(inputVal, data.name, data.referrer, data.gender, "demo", rememberMe); return; }
-
-                error.innerText = "Chave não localizada."; error.style.display = 'block';
-            } catch (e) { error.innerText = "Erro técnico."; error.style.display = 'block'; }
-        }
-
-        function login(key, name, referrer, gender, type, persist) {
-            const authData = { type, key, name, referrer, gender };
-            if (persist) localStorage.setItem('arx_auth_v7', JSON.stringify(authData));
-            sessionStorage.setItem('arx_session_v7', JSON.stringify(authData));
-            renderApp(authData);
+                let data = findInList(textPaid, inputVal) || findInList(textDemo, inputVal);
+                if (data) { 
+                    const authData = { key: inputVal, name: data.name, referrer: data.referrer, gender: data.gender };
+                    if (rememberMe) localStorage.setItem('arx_auth_v7', JSON.stringify(authData));
+                    sessionStorage.setItem('arx_session_v7', JSON.stringify(authData));
+                    renderApp(authData);
+                } else { document.getElementById('error-msg').innerText = "Chave inválida."; document.getElementById('error-msg').style.display = 'block'; }
+            } catch (e) { console.error(e); }
         }
 
         function renderApp(data) {
             document.getElementById('gate-container').style.display = 'none';
             document.getElementById('main-app').style.display = 'block';
-            const isFem = (data.gender === 'M');
-            const saudacao = isFem ? "Bem-vinda" : "Bem-vindo";
-            document.getElementById('welcome-msg').innerText = `${saudacao}, ${data.name}`;
+            const saudacao = data.gender === 'M' ? "Bem-vinda" : "Bem-vindo";
+            const artigo = data.gender === 'M' ? "uma" : "um";
+            const substantivo = data.gender === 'M' ? "convidada" : "convidado";
+            const padrinho = data.referrer ? `do Membro ${data.referrer}` : "";
+            document.getElementById('welcome-msg').innerText = `${saudacao}, ${data.name}! Você é ${artigo} ${substantivo} ${padrinho} para experimentar a ARX!`;
             window.scrollTo(0,0);
         }
 
@@ -253,72 +226,45 @@
         };
 
         function handleFiles(files) {
-            if (!files.length) return;
-            for (let f of files) { vaultFiles.push(f); }
-            const container = document.getElementById('file-list-container');
-            const display = document.getElementById('file-list-display');
-            container.style.display = 'block';
-            display.innerHTML = vaultFiles.map(f => `<li style="margin-bottom:8px; display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:5px;"><span>${f.name}</span><span style="opacity:0.5;">(${(f.size/1024/1024).toFixed(2)} MB)</span></li>`).join('');
+            for (let f of files) vaultFiles.push(f);
+            document.getElementById('file-list-container').style.display = 'block';
+            document.getElementById('file-list-display').innerHTML = vaultFiles.map(f => `<li>${f.name}</li>`).join('');
         }
 
         function clearVault() { localStorage.clear(); sessionStorage.clear(); location.reload(); }
 
         async function processAllFiles() {
-            if (vaultFiles.length === 0) return;
-            const statusArea = document.getElementById('status-area');
-            const loteText = document.getElementById('lote-count-text');
-            const downloadGrid = document.getElementById('download-links');
-            statusArea.style.display = 'block'; loteText.innerText = "Sintetizando documentos para auditoria..."; downloadGrid.innerHTML = "";
-            
+            if (!vaultFiles.length) return;
+            document.getElementById('status-area').style.display = 'block';
+            document.getElementById('lote-count-text').innerText = "Sintetizando crivo...";
             try {
                 const master = await PDFDocument.create();
                 for (const f of vaultFiles) {
                     const buf = await f.arrayBuffer();
                     if (f.type.startsWith('image/')) {
                         const img = f.type === 'image/png' ? await master.embedPng(buf) : await master.embedJpg(buf);
-                        const page = master.addPage([img.width, img.height]); 
-                        page.drawImage(img, { x: 0, y: 0, width: img.width, height: img.height });
+                        const page = master.addPage([img.width, img.height]); page.drawImage(img, { x: 0, y: 0, width: img.width, height: img.height });
                     } else {
-                        const pdf = await PDFDocument.load(buf); 
-                        const pages = await master.copyPages(pdf, pdf.getPageIndices()); 
-                        pages.forEach(p => master.addPage(p));
+                        const pdf = await PDFDocument.load(buf); const pages = await master.copyPages(pdf, pdf.getPageIndices()); pages.forEach(p => master.addPage(p));
                     }
                 }
-
                 totalPagesInLote = master.getPageCount();
-                const pdfBytes = await master.save();
-                const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-                const url = URL.createObjectURL(blob);
-                
-                loteText.innerText = `Lote de ${totalPagesInLote} páginas higienizado. Baixe para liberar a análise estratégica.`;
-                downloadGrid.innerHTML = `<a href="${url}" download="PACOTE_ARX_AUDITORIA.pdf" class="download-link" onclick="activateTiers()">BAIXAR PACOTE DE AUDITORIA</a>`;
-            } catch (e) {
-                loteText.innerText = "Erro ao processar documentos.";
-            }
+                const url = URL.createObjectURL(new Blob([await master.save()], { type: 'application/pdf' }));
+                document.getElementById('lote-count-text').innerText = `Lote de ${totalPagesInLote} páginas higienizado. Baixe para liberar a análise.`;
+                document.getElementById('download-links').innerHTML = `<a href="${url}" download="PACOTE_ARX.pdf" class="download-link" onclick="activateTiers()">BAIXAR PACOTE DE AUDITORIA</a>`;
+            } catch (e) { document.getElementById('lote-count-text').innerText = "Erro no crivo."; }
         }
 
-        // v7.0.6 - LÓGICA DE ILUMINAÇÃO SELETIVA
+        // v7.0.8 - LÓGICA DE ILUMINAÇÃO CIRÚRGICA
         function activateTiers() {
-            // Remove qualquer classe active pré-existente
-            document.querySelectorAll('.price-card').forEach(card => card.classList.remove('active'));
-
-            // Lógica de recomendação baseada no tamanho do lote
-            let recommendedTier = 'tier-max'; // Default para Elite (Elite é o padrão para casos reais)
-            
-            if (totalPagesInLote <= 5) {
-                recommendedTier = 'tier-standard';
-            } else if (totalPagesInLote <= 20) {
-                recommendedTier = 'tier-plus';
-            }
-
-            // Destaca apenas o plano recomendado
-            document.getElementById(recommendedTier).classList.add('active');
-            
-            // Permite que os outros sejam clicados também, mas sem o destaque visual
             document.querySelectorAll('.price-card').forEach(card => {
-                card.style.pointerEvents = 'auto';
-                card.style.opacity = '1'; // Torna todos visíveis, mas o 'active' tem a borda e o transform
+                card.classList.add('unlocked'); // Libera clique em todos
+                card.classList.remove('active'); // Remove brilho anterior
             });
+            let rec = 'tier-max'; 
+            if (totalPagesInLote <= 5) rec = 'tier-standard';
+            else if (totalPagesInLote <= 15) rec = 'tier-plus';
+            document.getElementById(rec).classList.add('active'); // Ilumina apenas a recomendação
         }
     </script>
 </body>
