@@ -71,13 +71,12 @@
         .vault-card { background: var(--navy-light); border: 2px dashed var(--gold-border); padding: 5rem 2rem; text-align: center; cursor: pointer; border-radius: 4px; transition: 0.3s; }
         .vault-card:hover { border-color: var(--gold); }
 
-        /* v7.0.8 - LÓGICA DE CARDS */
         .price-card { 
             background: var(--navy-light); border: 1px solid var(--border); padding: 3rem 2rem; 
             border-radius: 2px; opacity: 0.25; transition: 0.6s; position: relative; 
             display: flex; flex-direction: column; pointer-events: none; 
         }
-        .price-card.unlocked { opacity: 0.6; pointer-events: auto; } /* Liberado após download, mas sem brilho */
+        .price-card.unlocked { opacity: 0.6; pointer-events: auto; }
         .price-card.active { border-color: var(--gold); opacity: 1 !important; transform: translateY(-10px); box-shadow: 0 15px 50px rgba(0,0,0,0.7); }
 
         .download-link { display: block; background: var(--gold); color: var(--navy); padding: 1.2rem; text-decoration: none; font-size: 0.85rem; font-weight: 600; text-align: center; border-radius: 2px; box-shadow: 0 5px 20px rgba(201,168,76,0.2); transition: 0.3s; }
@@ -115,8 +114,8 @@
             <p id="error-msg" style="color: #ff4d4d; font-size: 0.75rem; margin-top: 1.5rem; display: none;"></p>
         </div>
 
-        <footer style="position: absolute; bottom: 0;">
-            <p>© 2026 ARX LEGALTECH · v7.0.8</p>
+        <footer style="position: absolute; bottom: 0; width: 100%;">
+            <p>© 2026 ARX LEGALTECH · v7.0.9</p>
         </footer>
     </div>
 
@@ -159,12 +158,12 @@
                     </div>
                     <div id="tier-plus" class="price-card">
                         <div style="color:var(--gold); font-family:'Cormorant Garamond',serif; font-size:1.8rem;">ARX Professional</div>
-                        <div style="font-size:2.5rem; color:#fff; margin: 1rem 0;">R$ 365</div>
+                        <div style="font-size:2.5rem; color:#fff; margin: 1rem 0;">R$ 330</div>
                         <a href="https://arxlegaltech.fillout.com/plus" target="_blank" class="btn-action">Selecionar</a>
                     </div>
                     <div id="tier-max" class="price-card">
                         <div style="color:var(--gold); font-family:'Cormorant Garamond',serif; font-size:1.8rem;">ARX Elite</div>
-                        <div style="font-size:2.5rem; color:#fff; margin: 1rem 0;">R$ 450</div>
+                        <div style="font-size:2.5rem; color:#fff; margin: 1rem 0;">R$ 390</div>
                         <a href="https://arxlegaltech.fillout.com/max" target="_blank" class="btn-action">Selecionar</a>
                     </div>
                 </div>
@@ -172,7 +171,7 @@
         </section>
         
         <footer>
-            <p>© 2026 ARX LEGALTECH · v7.0.8</p>
+            <p>© 2026 ARX LEGALTECH · v7.0.9</p>
         </footer>
     </div>
 
@@ -255,16 +254,23 @@
             } catch (e) { document.getElementById('lote-count-text').innerText = "Erro no crivo."; }
         }
 
-        // v7.0.8 - LÓGICA DE ILUMINAÇÃO CIRÚRGICA
+        // v7.0.9 - LÓGICA DE RECOMENDAÇÃO CORRIGIDA (FOCO NO STANDARD PARA BAIXO VOLUME)
         function activateTiers() {
             document.querySelectorAll('.price-card').forEach(card => {
-                card.classList.add('unlocked'); // Libera clique em todos
-                card.classList.remove('active'); // Remove brilho anterior
+                card.classList.add('unlocked');
+                card.classList.remove('active');
             });
-            let rec = 'tier-max'; 
-            if (totalPagesInLote <= 5) rec = 'tier-standard';
-            else if (totalPagesInLote <= 15) rec = 'tier-plus';
-            document.getElementById(rec).classList.add('active'); // Ilumina apenas a recomendação
+            
+            // Inicia recomendação como Essential para garantir que volumes baixos não caiam no Elite por padrão
+            let rec = 'tier-standard'; 
+            
+            if (totalPagesInLote > 15) {
+                rec = 'tier-max'; 
+            } else if (totalPagesInLote > 5) {
+                rec = 'tier-plus';
+            }
+
+            document.getElementById(rec).classList.add('active');
         }
     </script>
 </body>
