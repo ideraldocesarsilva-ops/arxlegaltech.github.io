@@ -22,12 +22,12 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: var(--navy); color: var(--text); font-family: 'Inter', sans-serif; font-weight: 300; line-height: 1.6; display: flex; flex-direction: column; min-height: 100vh; }
+        body { background: var(--navy); color: var(--text); font-family: 'Inter', sans-serif; font-weight: 300; line-height: 1.6; }
 
-        /* GATE CONTAINER */
-        #gate-container { position: fixed; inset: 0; background: var(--navy); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .intro-box { max-width: 800px; width: 90%; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .choice-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-top: 4rem; width: 100%; }
+        /* PORTÃO DE ENTRADA */
+        #gate-container { position: fixed; inset: 0; background: var(--navy); z-index: 9999; display: flex; align-items: center; justify-content: center; }
+        .intro-box { max-width: 800px; width: 90%; text-align: center; }
+        .choice-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-top: 4rem; }
         
         .choice-card { 
             background: var(--navy-light); border: 1px solid var(--gold-border); 
@@ -37,6 +37,7 @@
         }
         .choice-card:hover { border-color: var(--gold); transform: translateY(-5px); background: rgba(201,168,76,0.03); }
         .choice-card h3 { font-family: 'Cormorant Garamond', serif; color: var(--gold); font-size: 1.8rem; margin-bottom: 1rem; }
+        .choice-card p { font-size: 0.85rem; color: var(--silver); margin-bottom: 2rem; }
 
         .btn-action { 
             width: 100%; display: flex; align-items: center; justify-content: center;
@@ -49,9 +50,8 @@
         #login-form-area { display: none; text-align: center; max-width: 400px; width: 100%; }
         .login-input { width: 100%; background: var(--navy-light); border: 1px solid var(--gold-border); color: #fff; padding: 1.2rem; margin-top: 2rem; border-radius: 2px; text-align: center; outline: none; letter-spacing: 0.2em; }
         .remember-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 1.5rem; color: var(--silver); font-size: 0.75rem; cursor: pointer; }
+        .back-link { display: block; margin-top: 1.5rem; color: var(--silver); font-size: 0.7rem; text-decoration: underline; cursor: pointer; }
 
-        /* APP INTERNO */
-        #main-app { flex-grow: 1; display: none; }
         nav { position: fixed; top: 0; width: 100%; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 2.5rem; background: rgba(8, 12, 20, 0.95); border-bottom: 1px solid var(--border); backdrop-filter: blur(10px); min-height: 80px; }
         .nav-logo { font-family: 'Cormorant Garamond', serif; color: var(--gold); font-weight: 600; font-size: 0.85rem; line-height: 1.4; max-width: 75%; }
         
@@ -64,12 +64,13 @@
         .download-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin: 2rem 0; }
         .download-link { display: block; background: var(--gold-dim); color: var(--gold); padding: 1rem; text-decoration: none; font-size: 0.8rem; text-align: center; border: 1px solid var(--gold-border); border-radius: 2px; }
         
+        .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 3rem; }
         .price-card { background: var(--navy-light); border: 1px solid var(--border); padding: 3rem 2rem; border-radius: 2px; opacity: 0.4; transition: 0.5s; position: relative; display: flex; flex-direction: column; }
         .price-card.active { border-color: var(--gold); opacity: 1; transform: translateY(-8px); box-shadow: 0 15px 40px rgba(0,0,0,0.6); }
+        .price-card.active::before { content: 'MODELO RECOMENDADO'; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--gold); color: var(--navy); font-size: 0.65rem; font-weight: 800; padding: 4px 15px; border-radius: 2px; }
         .tier-btn { display: block; width: 100%; text-align: center; padding: 1.2rem; border: 1px solid var(--gold); color: var(--gold); text-decoration: none; font-size: 0.85rem; font-weight: 600; margin-top: auto; }
 
-        footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--border); color: var(--silver); font-size: 0.75rem; width: 100%; background: var(--navy); }
-        .gate-footer { position: absolute; bottom: 0; left: 0; }
+        footer { text-align: center; padding: 6rem 2rem; border-top: 1px solid var(--border); color: var(--silver); font-size: 0.75rem; }
     </style>
 </head>
 <body>
@@ -92,21 +93,17 @@
             </div>
         </div>
 
-        <div id="login-form-area" class="intro-box">
+        <div id="login-form-area">
             <img src="logo_arx.png" alt="ARX" style="width: 180px; margin-bottom: 2rem;">
             <input type="password" id="access-key" class="login-input" placeholder="CHAVE DE ACESSO" onkeypress="if(event.key === 'Enter') checkAccess()">
             <label class="remember-container"><input type="checkbox" id="remember-me"> Não solicitar mais chave neste navegador</label>
-            <button onclick="checkAccess()" class="btn-action" style="margin-top: 1.5rem; max-width: 400px;">Validar Securitas</button>
-            <span onclick="hideLoginForm()" style="display: block; margin-top: 1.5rem; color: var(--silver); font-size: 0.7rem; text-decoration: underline; cursor: pointer;">Voltar para a recepção</span>
+            <button onclick="checkAccess()" class="btn-action" style="margin-top: 1.5rem;">Validar Securitas</button>
+            <span onclick="hideLoginForm()" class="back-link">Voltar para a recepção</span>
             <p id="error-msg" style="color: #ff4d4d; font-size: 0.75rem; margin-top: 1.5rem; display: none;"></p>
         </div>
-
-        <footer class="gate-footer">
-            <p>© 2026 ARX LEGALTECH · AMBIENTE PRIVADO · <span style="opacity: 0.4; font-size: 0.6rem;">v7.0.2</span></p>
-        </footer>
     </div>
 
-    <div id="main-app">
+    <div id="main-app" style="display:none;">
         <nav>
             <span class="nav-logo" id="welcome-msg">Ambiente ARX</span>
             <span style="font-size: 0.6rem; color: var(--gold); text-transform: uppercase; text-align: right; letter-spacing: 0.1em;">Agilitas et Securitas</span>
@@ -129,9 +126,12 @@
             <div id="status-area" class="status-panel">
                 <div class="diagnosis-box"><h3 style="color: var(--gold); font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; margin-bottom: 1rem;">Diagnóstico de Capacidade</h3><p id="lote-count-text" style="font-size: 1.1rem; color: #fff;"></p></div>
                 <div id="download-links" class="download-grid"></div>
-                <div class="pricing-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 3rem;">
+                <div style="background: rgba(201,168,76,0.05); border: 1px solid var(--gold-border); padding: 1.5rem; border-radius: 4px; margin-bottom: 3.5rem;">
+                    <p style="color: var(--silver); font-size: 0.85rem; line-height: 1.6;">Reconstrução técnica ativa. Consideramos o peso original para determinar o modelo adequado.</p>
+                </div>
+                <div class="pricing-grid">
                     <div id="tier-standard" class="price-card"><div style="color:var(--gold); font-family:'Cormorant Garamond',serif; font-size:1.8rem;">ARX Standard</div><div style="font-size:2.5rem; color:#fff; margin: 1rem 0;">R$ 380</div><a id="link-standard" href="https://arxlegaltech.fillout.com/standard" target="_blank" class="tier-btn">Selecionar</a></div>
-                    <div id="tier-plus" class="price-card"><div style="color:var(--gold); font-family:'Cormorant Garamond',serif; font-size:1.8rem;">ARX Plus</div><div style="font-size:2.5rem; color:#fff; margin: 1rem 0;">R$ 430</div><a id="link-plus" href="https://arxlegaltech.fillout.com/plus" target="_blank" class="tier-btn">Selecionar</a></div>
+                    <div id="tier-plus" class="price-card"><div style="color:var(--gold); font-family:'Cormorant Garamond',serif; font-size:1.8rem;">ARX Plus</div><div style="font-size:2.5rem; color:#fff; margin: 1rem 0;">R$ 430</div><a id="link-plus" href="https://arxlegaltech.fillout.com/plu" target="_blank" class="tier-btn">Selecionar</a></div>
                     <div id="tier-max" class="price-card"><div style="color:var(--gold); font-family:'Cormorant Garamond',serif; font-size:1.8rem;">ARX Max</div><div style="font-size:2.5rem; color:#fff; margin: 1rem 0;">R$ 480</div><a id="link-max" href="https://arxlegaltech.fillout.com/max" target="_blank" class="tier-btn">Selecionar</a></div>
                 </div>
             </div>
@@ -141,9 +141,8 @@
                 <a href="mailto:contato@arxlegaltech.com.br" style="display: flex; align-items: center; gap: 12px; background: var(--navy-light); border: 1px solid var(--gold-border); color: var(--gold); padding: 1rem 2rem; text-decoration: none; font-size: 0.85rem; border-radius: 4px;">Contato via E-mail</a>
             </div>
         </section>
-        
         <footer>
-            <p>© 2026 ARX LEGALTECH · AMBIENTE PRIVADO · <span style="opacity: 0.4; font-size: 0.6rem;">v7.0.2</span></p>
+            <p>© 2026 ARX LEGALTECH · AMBIENTE PRIVADO · <span style="opacity: 0.4; font-size: 0.6rem;">v7.0.1</span></p>
         </footer>
     </div>
 
@@ -207,7 +206,6 @@
                 document.getElementById('link-plus').href = "https://arxlegaltech.fillout.com/plus-demo";
                 document.getElementById('link-max').href = "https://arxlegaltech.fillout.com/max-demo";
             } else welcomeMsg.innerText = `${saudacao}, ${data.name}`;
-            window.scrollTo(0,0);
         }
 
         window.onload = () => { 
@@ -246,4 +244,27 @@
                 while (currentIndex < total) {
                     const chunk = await PDFDocument.create(); let chunkPages = 0;
                     while (currentIndex < total) {
-                        const [p] =
+                        const [p] = await chunk.copyPages(master, [currentIndex]); chunk.addPage(p);
+                        currentIndex++; chunkPages++; const bytes = await chunk.save(); if (bytes.length > MAX_BYTES || chunkPages >= 500) break;
+                    }
+                    const final = await chunk.save(); slots++; const url = URL.createObjectURL(new Blob([final], { type: 'application/pdf' }));
+                    const a = document.createElement('a'); a.href = url; a.download = `LOTE_ARX_${slots}.pdf`; a.className = 'download-link';
+                    a.innerHTML = `<strong>Baixar LOTE_${slots}</strong>`; downloadGrid.appendChild(a);
+                }
+                loteText.innerText = `Pacote organizado em ${slots} lotes.`;
+                const pesoOriginalMB = vaultFiles.reduce((acc, f) => acc + f.size, 0) / (1024 * 1024);
+                document.querySelectorAll('.price-card').forEach(c => c.classList.remove('active'));
+                if (pesoOriginalMB <= 200) document.getElementById('tier-standard').classList.add('active');
+                else if (pesoOriginalMB <= 400) document.getElementById('tier-plus').classList.add('active');
+                else document.getElementById('tier-max').classList.add('active');
+                statusArea.scrollIntoView({ behavior: 'smooth' });
+            } catch(e) { loteText.innerText = "Erro na síntese."; }
+        }
+
+        const dropZone = document.getElementById('drop-zone');
+        dropZone.ondragover = (e) => { e.preventDefault(); dropZone.style.borderColor = 'var(--gold)'; };
+        dropZone.ondragleave = () => { dropZone.style.borderColor = 'var(--gold-border)'; };
+        dropZone.ondrop = (e) => { e.preventDefault(); handleFiles(e.dataTransfer.files); };
+        document.getElementById('file-input').onchange = (e) => { handleFiles(e.target.files); };
+    </script>
+</body>
