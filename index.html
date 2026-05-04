@@ -63,6 +63,12 @@
         .diagnosis-box { background: var(--navy-light); padding: 2.5rem; border-left: 3px solid var(--gold); margin-bottom: 2rem; }
         .download-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin: 2rem 0; }
         .download-link { display: block; background: var(--gold-dim); color: var(--gold); padding: 1rem; text-decoration: none; font-size: 0.8rem; text-align: center; border: 1px solid var(--gold-border); border-radius: 2px; }
+        .download-link.oversized { background: rgba(255,77,77,0.08); color: #ff8a8a; border: 1px solid rgba(255,77,77,0.4); }
+        .download-link.oversized strong { color: #ffb0b0; }
+        .oversized-note { display: block; font-size: 0.65rem; color: var(--silver); margin-top: 6px; font-style: italic; line-height: 1.4; }
+        .oversized-alert { background: rgba(255,77,77,0.05); border: 1px solid rgba(255,77,77,0.3); padding: 1.5rem; border-radius: 4px; margin-bottom: 1.5rem; color: #ffb0b0; font-size: 0.85rem; line-height: 1.6; text-align: left; }
+        .oversized-alert strong { color: #ff8a8a; display: block; margin-bottom: 0.5rem; font-size: 0.95rem; }
+        .oversized-alert a { color: var(--gold); text-decoration: underline; }
 
         .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 3rem; }
         .price-card { background: var(--navy-light); border: 1px solid var(--border); padding: 3rem 2rem; border-radius: 2px; opacity: 0.4; transition: 0.5s; position: relative; display: flex; flex-direction: column; }
@@ -142,7 +148,7 @@
             </div>
         </section>
         <footer>
-            <p>© 2026 ARX LEGALTECH · AMBIENTE PRIVADO · <span style="opacity: 0.4; font-size: 0.6rem;">v7.0.2</span></p>
+            <p>© 2026 ARX LEGALTECH · AMBIENTE PRIVADO · <span style="opacity: 0.4; font-size: 0.6rem;">v7.0.5</span></p>
         </footer>
     </div>
 
@@ -240,16 +246,65 @@
                         const pdf = await PDFDocument.load(buf); const pages = await master.copyPages(pdf, pdf.getPageIndices()); pages.forEach(p => master.addPage(p));
                     }
                 }
-                let slots = 0, currentIndex = 0; const total = master.getPageCount(), MAX_BYTES = 18 * 1024 * 1024;
+                let slots = 0, currentIndex = 0;
+                let oversizedSlots = [];
+                const total = master.getPageCount();
+                const MAX_BYTES = 18 * 1024 * 1024;       // alvo de fatiamento
+                const FILLOUT_LIMIT = 20 * 1024 * 1024;   // limite duro do Fillout
                 while (currentIndex < total) {
-                    const chunk = await PDFDocument.create(); let chunkPages = 0;
+                    const chunk = await PDFDocument.create();
                     while (currentIndex < total) {
-                        const [p] = await chunk.copyPages(master, [currentIndex]); chunk.addPage(p);
-                        currentIndex++; chunkPages++; const bytes = await chunk.save(); if (bytes.length > MAX_BYTES || chunkPages >= 500) break;
+                        loteText.innerText = `Processando página ${currentIndex + 1} de ${total}...`;
+                        const [p] = await chunk.copyPages(master, [currentIndex]);
+                        chunk.addPage(p);
+                        const bytes = await chunk.save({ useObjectStreams: false });
+                        if (bytes.length > MAX_BYTES) {
+                            if (chunk.getPageCount() > 1) {
+                                // Página estourou o limite: remove e devolve para o próximo lote
+                                chunk.removePage(chunk.getPageCount() - 1);
+                                break;
+                            } else {
+                                // Página única já passa do limite (escaneamento gigante isolado):
+                                // aceita o overshoot — não dá para dividir uma página
+                                console.warn(`Página ${currentIndex + 1} sozinha excede ${MAX_BYTES} bytes (${(bytes.length/1024/1024).toFixed(2)} MB). Lote único aceito.`);
+                                currentIndex++;
+                                break;
+                            }
+                        }
+                        currentIndex++;
+                        if (chunk.getPageCount() >= 500) break;
                     }
-                    const final = await chunk.save(); slots++; const url = URL.createObjectURL(new Blob([final], { type: 'application/pdf' }));
-                    const a = document.createElement('a'); a.href = url; a.download = `LOTE_ARX_${slots}.pdf`; a.className = 'download-link';
-                    a.innerHTML = `<strong>Baixar LOTE_${slots}</strong>`; downloadGrid.appendChild(a);
+                    if (chunk.getPageCount() === 0) { currentIndex++; continue; } // safety
+                    const final = await chunk.save({ useObjectStreams: false });
+                    slots++;
+                    const sizeMB = (final.length / 1024 / 1024).toFixed(1);
+                    const url = URL.createObjectURL(new Blob([final], { type: 'application/pdf' }));
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `LOTE_ARX_${slots}.pdf`;
+                    if (final.length > FILLOUT_LIMIT) {
+                        // Lote excede o limite do Fillout — sinalização visual + nota
+                        a.className = 'download-link oversized';
+                        a.innerHTML = `<strong>Baixar LOTE_${slots}</strong> <span style="opacity:0.7; font-size:0.7rem;">(${sizeMB} MB)</span>
+                                       <span class="oversized-note">⚠ Excede 20 MB — envie pelo WhatsApp após baixar.</span>`;
+                        oversizedSlots.push(slots);
+                    } else {
+                        a.className = 'download-link';
+                        a.innerHTML = `<strong>Baixar LOTE_${slots}</strong> <span style="opacity:0.6; font-size:0.7rem;">(${sizeMB} MB)</span>`;
+                    }
+                    downloadGrid.appendChild(a);
+                }
+
+                // Se algum lote ultrapassou o limite do Fillout, exibe alerta com instruções
+                if (oversizedSlots.length > 0) {
+                    const alert = document.createElement('div');
+                    alert.className = 'oversized-alert';
+                    const plural = oversizedSlots.length > 1;
+                    alert.innerHTML = `<strong>⚠ Atenção — ${oversizedSlots.length} lote${plural ? 's' : ''} acima do limite do Fillout (20 MB)</strong>
+                        ${plural ? 'Os lotes' : 'O lote'} <strong>LOTE_ARX_${oversizedSlots.join(', LOTE_ARX_')}</strong> ${plural ? 'contêm páginas isoladas muito pesadas (geralmente escaneamentos em alta resolução) e não cabem' : 'contém uma página isolada muito pesada (geralmente um escaneamento em alta resolução) e não cabe'} no envio padrão. Baixe ${plural ? 'esses arquivos' : 'esse arquivo'} normalmente e envie pelo:<br><br>
+                        • <strong>WhatsApp</strong> — preferencial, aceita arquivos grandes: <a href="https://wa.me/5543988102220" target="_blank">enviar agora</a><br>
+                        • <strong>Email</strong> — apenas para lotes até 25 MB: <a href="mailto:contato@arxlegaltech.com.br?subject=Envio%20de%20lote%20ARX%20-%20arquivo%20excede%2020MB">contato@arxlegaltech.com.br</a>`;
+                    downloadGrid.parentNode.insertBefore(alert, downloadGrid);
                 }
                 loteText.innerText = `Pacote organizado em ${slots} lotes.`;
                 const pesoOriginalMB = vaultFiles.reduce((acc, f) => acc + f.size, 0) / (1024 * 1024);
