@@ -122,7 +122,7 @@
     </div>
 
     <footer class="gate-footer">
-        <p>© 2026 ARX LEGALTECH · AMBIENTE PRIVADO · <span style="opacity:0.4; font-size:0.6rem;">v8.0.0</span></p>
+        <p>© 2026 ARX LEGALTECH · AMBIENTE PRIVADO · <span style="opacity:0.4; font-size:0.6rem;">v9.0.0</span></p>
     </footer>
 </div>
 
@@ -155,7 +155,7 @@
                 </div>
                 <ul id="file-list-display" style="list-style:none; display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:0.5rem;"></ul>
                 <button onclick="processAllFiles()" id="btn-processar" style="margin-top:2rem; width:100%; padding:1.3rem; background:var(--gold); color:#080c14; border:none; border-radius:2px; font-weight:700; font-size:0.95rem; letter-spacing:0.1em; text-transform:uppercase; cursor:pointer; transition:0.2s;">
-                    Higienizar e Preparar Documentos
+                    Preparar e Enviar para ARX
                 </button>
             </div>
 
@@ -271,7 +271,7 @@
     </section>
 
     <footer>
-        <p>2026 ARX LEGALTECH - AMBIENTE PRIVADO - <span style="opacity:0.4; font-size:0.6rem;">v8.0.0</span></p>
+        <p>2026 ARX LEGALTECH - AMBIENTE PRIVADO - <span style="opacity:0.4; font-size:0.6rem;">v9.0.0</span></p>
     </footer>
 </div>
 
@@ -432,80 +432,15 @@
             progressLabel.innerText = 'Finalizando compilacao...';
             pdfCompiladoBytes = await compilado.save({ useObjectStreams: false });
 
-            progressFill.style.width = '80%';
-            progressLabel.innerText = 'Gerando lotes...';
-
-            const lotes = [];
-            let currentIndex = 0;
-            const pageCount = compilado.getPageCount();
-
-            while (currentIndex < pageCount) {
-                const chunk = await PDFDocument.create();
-                while (currentIndex < pageCount) {
-                    const [p] = await chunk.copyPages(compilado, [currentIndex]);
-                    chunk.addPage(p);
-                    const bytes = await chunk.save({ useObjectStreams: false });
-                    if (bytes.length > MAX_BYTES) {
-                        if (chunk.getPageCount() > 1) { chunk.removePage(chunk.getPageCount() - 1); break; }
-                        else { currentIndex++; break; }
-                    }
-                    currentIndex++;
-                    if (chunk.getPageCount() >= 500) break;
-                }
-                if (chunk.getPageCount() === 0) { currentIndex++; continue; }
-                lotes.push(await chunk.save({ useObjectStreams: false }));
-            }
-
             progressFill.style.width = '100%';
-            progressLabel.innerText = 'Concluido!';
-
-            const totalSlots = lotes.length;
-            let hasOversized = false;
-
-            if (totalSlots > 1) {
-                const btnAll = document.createElement('button');
-                btnAll.className = 'btn-download-all';
-                btnAll.innerHTML = 'Baixar Todos os Lotes';
-                btnAll.onclick = function() {
-                    lotes.forEach(function(bytes, i) {
-                        setTimeout(function() {
-                            const slotPad = String(i+1).padStart(2,'0');
-                            const totalPad = String(totalSlots).padStart(2,'0');
-                            const url = URL.createObjectURL(new Blob([bytes], { type:'application/pdf' }));
-                            const a = document.createElement('a');
-                            a.href = url; a.download = 'ARX_Higienizado_LOTE_' + slotPad + '_de_' + totalPad + '.pdf'; a.click();
-                        }, i * 700);
-                    });
-                };
-                downloadGrid.appendChild(btnAll);
-            }
-
-            lotes.forEach(function(bytes, i) {
-                const slot = i + 1;
-                const slotPad = String(slot).padStart(2,'0');
-                const totalPad = String(totalSlots).padStart(2,'0');
-                const sizeMB = (bytes.length / 1024 / 1024).toFixed(1);
-                const url = URL.createObjectURL(new Blob([bytes], { type:'application/pdf' }));
-                const item = document.createElement('div');
-                const isOversized = bytes.length > FORM_LIMIT;
-                if (isOversized) hasOversized = true;
-                item.className = 'pacote-item' + (isOversized ? ' oversized' : '');
-                item.innerHTML = '<span class="pacote-nome">LOTE ' + slotPad + ' de ' + totalPad + '</span>' +
-                    '<span class="pacote-info' + (isOversized ? ' red' : '') + '">' + sizeMB + ' MB' + (isOversized ? ' - excede 50 MB' : '') + '</span>' +
-                    '<a href="' + url + '" download="ARX_Higienizado_LOTE_' + slotPad + '_de_' + totalPad + '.pdf" class="pacote-btn' + (isOversized ? ' red' : '') + '">Baixar</a>';
-                downloadGrid.appendChild(item);
-            });
-
-            if (hasOversized) document.getElementById('whatsapp-notice').style.display = 'block';
-
-            const pesoOriginalMB = vaultFiles.reduce(function(acc, f) { return acc + f.size; }, 0) / (1024 * 1024);
-            loteText.innerText = 'Higienizacao concluida. ' + pageCount + ' paginas compiladas em ' + totalSlots + ' lote' + (totalSlots > 1 ? 's' : '') + ' - ' + (pdfCompiladoBytes.length / 1024 / 1024).toFixed(1) + ' MB total. Os documentos serao enviados automaticamente ao confirmar o pagamento.';
-
+            progressLabel.innerText = 'Compilacao concluida!';
+            const pageCount = compilado.getPageCount();
+            const pesoOriginalMB = vaultFiles.reduce((a, f) => a + f.size, 0) / 1024 / 1024;
+            loteText.innerText = pageCount + ' paginas compiladas — ' + (pdfCompiladoBytes.length / 1024 / 1024).toFixed(1) + ' MB. Preencha os dados abaixo para prosseguir ao pagamento.';
             document.querySelectorAll('.price-card').forEach(function(c) { c.classList.remove('active'); });
             if (pesoOriginalMB <= 200) document.getElementById('tier-standard').classList.add('active');
             else if (pesoOriginalMB <= 400) document.getElementById('tier-plus').classList.add('active');
             else document.getElementById('tier-max').classList.add('active');
-
             statusArea.style.display = 'block';
             document.getElementById('step-form').style.display = 'block';
             setTimeout(function() { document.getElementById('step-form').scrollIntoView({ behavior:'smooth', block:'start' }); }, 300);
@@ -515,7 +450,7 @@
             console.error(e);
         } finally {
             btn.disabled = false;
-            btn.innerHTML = 'Higienizar e Preparar Documentos';
+            btn.innerHTML = 'Preparar e Enviar para ARX';
             setTimeout(function() { progressContainer.style.display = 'none'; }, 2000);
         }
     }
