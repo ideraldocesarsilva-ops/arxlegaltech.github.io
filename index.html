@@ -5,13 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex, nofollow" />
     <title>Ambiente ARX | Portal de Inteligência Jurídica</title>
-
     <link rel="icon" type="image/png" href="favicon_arx.png">
     <link rel="apple-touch-icon" href="favicon_arx.png">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
     <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
-
     <style>
         :root {
             --navy: #080c14; --navy-light: #0f1729;
@@ -19,316 +17,639 @@
             --gold-border: rgba(201,168,76,0.25);
             --silver: #9a9a9a; --text: #e8e8e8;
             --border: rgba(255,255,255,0.06);
+            --red: #e05252; --green: #4caf7d;
         }
-
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: var(--navy); color: var(--text); font-family: 'Inter', sans-serif; font-weight: 300; line-height: 1.6; }
-
-        /* PORTÃO DE ENTRADA */
-        #gate-container { position: fixed; inset: 0; background: var(--navy); z-index: 9999; display: flex; align-items: center; justify-content: center; }
-        .intro-box { max-width: 800px; width: 90%; text-align: center; }
-        .choice-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-top: 4rem; }
-
-        .choice-card {
-            background: var(--navy-light); border: 1px solid var(--gold-border);
-            padding: 3rem 2rem; border-radius: 4px; cursor: pointer; transition: 0.4s;
-            text-decoration: none; display: flex; flex-direction: column; align-items: center;
-            color: var(--text) !important;
-        }
+        body { background: var(--navy); color: var(--text); font-family: 'Inter', sans-serif; font-weight: 300; line-height: 1.6; display: flex; flex-direction: column; min-height: 100vh; }
+        #gate-container { position: fixed; inset: 0; background: var(--navy); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .intro-box { max-width: 800px; width: 90%; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .choice-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-top: 4rem; width: 100%; }
+        .choice-card { background: var(--navy-light); border: 1px solid var(--gold-border); padding: 3rem 2rem; border-radius: 4px; cursor: pointer; transition: 0.4s; text-decoration: none; display: flex; flex-direction: column; align-items: center; color: var(--text) !important; }
         .choice-card:hover { border-color: var(--gold); transform: translateY(-5px); background: rgba(201,168,76,0.03); }
         .choice-card h3 { font-family: 'Cormorant Garamond', serif; color: var(--gold); font-size: 1.8rem; margin-bottom: 1rem; }
         .choice-card p { font-size: 0.85rem; color: var(--silver); margin-bottom: 2rem; }
-
-        .btn-action {
-            width: 100%; display: flex; align-items: center; justify-content: center;
-            padding: 1.2rem; border: none !important; border-radius: 2px;
-            background-color: #c9a84c !important; color: #080c14 !important;
-            font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.85rem;
-            cursor: pointer; text-decoration: none !important;
-        }
-
+        .btn-action { width: 100%; display: flex; align-items: center; justify-content: center; padding: 1.2rem; border: none !important; border-radius: 2px; background-color: #c9a84c !important; color: #080c14 !important; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.85rem; cursor: pointer; text-decoration: none !important; }
         #login-form-area { display: none; text-align: center; max-width: 400px; width: 100%; }
-        .login-input { width: 100%; background: var(--navy-light); border: 1px solid var(--gold-border); color: #fff; padding: 1.2rem; margin-top: 2rem; border-radius: 2px; text-align: center; outline: none; letter-spacing: 0.2em; }
+        .login-input { width: 100%; background: var(--navy-light); border: 1px solid var(--gold-border); color: #fff; padding: 1.2rem; margin-top: 2rem; border-radius: 2px; text-align: center; outline: none; letter-spacing: 0.2em; font-family: 'Inter', sans-serif; }
         .remember-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 1.5rem; color: var(--silver); font-size: 0.75rem; cursor: pointer; }
-        .back-link { display: block; margin-top: 1.5rem; color: var(--silver); font-size: 0.7rem; text-decoration: underline; cursor: pointer; }
-
-        nav { position: fixed; top: 0; width: 100%; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 2.5rem; background: rgba(8, 12, 20, 0.95); border-bottom: 1px solid var(--border); backdrop-filter: blur(10px); min-height: 90px; }
-        .nav-logo { font-family: 'Cormorant Garamond', serif; color: var(--gold); font-weight: 500; font-size: 1.25rem; line-height: 1.35; max-width: 80%; }
-
-        section { padding: 9rem 2rem 4rem; max-width: 1100px; margin: 0 auto; }
+        #main-app { flex-grow: 1; display: none; }
+        nav { position: fixed; top: 0; width: 100%; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 2.5rem; background: rgba(8,12,20,0.95); border-bottom: 1px solid var(--border); backdrop-filter: blur(10px); min-height: 80px; }
+        .nav-logo { font-family: 'Cormorant Garamond', serif; color: var(--gold); font-weight: 600; font-size: 0.85rem; line-height: 1.4; max-width: 75%; }
+        section { padding: 8rem 2rem 4rem; max-width: 1100px; margin: 0 auto; }
         .section-title { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; color: var(--gold); margin-bottom: 1rem; }
-        .vault-card { background: var(--navy-light); border: 2px dashed var(--gold-border); padding: 5rem 2rem; text-align: center; cursor: pointer; border-radius: 4px; }
-
+        .vault-card { background: var(--navy-light); border: 2px dashed var(--gold-border); padding: 5rem 2rem; text-align: center; cursor: pointer; border-radius: 4px; transition: 0.3s; }
+        .vault-card:hover, .vault-card.drag-over { border-color: var(--gold); background: rgba(201,168,76,0.03); }
         .status-panel { display: none; margin-top: 3rem; }
         .diagnosis-box { background: var(--navy-light); padding: 2.5rem; border-left: 3px solid var(--gold); margin-bottom: 2rem; }
-        .download-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin: 2rem 0; }
-        .download-link { display: block; background: var(--gold-dim); color: var(--gold); padding: 1rem; text-decoration: none; font-size: 0.8rem; text-align: center; border: 1px solid var(--gold-border); border-radius: 2px; }
-        .download-link.oversized { background: rgba(255,77,77,0.08); color: #ff8a8a; border: 1px solid rgba(255,77,77,0.4); }
-        .download-link.oversized strong { color: #ffb0b0; }
-        .oversized-note { display: block; font-size: 0.65rem; color: var(--silver); margin-top: 6px; font-style: italic; line-height: 1.4; }
-        .oversized-alert { background: rgba(255,77,77,0.05); border: 1px solid rgba(255,77,77,0.3); padding: 1.5rem; border-radius: 4px; margin-bottom: 1.5rem; color: #ffb0b0; font-size: 0.85rem; line-height: 1.6; text-align: left; }
-        .oversized-alert strong { color: #ff8a8a; display: block; margin-bottom: 0.5rem; font-size: 0.95rem; }
-        .oversized-alert a { color: var(--gold); text-decoration: underline; }
-
+        .pacote-item { display: flex; align-items: center; justify-content: space-between; background: var(--navy-light); border: 1px solid var(--gold-border); padding: 1rem 1.5rem; border-radius: 2px; margin-bottom: 0.75rem; gap: 1rem; flex-wrap: wrap; }
+        .pacote-item.oversized { border-color: var(--red); background: rgba(224,82,82,0.06); }
+        .pacote-nome { color: var(--gold); font-size: 0.85rem; font-weight: 500; flex: 1; min-width: 150px; }
+        .pacote-info { color: var(--silver); font-size: 0.75rem; }
+        .pacote-info.red { color: var(--red); font-weight: 500; }
+        .pacote-btn { background: var(--gold-dim); border: 1px solid var(--gold-border); color: var(--gold); padding: 0.5rem 1.2rem; font-size: 0.75rem; font-weight: 600; cursor: pointer; border-radius: 2px; text-transform: uppercase; letter-spacing: 0.08em; white-space: nowrap; text-decoration: none; display: inline-block; transition: 0.2s; }
+        .pacote-btn:hover { background: var(--gold); color: var(--navy); }
+        .pacote-btn.red { border-color: var(--red); color: var(--red); background: rgba(224,82,82,0.08); }
+        .btn-download-all { display: flex; align-items: center; justify-content: center; gap: 0.5rem; width: 100%; padding: 1.2rem; background: var(--gold); color: var(--navy); font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.1em; border: none; border-radius: 2px; cursor: pointer; margin-bottom: 1rem; transition: 0.2s; }
+        .btn-download-all:hover { background: #e0be6a; }
+        .whatsapp-notice { background: rgba(224,82,82,0.08); border: 1px solid rgba(224,82,82,0.3); border-radius: 4px; padding: 1.5rem; margin-bottom: 1.5rem; display: none; }
+        .whatsapp-notice p { color: #ffb0b0; font-size: 0.85rem; line-height: 1.7; }
+        .whatsapp-notice a { color: var(--red); font-weight: 600; }
+        .progress-bar-wrap { background: rgba(255,255,255,0.05); border-radius: 2px; height: 4px; margin-top: 0.5rem; }
+        .progress-bar-fill { height: 4px; background: var(--gold); border-radius: 2px; transition: width 0.3s; }
+        .form-section { display: none; margin-top: 4rem; padding-top: 4rem; border-top: 1px solid var(--border); }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2rem; }
+        @media (max-width: 640px) { .form-grid { grid-template-columns: 1fr; } }
+        .form-field { display: flex; flex-direction: column; gap: 0.5rem; }
+        .form-field.full { grid-column: 1 / -1; }
+        .form-label { font-size: 0.75rem; color: var(--silver); text-transform: uppercase; letter-spacing: 0.1em; }
+        .form-input, .form-select, .form-textarea { background: var(--navy-light); border: 1px solid var(--gold-border); color: var(--text); padding: 1rem; border-radius: 2px; font-family: 'Inter', sans-serif; font-size: 0.9rem; outline: none; transition: 0.2s; width: 100%; }
+        .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--gold); }
+        .form-select option { background: var(--navy-light); }
+        .form-textarea { resize: vertical; min-height: 100px; }
         .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 3rem; }
         .price-card { background: var(--navy-light); border: 1px solid var(--border); padding: 3rem 2rem; border-radius: 2px; opacity: 0.4; transition: 0.5s; position: relative; display: flex; flex-direction: column; pointer-events: none; }
-        .price-card.active { border-color: var(--gold); opacity: 1; transform: translateY(-8px); box-shadow: 0 15px 40px rgba(0,0,0,0.6); pointer-events: auto; }
-        .price-card.active::before { content: 'MODELO RECOMENDADO'; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--gold); color: var(--navy); font-size: 0.65rem; font-weight: 800; padding: 4px 15px; border-radius: 2px; }
-        .tier-btn { display: block; width: 100%; text-align: center; padding: 1.2rem; border: 1px solid var(--gold); color: var(--gold); text-decoration: none; font-size: 0.85rem; font-weight: 600; margin-top: auto; }
-
-        footer { text-align: center; padding: 6rem 2rem; border-top: 1px solid var(--border); color: var(--silver); font-size: 0.75rem; }
+        .price-card.active { border-color: var(--gold); opacity: 1; transform: translateY(-8px); box-shadow: 0 15px 40px rgba(0,0,0,0.6); pointer-events: all; }
+        .price-card.selected { border-color: var(--green); box-shadow: 0 0 0 2px rgba(76,175,125,0.3); }
+        .tier-btn { display: block; width: 100%; text-align: center; padding: 1.2rem; border: 1px solid var(--gold); color: var(--gold); background: transparent; font-size: 0.85rem; font-weight: 600; margin-top: auto; cursor: pointer; transition: 0.2s; letter-spacing: 0.08em; text-transform: uppercase; }
+        .tier-btn:hover { background: var(--gold); color: var(--navy); }
+        .tier-btn.selected-btn { background: var(--green); border-color: var(--green); color: #fff; }
+        .checkout-section { display: none; margin-top: 3rem; padding: 2.5rem; background: var(--navy-light); border: 1px solid var(--gold-border); border-radius: 4px; }
+        .checkout-summary { font-size: 0.9rem; color: var(--silver); margin-bottom: 1.5rem; line-height: 2; }
+        .checkout-summary strong { color: var(--text); }
+        .btn-pagar { width: 100%; padding: 1.3rem; background: var(--gold); color: #080c14; border: none; border-radius: 2px; font-weight: 700; font-size: 1rem; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: 0.2s; }
+        .btn-pagar:hover { background: #e0be6a; }
+        .btn-pagar:disabled { opacity: 0.5; cursor: not-allowed; }
+        .payment-link-box { margin-top: 1.5rem; padding: 1.5rem; background: rgba(76,175,125,0.05); border: 1px solid rgba(76,175,125,0.3); border-radius: 4px; text-align: center; }
+        .payment-link-box a { color: var(--green); font-weight: 600; font-size: 1.1rem; text-decoration: none; display: block; margin-bottom: 0.5rem; }
+        .payment-link-box p { font-size: 0.8rem; color: var(--silver); }
+        .upload-progress { display: none; margin: 1rem 0; }
+        .upload-progress-bar { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+        .upload-progress-fill { height: 100%; background: var(--green); width: 0%; transition: width 0.3s; }
+        .upload-status-text { font-size: 0.8rem; color: var(--silver); margin-top: 0.5rem; text-align: center; }
+        footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--border); color: var(--silver); font-size: 0.75rem; width: 100%; background: var(--navy); }
+        .gate-footer { position: absolute; bottom: 0; left: 0; width: 100%; }
+        .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(8,12,20,0.3); border-top-color: #080c14; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 6px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-    <div id="gate-container">
-        <div id="choice-view" class="intro-box">
-            <img src="logo_arx.png" alt="ARX" style="width: 240px; margin-bottom: 2rem;">
-            <p style="color: var(--silver); font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 3rem;">Agilitas et Securitas</p>
-            <div class="choice-grid">
-                <a href="https://arxlegaltech.fillout.com/onboarding" target="_blank" class="choice-card">
-                    <h3>Onboarding</h3>
-                    <p>Contrate o treinamento estratégico e domine a metodologia ARX.</p>
-                    <div class="btn-action">Contratar Agora</div>
-                </a>
-                <div onclick="showLoginForm()" class="choice-card">
-                    <h3>Membros</h3>
-                    <p>Acesse o ambiente privado para síntese e diagnósticos.</p>
-                    <div class="btn-action">Acessar Ambiente</div>
-                </div>
+<div id="gate-container">
+    <div id="choice-view" class="intro-box">
+        <img src="logo_arx.png" alt="ARX" style="width:240px; margin-bottom:2rem;">
+        <p style="color:var(--silver); font-size:0.8rem; letter-spacing:0.2em; text-transform:uppercase; margin-bottom:3rem;">Agilitas et Securitas</p>
+        <div class="choice-grid">
+            <a href="https://arxlegaltech.fillout.com/onboarding" target="_blank" class="choice-card">
+                <h3>Onboarding</h3>
+                <p>Contrate o treinamento estratégico e domine a metodologia ARX.</p>
+                <div class="btn-action">Contratar Agora</div>
+            </a>
+            <div onclick="showLoginForm()" class="choice-card">
+                <h3>Membros</h3>
+                <p>Acesse o ambiente privado para síntese e diagnósticos.</p>
+                <div class="btn-action">Acessar Ambiente</div>
             </div>
-        </div>
-
-        <div id="login-form-area">
-            <img src="logo_arx.png" alt="ARX" style="width: 180px; margin-bottom: 2rem;">
-            <input type="password" id="access-key" class="login-input" placeholder="CHAVE DE ACESSO" onkeypress="if(event.key === 'Enter') checkAccess()">
-            <label class="remember-container"><input type="checkbox" id="remember-me"> Não solicitar mais chave neste navegador</label>
-            <button onclick="checkAccess()" class="btn-action" style="margin-top: 1.5rem;">Validar Securitas</button>
-            <span onclick="hideLoginForm()" class="back-link">Voltar para a recepção</span>
-            <p id="error-msg" style="color: #ff4d4d; font-size: 0.75rem; margin-top: 1.5rem; display: none;"></p>
         </div>
     </div>
 
-    <div id="main-app" style="display:none;">
-        <nav>
-            <span class="nav-logo" id="welcome-msg">Ambiente ARX</span>
-            <span style="font-size: 0.6rem; color: var(--gold); text-transform: uppercase; text-align: right; letter-spacing: 0.1em;">Agilitas et Securitas</span>
-        </nav>
+    <div id="login-form-area" class="intro-box">
+        <img src="logo_arx.png" alt="ARX" style="width:180px; margin-bottom:2rem;">
+        <input type="password" id="access-key" class="login-input" placeholder="CHAVE DE ACESSO" onkeypress="if(event.key==='Enter')checkAccess()">
+        <label class="remember-container"><input type="checkbox" id="remember-me"> Não solicitar mais chave neste navegador</label>
+        <button onclick="checkAccess()" class="btn-action" style="margin-top:1.5rem; max-width:400px;">Validar Securitas</button>
+        <span onclick="hideLoginForm()" style="display:block; margin-top:1.5rem; color:var(--silver); font-size:0.7rem; text-decoration:underline; cursor:pointer;">Voltar para a recepção</span>
+        <p id="error-msg" style="color:#ff4d4d; font-size:0.75rem; margin-top:1.5rem; display:none;"></p>
+    </div>
 
-        <section>
-            <h2 class="section-title">Preparação de arquivos para envio.</h2>
+    <footer class="gate-footer">
+        <p>© 2026 ARX LEGALTECH · AMBIENTE PRIVADO · <span style="opacity:0.4; font-size:0.6rem;">v8.0.0</span></p>
+    </footer>
+</div>
+
+<div id="main-app">
+    <nav>
+        <span class="nav-logo" id="welcome-msg">Ambiente ARX</span>
+        <div style="display:flex; align-items:center; gap:1rem;">
+            <span style="font-size:0.6rem; color:var(--gold); text-transform:uppercase; letter-spacing:0.1em;">Agilitas et Securitas</span>
+            <button onclick="clearVault()" style="background:transparent; border:1px solid var(--border); color:var(--silver); padding:0.4rem 0.8rem; font-size:0.7rem; cursor:pointer; border-radius:2px; transition:0.2s;" onmouseover="this.style.borderColor='var(--gold)'; this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--border)'; this.style.color='var(--silver)'">Sair</button>
+        </div>
+    </nav>
+
+    <section>
+        <div id="step-upload">
+            <h2 class="section-title">1. Preparação dos Documentos</h2>
+            <p style="color:var(--silver); font-size:0.85rem; margin-bottom:2rem;">
+                Selecione todos os arquivos do caso. O sistema higieniza, compila e envia diretamente para a ARX — sem downloads obrigatórios, sem formulários separados.
+            </p>
+
             <div class="vault-card" id="drop-zone" onclick="document.getElementById('file-input').click()">
-                <p style="color: var(--gold); font-size: 1.1rem;">Clique ou arraste para adicionar ao Cofre</p>
-                <input type="file" id="file-input" multiple accept="application/pdf,image/jpeg,image/png" style="display: none;" />
+                <p style="color:var(--gold); font-size:1.1rem;">Clique ou arraste para adicionar ao Cofre</p>
+                <p style="color:var(--silver); font-size:0.8rem; margin-top:0.5rem;">PDF, JPG, PNG — sem limite de tamanho total</p>
+                <input type="file" id="file-input" multiple accept="application/pdf,image/jpeg,image/png" style="display:none;" />
             </div>
 
-            <div id="file-list-container" style="margin-top: 2rem; display: none;">
-                <h4 style="color: var(--gold); font-size: 0.8rem; text-transform: uppercase; margin-bottom: 1rem;">Arquivos no Cofre:</h4>
-                <ul id="file-list-display" style="list-style: none; color: var(--silver); font-size: 0.85rem; background: rgba(255,255,255,0.03); padding: 1.5rem; border-radius: 4px;"></ul>
-                <button onclick="processAllFiles()" class="btn-action" style="margin-top: 2rem;">Sintetizar Pacote de Documentos</button>
-            </div>
-
-            <div id="status-area" class="status-panel">
-                <div class="diagnosis-box"><h3 style="color: var(--gold); font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; margin-bottom: 1rem;">Diagnóstico de Capacidade</h3><p id="lote-count-text" style="font-size: 1.1rem; color: #fff;"></p></div>
-                <div id="download-links" class="download-grid"></div>
-                <div style="background: rgba(201,168,76,0.05); border: 1px solid var(--gold-border); padding: 1.5rem; border-radius: 4px; margin-bottom: 3.5rem;">
-                    <p style="color: var(--silver); font-size: 0.85rem; line-height: 1.6;">Cada lote foi higienizado e dimensionado para o envio seguro pelo formulário. <strong style="color: var(--gold);">Selecione todos os pacotes</strong> na hora de anexar — o sistema da ARX reagrupa automaticamente.</p>
+            <div id="file-list-container" style="margin-top:2rem; display:none;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+                    <h4 style="color:var(--gold); font-size:0.8rem; text-transform:uppercase;" id="file-count-label">Arquivos no Cofre</h4>
+                    <button onclick="clearFiles()" style="background:transparent; border:none; color:var(--silver); font-size:0.75rem; cursor:pointer; text-decoration:underline;">Limpar</button>
                 </div>
+                <ul id="file-list-display" style="list-style:none; display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:0.5rem;"></ul>
+                <button onclick="processAllFiles()" id="btn-processar" style="margin-top:2rem; width:100%; padding:1.3rem; background:var(--gold); color:#080c14; border:none; border-radius:2px; font-weight:700; font-size:0.95rem; letter-spacing:0.1em; text-transform:uppercase; cursor:pointer; transition:0.2s;">
+                    Higienizar e Preparar Documentos
+                </button>
+            </div>
+
+            <div id="progress-container" style="display:none; margin-top:1.5rem;">
+                <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progress-fill" style="width:0%"></div></div>
+                <p id="progress-label" style="color:var(--silver); font-size:0.75rem; margin-top:0.5rem; text-align:center;"></p>
+            </div>
+
+            <div class="status-panel" id="status-area">
+                <div class="diagnosis-box">
+                    <p id="lote-count-text" style="color:var(--text); font-size:0.9rem;"></p>
+                </div>
+                <div id="whatsapp-notice" class="whatsapp-notice">
+                    <p><strong style="color:var(--red);">Atencao — lotes com paginas muito pesadas</strong><br>
+                    Alguns lotes contêm escaneamentos em alta resolução. Se precisar enviar manualmente, use o <a href="https://wa.me/5543988102220" target="_blank">WhatsApp da ARX</a>. No formulário, prossiga normalmente — os documentos já foram enviados automaticamente.</p>
+                </div>
+                <div id="download-links"></div>
+            </div>
+        </div>
+
+        <div class="form-section" id="step-form">
+            <h2 class="section-title">2. Dados do Caso</h2>
+            <p style="color:var(--silver); font-size:0.85rem; margin-bottom:0.5rem;">Preencha as informações abaixo. O prompt correto será gerado automaticamente.</p>
+
+            <div class="form-grid">
+                <div class="form-field">
+                    <label class="form-label">Nome completo do advogado *</label>
+                    <input type="text" id="f-advogado" class="form-input" placeholder="Dr. Joao da Silva">
+                </div>
+                <div class="form-field">
+                    <label class="form-label">E-mail *</label>
+                    <input type="email" id="f-email" class="form-input" placeholder="joao@escritorio.com.br">
+                </div>
+                <div class="form-field">
+                    <label class="form-label">CPF ou CNPJ *</label>
+                    <input type="text" id="f-cpfcnpj" class="form-input" placeholder="000.000.000-00 ou 00.000.000/0001-00" maxlength="18" oninput="formatarCpfCnpj(this)">
+                </div>
+                <div class="form-field">
+                    <label class="form-label">Tipo de analise *</label>
+                    <select id="f-tipo" class="form-select">
+                        <option value="">Selecione...</option>
+                        <option value="Auditoria">Auditoria / Regularizacao de Imovel</option>
+                        <option value="Usucapiao">Usucapiao</option>
+                        <option value="Leilao">Leilao</option>
+                        <option value="Distressed">Distressed / Ativo Problematico</option>
+                        <option value="Contrato">Analise Contratual</option>
+                        <option value="Revisao de Processo (Estoque)">Revisao de Processo (Estoque)</option>
+                    </select>
+                </div>
+                <div class="form-field">
+                    <label class="form-label">Intencao da analise</label>
+                    <input type="text" id="f-intencao" class="form-input" placeholder="Ex: verificar viabilidade de usucapiao tabular">
+                </div>
+                <div class="form-field full">
+                    <label class="form-label">Descricao do caso</label>
+                    <textarea id="f-descricao" class="form-textarea" placeholder="Descreva o contexto, historico relevante e o que o cliente pretende..."></textarea>
+                </div>
+            </div>
+
+            <div style="margin-top:3rem;">
+                <h3 style="font-family:'Cormorant Garamond',serif; color:var(--gold); font-size:1.6rem; margin-bottom:0.5rem;">3. Selecione o Plano</h3>
+                <p style="color:var(--silver); font-size:0.8rem; margin-bottom:0.5rem;">O plano recomendado e destacado automaticamente com base no volume de documentos.</p>
                 <div class="pricing-grid">
-                    <div id="tier-standard" class="price-card"><div style="color:var(--gold); font-family:'Cormorant Garamond',serif; font-size:1.8rem;">ARX Standard</div><div style="font-size:2.5rem; color:#fff; margin: 1rem 0;">R$ 380</div><a id="link-standard" href="https://arxlegaltech.fillout.com/standard" target="_blank" class="tier-btn">Selecionar</a></div>
-                    <div id="tier-plus" class="price-card"><div style="color:var(--gold); font-family:'Cormorant Garamond',serif; font-size:1.8rem;">ARX Plus</div><div style="font-size:2.5rem; color:#fff; margin: 1rem 0;">R$ 430</div><a id="link-plus" href="https://arxlegaltech.fillout.com/plus" target="_blank" class="tier-btn">Selecionar</a></div>
-                    <div id="tier-max" class="price-card"><div style="color:var(--gold); font-family:'Cormorant Garamond',serif; font-size:1.8rem;">ARX Max</div><div style="font-size:2.5rem; color:#fff; margin: 1rem 0;">R$ 480</div><a id="link-max" href="https://arxlegaltech.fillout.com/max" target="_blank" class="tier-btn">Selecionar</a></div>
+                    <div id="tier-standard" class="price-card">
+                        <div style="color:var(--gold); font-family:'Cormorant Garamond',serif; font-size:1.8rem;">ARX Standard</div>
+                        <div style="font-size:2.5rem; color:#fff; margin:1rem 0;">R$ 380</div>
+                        <div style="color:var(--silver); font-size:0.8rem; margin-bottom:2rem;">Analise completa - Ate 200 MB</div>
+                        <button class="tier-btn" onclick="selecionarPlano('standard', this)">Selecionar</button>
+                    </div>
+                    <div id="tier-plus" class="price-card">
+                        <div style="color:var(--gold); font-family:'Cormorant Garamond',serif; font-size:1.8rem;">ARX Plus</div>
+                        <div style="font-size:2.5rem; color:#fff; margin:1rem 0;">R$ 430</div>
+                        <div style="color:var(--silver); font-size:0.8rem; margin-bottom:2rem;">Analise completa - Ate 400 MB</div>
+                        <button class="tier-btn" onclick="selecionarPlano('plus', this)">Selecionar</button>
+                    </div>
+                    <div id="tier-max" class="price-card">
+                        <div style="color:var(--gold); font-family:'Cormorant Garamond',serif; font-size:1.8rem;">ARX Max</div>
+                        <div style="font-size:2.5rem; color:#fff; margin:1rem 0;">R$ 480</div>
+                        <div style="color:var(--silver); font-size:0.8rem; margin-bottom:2rem;">Analise completa - Acima de 400 MB</div>
+                        <button class="tier-btn" onclick="selecionarPlano('max', this)">Selecionar</button>
+                    </div>
                 </div>
             </div>
 
-            <div style="margin-top: 6rem; border-top: 1px solid var(--border); padding-top: 4rem; display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
-                <a href="https://wa.me/5543988102220" target="_blank" style="display: flex; align-items: center; gap: 12px; background: var(--navy-light); border: 1px solid var(--gold-border); color: var(--gold); padding: 1rem 2rem; text-decoration: none; font-size: 0.85rem; border-radius: 4px;">Fale no WhatsApp</a>
-                <a href="mailto:contato@arxlegaltech.com.br" style="display: flex; align-items: center; gap: 12px; background: var(--navy-light); border: 1px solid var(--gold-border); color: var(--gold); padding: 1rem 2rem; text-decoration: none; font-size: 0.85rem; border-radius: 4px;">Contato via E-mail</a>
+            <div class="checkout-section" id="checkout-section">
+                <h3 style="font-family:'Cormorant Garamond',serif; color:var(--gold); font-size:1.4rem; margin-bottom:1rem;">4. Confirmar e Pagar</h3>
+                <div class="checkout-summary" id="checkout-summary"></div>
+
+                <div class="upload-progress" id="upload-progress">
+                    <div class="upload-progress-bar"><div class="upload-progress-fill" id="upload-progress-fill"></div></div>
+                    <div class="upload-status-text" id="upload-status-text">Enviando documentos...</div>
+                </div>
+
+                <button class="btn-pagar" id="btn-pagar" onclick="iniciarPagamento()">
+                    Confirmar e Ir para Pagamento
+                </button>
+
+                <div class="payment-link-box" id="payment-link-box" style="display:none;">
+                    <a id="payment-link" href="#" target="_blank">Clique aqui para pagar</a>
+                    <p>Apos o pagamento, voce recebera confirmacao por e-mail.<br>A ARX iniciara a analise em ate 24 horas.</p>
+                </div>
             </div>
+        </div>
 
-            <div style="margin-top: 4rem; text-align: center;">
-                <button onclick="clearVault()" style="background: transparent; border: none; color: var(--silver); font-size: 0.75rem; cursor: pointer; text-decoration: underline; letter-spacing: 0.05em; opacity: 0.7; transition: 0.3s;" onmouseover="this.style.opacity='1'; this.style.color='var(--gold)'" onmouseout="this.style.opacity='0.7'; this.style.color='var(--silver)'">Limpar e Encerrar Sessão</button>
-            </div>
-        </section>
-        <footer>
-            <p>© 2026 ARX LEGALTECH · AMBIENTE PRIVADO · <span style="opacity: 0.4; font-size: 0.6rem;">v7.0.7</span></p>
-        </footer>
-    </div>
+        <div style="margin-top:6rem; border-top:1px solid var(--border); padding-top:4rem; display:flex; justify-content:center; gap:2rem; flex-wrap:wrap;">
+            <a href="https://wa.me/5543988102220" target="_blank" style="display:flex; align-items:center; gap:12px; background:var(--navy-light); border:1px solid var(--gold-border); color:var(--gold); padding:1rem 2rem; text-decoration:none; font-size:0.85rem; border-radius:4px;">Fale no WhatsApp</a>
+            <a href="mailto:contato@arxlegaltech.com.br" style="display:flex; align-items:center; gap:12px; background:var(--navy-light); border:1px solid var(--gold-border); color:var(--gold); padding:1rem 2rem; text-decoration:none; font-size:0.85rem; border-radius:4px;">Contato via E-mail</a>
+        </div>
 
-    <script>
-        const { PDFDocument } = PDFLib;
-        let vaultFiles = [];
+        <div style="margin-top:4rem; text-align:center;">
+            <button onclick="clearVault()" style="background:transparent; border:none; color:var(--silver); font-size:0.75rem; cursor:pointer; text-decoration:underline; letter-spacing:0.05em; opacity:0.7; transition:0.3s;" onmouseover="this.style.opacity='1'; this.style.color='var(--gold)'" onmouseout="this.style.opacity='0.7'; this.style.color='var(--silver)'">Limpar e Encerrar Sessao</button>
+        </div>
+    </section>
 
-        function showLoginForm() { document.getElementById('choice-view').style.display = 'none'; document.getElementById('login-form-area').style.display = 'block'; }
-        function hideLoginForm() { document.getElementById('choice-view').style.display = 'block'; document.getElementById('login-form-area').style.display = 'none'; }
+    <footer>
+        <p>2026 ARX LEGALTECH - AMBIENTE PRIVADO - <span style="opacity:0.4; font-size:0.6rem;">v8.0.0</span></p>
+    </footer>
+</div>
 
-        async function checkAccess() {
-            const inputVal = document.getElementById('access-key').value.trim();
-            const rememberMe = document.getElementById('remember-me').checked;
-            const error = document.getElementById('error-msg');
+<script>
+    const { PDFDocument } = PDFLib;
 
-            try {
-                let textPaid = ""; let textDemo = "";
-                try { const r1 = await fetch('lista.txt'); if(r1.ok) textPaid = await r1.text(); } catch(e){}
-                try { const r2 = await fetch('lista-demo.txt'); if(r2.ok) textDemo = await r2.text(); } catch(e){}
+    const ARX_API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+        ? 'http://localhost:3000'
+        : 'https://arx-api.up.railway.app';
 
-                const findInList = (text, input) => {
-                    const lines = text.split(/\r?\n/).filter(l => l.trim());
-                    for (let line of lines) {
-                        const parts = line.split(';');
-                        if (parts[0].trim() === input) return { name: parts[1]?.trim() || "Doutor", referrer: parts[2]?.trim() || null, gender: parts[3]?.trim().toUpperCase() || "H" };
+    const MAX_BYTES  = 50 * 1024 * 1024;
+    const FORM_LIMIT = 50 * 1024 * 1024;
+
+    let vaultFiles = [];
+    let pdfCompiladoBytes = null;
+    let planoSelecionado = null;
+    let s3KeyUploadado = null;
+
+    function showLoginForm() {
+        document.getElementById('choice-view').style.display = 'none';
+        document.getElementById('login-form-area').style.display = 'flex';
+    }
+    function hideLoginForm() {
+        document.getElementById('choice-view').style.display = 'flex';
+        document.getElementById('login-form-area').style.display = 'none';
+    }
+    async function checkAccess() {
+        const inputVal = document.getElementById('access-key').value.trim();
+        const rememberMe = document.getElementById('remember-me').checked;
+        const error = document.getElementById('error-msg');
+        error.style.display = 'none';
+        try {
+            let textPaid = '', textDemo = '';
+            try { const r1 = await fetch('lista.txt'); if (r1.ok) textPaid = await r1.text(); } catch(e) {}
+            try { const r2 = await fetch('lista-demo.txt'); if (r2.ok) textDemo = await r2.text(); } catch(e) {}
+            const findInList = (text, input) => {
+                const lines = text.split(/\r?\n/).filter(l => l.trim());
+                for (let line of lines) {
+                    const parts = line.split(';');
+                    if (parts[0].trim() === input) return { name: parts[1]?.trim() || 'Doutor', referrer: parts[2]?.trim() || null, gender: parts[3]?.trim().toUpperCase() || 'H' };
+                }
+                return null;
+            };
+            let data = findInList(textPaid, inputVal);
+            if (data) { login(inputVal, data.name, data.referrer, data.gender, 'paid', rememberMe); return; }
+            data = findInList(textDemo, inputVal);
+            if (data) { login(inputVal, data.name, data.referrer, data.gender, 'demo', rememberMe); return; }
+            error.innerText = 'Chave nao localizada.';
+            error.style.display = 'block';
+        } catch(e) {
+            error.innerText = 'Erro tecnico. Tente novamente.';
+            error.style.display = 'block';
+        }
+    }
+    function login(key, name, referrer, gender, type, persist) {
+        const authData = { type, key, name, referrer, gender };
+        if (persist) localStorage.setItem('arx_auth_v8', JSON.stringify(authData));
+        sessionStorage.setItem('arx_session_v8', JSON.stringify(authData));
+        renderApp(authData);
+    }
+    function renderApp(data) {
+        document.getElementById('gate-container').style.display = 'none';
+        document.getElementById('main-app').style.display = 'block';
+        const isFem = (data.gender === 'M');
+        const saudacao = isFem ? 'Bem-vinda' : 'Bem-vindo';
+        const artigo = isFem ? 'uma' : 'um';
+        const possessivo = isFem ? 'nossa' : 'nosso';
+        const substantivo = isFem ? 'convidada' : 'convidado';
+        const welcomeMsg = document.getElementById('welcome-msg');
+        if (data.type === 'demo') {
+            if (data.referrer) welcomeMsg.innerText = saudacao + ' ' + data.name + '! Voce e ' + artigo + ' ' + substantivo + ' do Membro ' + data.referrer + ' para experimentar a Analise ARX!';
+            else welcomeMsg.innerText = saudacao + ' ' + data.name + '! Voce e ' + possessivo + ' ' + substantivo + ' para experimentar a Analise ARX!';
+        } else {
+            welcomeMsg.innerText = saudacao + ', ' + data.name;
+        }
+        document.getElementById('f-advogado').value = data.name || '';
+    }
+    window.onload = () => {
+        const saved = localStorage.getItem('arx_auth_v8') || sessionStorage.getItem('arx_session_v8');
+        if (saved) renderApp(JSON.parse(saved));
+    };
+
+    function handleFiles(files) {
+        for (let f of files) vaultFiles.push(f);
+        renderFileList();
+    }
+    function renderFileList() {
+        const container = document.getElementById('file-list-container');
+        const display = document.getElementById('file-list-display');
+        const countLabel = document.getElementById('file-count-label');
+        if (vaultFiles.length === 0) { container.style.display = 'none'; return; }
+        container.style.display = 'block';
+        const totalMB = (vaultFiles.reduce((a, f) => a + f.size, 0) / 1024 / 1024).toFixed(1);
+        countLabel.innerText = vaultFiles.length + ' arquivo' + (vaultFiles.length > 1 ? 's' : '') + ' - ' + totalMB + ' MB total';
+        display.innerHTML = '';
+        vaultFiles.forEach((f, i) => {
+            const li = document.createElement('li');
+            li.style.cssText = 'display:flex; align-items:center; justify-content:space-between; background:var(--navy-light); border:1px solid var(--border); padding:0.6rem 0.8rem; border-radius:2px; font-size:0.75rem;';
+            li.innerHTML = '<span style="color:var(--text); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:160px;" title="' + f.name + '">' + f.name + '</span>' +
+                           '<span style="color:var(--silver); margin-left:8px; white-space:nowrap;">' + (f.size/1024/1024).toFixed(1) + ' MB</span>' +
+                           '<button onclick="removeFile(' + i + ')" style="background:transparent; border:none; color:var(--silver); cursor:pointer; margin-left:8px; font-size:0.9rem;" title="Remover">x</button>';
+            display.appendChild(li);
+        });
+    }
+    function removeFile(index) { vaultFiles.splice(index, 1); renderFileList(); }
+    function clearFiles() { vaultFiles = []; renderFileList(); }
+    function clearVault() {
+        vaultFiles = []; pdfCompiladoBytes = null; planoSelecionado = null; s3KeyUploadado = null;
+        localStorage.removeItem('arx_auth_v8');
+        sessionStorage.removeItem('arx_session_v8');
+        location.reload();
+    }
+
+    async function processAllFiles() {
+        if (vaultFiles.length === 0) return;
+        const btn = document.getElementById('btn-processar');
+        const progressContainer = document.getElementById('progress-container');
+        const progressFill = document.getElementById('progress-fill');
+        const progressLabel = document.getElementById('progress-label');
+        const statusArea = document.getElementById('status-area');
+        const downloadGrid = document.getElementById('download-links');
+        const loteText = document.getElementById('lote-count-text');
+
+        btn.disabled = true;
+        btn.innerHTML = 'Processando...';
+        progressContainer.style.display = 'block';
+        downloadGrid.innerHTML = '';
+        statusArea.style.display = 'none';
+        document.getElementById('whatsapp-notice').style.display = 'none';
+
+        try {
+            const compilado = await PDFDocument.create();
+            const total = vaultFiles.length;
+
+            for (let i = 0; i < total; i++) {
+                const f = vaultFiles[i];
+                progressFill.style.width = Math.round((i / total) * 60) + '%';
+                progressLabel.innerText = 'Processando ' + (i + 1) + ' de ' + total + ': ' + f.name;
+                try {
+                    const arrayBuffer = await f.arrayBuffer();
+                    const ext = f.name.split('.').pop().toLowerCase();
+                    if (ext === 'pdf') {
+                        const doc = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
+                        const pages = await compilado.copyPages(doc, doc.getPageIndices());
+                        pages.forEach(p => compilado.addPage(p));
+                    } else if (['jpg','jpeg','png'].includes(ext)) {
+                        const page = compilado.addPage();
+                        const img = ext === 'png' ? await compilado.embedPng(arrayBuffer) : await compilado.embedJpg(arrayBuffer);
+                        const dims = img.scale(1);
+                        const maxW = page.getWidth() - 40, maxH = page.getHeight() - 40;
+                        const scale = Math.min(maxW / dims.width, maxH / dims.height, 1);
+                        page.drawImage(img, { x: 20, y: 20, width: dims.width * scale, height: dims.height * scale });
                     }
-                    return null;
+                } catch(e) { console.warn('Erro ao processar ' + f.name + ':', e); }
+            }
+
+            progressFill.style.width = '70%';
+            progressLabel.innerText = 'Finalizando compilacao...';
+            pdfCompiladoBytes = await compilado.save({ useObjectStreams: false });
+
+            progressFill.style.width = '80%';
+            progressLabel.innerText = 'Gerando lotes...';
+
+            const lotes = [];
+            let currentIndex = 0;
+            const pageCount = compilado.getPageCount();
+
+            while (currentIndex < pageCount) {
+                const chunk = await PDFDocument.create();
+                while (currentIndex < pageCount) {
+                    const [p] = await chunk.copyPages(compilado, [currentIndex]);
+                    chunk.addPage(p);
+                    const bytes = await chunk.save({ useObjectStreams: false });
+                    if (bytes.length > MAX_BYTES) {
+                        if (chunk.getPageCount() > 1) { chunk.removePage(chunk.getPageCount() - 1); break; }
+                        else { currentIndex++; break; }
+                    }
+                    currentIndex++;
+                    if (chunk.getPageCount() >= 500) break;
+                }
+                if (chunk.getPageCount() === 0) { currentIndex++; continue; }
+                lotes.push(await chunk.save({ useObjectStreams: false }));
+            }
+
+            progressFill.style.width = '100%';
+            progressLabel.innerText = 'Concluido!';
+
+            const totalSlots = lotes.length;
+            let hasOversized = false;
+
+            if (totalSlots > 1) {
+                const btnAll = document.createElement('button');
+                btnAll.className = 'btn-download-all';
+                btnAll.innerHTML = 'Baixar Todos os Lotes';
+                btnAll.onclick = function() {
+                    lotes.forEach(function(bytes, i) {
+                        setTimeout(function() {
+                            const slotPad = String(i+1).padStart(2,'0');
+                            const totalPad = String(totalSlots).padStart(2,'0');
+                            const url = URL.createObjectURL(new Blob([bytes], { type:'application/pdf' }));
+                            const a = document.createElement('a');
+                            a.href = url; a.download = 'ARX_Higienizado_LOTE_' + slotPad + '_de_' + totalPad + '.pdf'; a.click();
+                        }, i * 700);
+                    });
                 };
+                downloadGrid.appendChild(btnAll);
+            }
 
-                let data = findInList(textPaid, inputVal);
-                if (data) { login(inputVal, data.name, data.referrer, data.gender, "paid", rememberMe); return; }
+            lotes.forEach(function(bytes, i) {
+                const slot = i + 1;
+                const slotPad = String(slot).padStart(2,'0');
+                const totalPad = String(totalSlots).padStart(2,'0');
+                const sizeMB = (bytes.length / 1024 / 1024).toFixed(1);
+                const url = URL.createObjectURL(new Blob([bytes], { type:'application/pdf' }));
+                const item = document.createElement('div');
+                const isOversized = bytes.length > FORM_LIMIT;
+                if (isOversized) hasOversized = true;
+                item.className = 'pacote-item' + (isOversized ? ' oversized' : '');
+                item.innerHTML = '<span class="pacote-nome">LOTE ' + slotPad + ' de ' + totalPad + '</span>' +
+                    '<span class="pacote-info' + (isOversized ? ' red' : '') + '">' + sizeMB + ' MB' + (isOversized ? ' - excede 50 MB' : '') + '</span>' +
+                    '<a href="' + url + '" download="ARX_Higienizado_LOTE_' + slotPad + '_de_' + totalPad + '.pdf" class="pacote-btn' + (isOversized ? ' red' : '') + '">Baixar</a>';
+                downloadGrid.appendChild(item);
+            });
 
-                data = findInList(textDemo, inputVal);
-                if (data) { login(inputVal, data.name, data.referrer, data.gender, "demo", rememberMe); return; }
+            if (hasOversized) document.getElementById('whatsapp-notice').style.display = 'block';
 
-                error.innerText = "Chave não localizada."; error.style.display = 'block';
-            } catch (e) { error.innerText = "Erro técnico."; error.style.display = 'block'; }
+            const pesoOriginalMB = vaultFiles.reduce(function(acc, f) { return acc + f.size; }, 0) / (1024 * 1024);
+            loteText.innerText = 'Higienizacao concluida. ' + pageCount + ' paginas compiladas em ' + totalSlots + ' lote' + (totalSlots > 1 ? 's' : '') + ' - ' + (pdfCompiladoBytes.length / 1024 / 1024).toFixed(1) + ' MB total. Os documentos serao enviados automaticamente ao confirmar o pagamento.';
+
+            document.querySelectorAll('.price-card').forEach(function(c) { c.classList.remove('active'); });
+            if (pesoOriginalMB <= 200) document.getElementById('tier-standard').classList.add('active');
+            else if (pesoOriginalMB <= 400) document.getElementById('tier-plus').classList.add('active');
+            else document.getElementById('tier-max').classList.add('active');
+
+            statusArea.style.display = 'block';
+            document.getElementById('step-form').style.display = 'block';
+            setTimeout(function() { document.getElementById('step-form').scrollIntoView({ behavior:'smooth', block:'start' }); }, 300);
+
+        } catch(e) {
+            loteText.innerText = 'Erro na sintese dos documentos. Tente novamente.';
+            console.error(e);
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = 'Higienizar e Preparar Documentos';
+            setTimeout(function() { progressContainer.style.display = 'none'; }, 2000);
         }
+    }
 
-        function login(key, name, referrer, gender, type, persist) {
-            const authData = { type, key, name, referrer, gender };
-            if (persist) localStorage.setItem('arx_auth_v7', JSON.stringify(authData));
-            sessionStorage.setItem('arx_session_v7', JSON.stringify(authData));
-            renderApp(authData);
+    function selecionarPlano(plano, btnEl) {
+        planoSelecionado = plano;
+        document.querySelectorAll('.price-card').forEach(function(c) { c.classList.remove('selected'); });
+        document.querySelectorAll('.tier-btn').forEach(function(b) { b.classList.remove('selected-btn'); b.innerText = 'Selecionar'; });
+        btnEl.closest('.price-card').classList.add('selected');
+        btnEl.classList.add('selected-btn');
+        btnEl.innerText = 'Selecionado';
+
+        const labels = { standard: 'ARX Standard - R$ 380,00', plus: 'ARX Plus - R$ 430,00', max: 'ARX Max - R$ 480,00' };
+        const advogado = document.getElementById('f-advogado').value || '-';
+        const tipo = document.getElementById('f-tipo').value || '-';
+        const cpfFormatado = document.getElementById('f-cpfcnpj').value;
+        document.getElementById('checkout-summary').innerHTML =
+            '<strong>Advogado:</strong> ' + advogado + '<br>' +
+            '<strong>CPF/CNPJ:</strong> ' + cpfFormatado + '<br>' +
+            '<strong>Tipo de analise:</strong> ' + tipo + '<br>' +
+            '<strong>Plano:</strong> ' + labels[plano] + '<br>' +
+            '<strong>Formas de pagamento:</strong> PIX (1%), Cartao de credito ou Boleto';
+        const checkout = document.getElementById('checkout-section');
+        checkout.style.display = 'block';
+        setTimeout(function() { checkout.scrollIntoView({ behavior:'smooth', block:'start' }); }, 200);
+    }
+
+    async function iniciarPagamento() {
+        const advogado = document.getElementById('f-advogado').value.trim();
+        const email    = document.getElementById('f-email').value.trim();
+        const tipo     = document.getElementById('f-tipo').value;
+        const intencao = document.getElementById('f-intencao').value.trim();
+        const descricao = document.getElementById('f-descricao').value.trim();
+        const cpfCnpj = document.getElementById('f-cpfcnpj').value.replace(/\D/g, '');
+
+        if (!advogado) { alert('Informe o nome do advogado.'); return; }
+        if (!email || !email.includes('@')) { alert('Informe um e-mail valido.'); return; }
+        if (!tipo) { alert('Selecione o tipo de analise.'); return; }
+        if (!cpfCnpj || (cpfCnpj.length !== 11 && cpfCnpj.length !== 14)) { alert('Informe um CPF (11 digitos) ou CNPJ (14 digitos) valido.'); return; }
+        if (!planoSelecionado) { alert('Selecione um plano.'); return; }
+        if (!pdfCompiladoBytes) { alert('Processe os documentos primeiro.'); return; }
+
+        const btn = document.getElementById('btn-pagar');
+        btn.disabled = true;
+        btn.innerHTML = 'Enviando documentos...';
+
+        const uploadProgress = document.getElementById('upload-progress');
+        const uploadFill = document.getElementById('upload-progress-fill');
+        const uploadText = document.getElementById('upload-status-text');
+        uploadProgress.style.display = 'block';
+
+        try {
+            uploadText.innerText = 'Obtendo autorizacao de upload...';
+            uploadFill.style.width = '10%';
+
+            const sanitized = advogado.replace(/[^a-zA-Z0-9]/g,'_') + '_' + tipo.replace(/[^a-zA-Z0-9]/g,'_') + '_COMPILADO.pdf';
+            const presignResp = await fetch(ARX_API_BASE + '/api/intake/presign', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ filename: sanitized, contentType: 'application/pdf' }),
+            });
+            if (!presignResp.ok) throw new Error('Erro ao obter URL de upload: ' + presignResp.status);
+            const presignData = await presignResp.json();
+            const s3Url = presignData.s3Url;
+            const key = presignData.key;
+            s3KeyUploadado = key;
+
+            uploadText.innerText = 'Enviando documentos para a ARX...';
+            uploadFill.style.width = '30%';
+
+            const uploadResp = await fetch(s3Url, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/pdf' },
+                body: new Blob([pdfCompiladoBytes], { type: 'application/pdf' }),
+            });
+            if (!uploadResp.ok) throw new Error('Erro no upload: ' + uploadResp.status);
+            uploadFill.style.width = '70%';
+            uploadText.innerText = 'Documentos enviados. Criando cobranca...';
+
+            const cobrancaResp = await fetch(ARX_API_BASE + '/api/intake/cobranca', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ advogado: advogado, emailAdvogado: email, cpfCnpj: cpfCnpj, tipoAnalise: tipo, intencao: intencao, descricao: descricao, plano: planoSelecionado, s3Key: key }),
+            });
+            if (!cobrancaResp.ok) {
+                const err = await cobrancaResp.json().catch(function() { return {}; });
+                throw new Error(err.error || 'Erro ao criar cobranca: ' + cobrancaResp.status);
+            }
+            const cobrancaData = await cobrancaResp.json();
+            const paymentUrl = cobrancaData.paymentUrl;
+            uploadFill.style.width = '100%';
+            uploadText.innerText = 'Pronto! Redirecionando para pagamento...';
+
+            const linkBox = document.getElementById('payment-link-box');
+            const linkEl = document.getElementById('payment-link');
+            linkEl.href = paymentUrl;
+            linkEl.innerText = 'Clique aqui para pagar';
+            linkBox.style.display = 'block';
+
+            btn.innerHTML = 'Documentos enviados - aguardando pagamento';
+            btn.style.background = 'var(--green)';
+            btn.style.color = '#fff';
+
+            setTimeout(function() { window.open(paymentUrl, '_blank'); }, 500);
+
+        } catch(e) {
+            console.error('[Pagamento] Erro:', e);
+            btn.disabled = false;
+            btn.innerHTML = 'Confirmar e Ir para Pagamento';
+            uploadProgress.style.display = 'none';
+            alert('Erro ao processar: ' + e.message + '\n\nTente novamente ou entre em contato pelo WhatsApp.');
         }
+    }
 
-        function renderApp(data) {
-            document.getElementById('gate-container').style.display = 'none';
-            document.getElementById('main-app').style.display = 'block';
-            const isFem = (data.gender === 'M');
-            const saudacao = isFem ? "Bem-vinda" : "Bem-vindo";
-            const artigo = isFem ? "uma" : "um";
-            const possessivo = isFem ? "nossa" : "nosso";
-            const substantivo = isFem ? "convidada" : "convidado";
-            const welcomeMsg = document.getElementById('welcome-msg');
-
-            if (data.type === 'demo') {
-                if (data.referrer) welcomeMsg.innerText = `${saudacao} ${data.name}! Você é ${artigo} ${substantivo} do Membro ${data.referrer} para experimentar a Análise ARX!`;
-                else welcomeMsg.innerText = `${saudacao} ${data.name}! Você é ${possessivo} ${substantivo} para experimentar a Análise ARX!`;
-                document.getElementById('link-standard').href = "https://arxlegaltech.fillout.com/standard-demo";
-                document.getElementById('link-plus').href = "https://arxlegaltech.fillout.com/plus-demo";
-                document.getElementById('link-max').href = "https://arxlegaltech.fillout.com/max-demo";
-            } else welcomeMsg.innerText = `${saudacao}, ${data.name}`;
+    function formatarCpfCnpj(input) {
+        let v = input.value.replace(/\D/g, '');
+        if (v.length <= 11) {
+            v = v.replace(/(\d{3})(\d)/, '$1.$2');
+            v = v.replace(/(\d{3})(\d)/, '$1.$2');
+            v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+        } else {
+            v = v.replace(/(\d{2})(\d)/, '$1.$2');
+            v = v.replace(/(\d{3})(\d)/, '$1.$2');
+            v = v.replace(/(\d{3})(\d)/, '$1/$2');
+            v = v.replace(/(\d{4})(\d{1,2})$/, '$1-$2');
         }
+        input.value = v;
+    }
 
-        window.onload = () => {
-            const saved = localStorage.getItem('arx_auth_v7') || sessionStorage.getItem('arx_session_v7');
-            if(saved) renderApp(JSON.parse(saved));
-        };
-
-        function handleFiles(files) {
-            for (let f of files) { vaultFiles.push(f); }
-            const container = document.getElementById('file-list-container');
-            const display = document.getElementById('file-list-display');
-            container.style.display = 'block';
-            display.innerHTML = vaultFiles.map(f => `<li style="margin-bottom:8px; display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:5px;"><span>${f.name}</span><span style="opacity:0.5;">(${(f.size/1024/1024).toFixed(2)} MB)</span></li>`).join('');
-        }
-
-        function clearVault() { localStorage.clear(); sessionStorage.clear(); location.reload(); }
-
-        async function processAllFiles() {
-            if (vaultFiles.length === 0) return;
-            const statusArea = document.getElementById('status-area');
-            const loteText = document.getElementById('lote-count-text');
-            const downloadGrid = document.getElementById('download-links');
-            statusArea.style.display = 'block'; loteText.innerText = "Higienizando documentos..."; downloadGrid.innerHTML = "";
-            try {
-                const master = await PDFDocument.create();
-                for (const f of vaultFiles) {
-                    const buf = await f.arrayBuffer();
-                    if (f.type.startsWith('image/')) {
-                        const img = f.type === 'image/png' ? await master.embedPng(buf) : await master.embedJpg(buf);
-                        const page = master.addPage([img.width, img.height]); page.drawImage(img, { x: 0, y: 0, width: img.width, height: img.height });
-                    } else {
-                        const pdf = await PDFDocument.load(buf); const pages = await master.copyPages(pdf, pdf.getPageIndices()); pages.forEach(p => master.addPage(p));
-                    }
-                }
-                let currentIndex = 0;
-                const total = master.getPageCount();
-                const MAX_BYTES = 18 * 1024 * 1024;       // alvo de fatiamento
-                const FORM_LIMIT = 20 * 1024 * 1024;      // limite do formulário de envio
-
-                // PASSO 1: gerar todos os lotes (em memória) antes de renderizar links
-                const lotes = [];
-                while (currentIndex < total) {
-                    const chunk = await PDFDocument.create();
-                    while (currentIndex < total) {
-                        loteText.innerText = `Higienizando página ${currentIndex + 1} de ${total}...`;
-                        const [p] = await chunk.copyPages(master, [currentIndex]);
-                        chunk.addPage(p);
-                        const bytes = await chunk.save({ useObjectStreams: false });
-                        if (bytes.length > MAX_BYTES) {
-                            if (chunk.getPageCount() > 1) {
-                                chunk.removePage(chunk.getPageCount() - 1);
-                                break;
-                            } else {
-                                console.warn(`Página ${currentIndex + 1} sozinha excede ${MAX_BYTES} bytes (${(bytes.length/1024/1024).toFixed(2)} MB). Lote único aceito.`);
-                                currentIndex++;
-                                break;
-                            }
-                        }
-                        currentIndex++;
-                        if (chunk.getPageCount() >= 500) break;
-                    }
-                    if (chunk.getPageCount() === 0) { currentIndex++; continue; }
-                    const finalBytes = await chunk.save({ useObjectStreams: false });
-                    lotes.push(finalBytes);
-                }
-
-                // PASSO 2: renderizar links agora que sabemos o total
-                const totalSlots = lotes.length;
-                const oversizedSlots = [];
-                lotes.forEach((bytes, i) => {
-                    const slot = i + 1;
-                    const slotPad = String(slot).padStart(2, '0');
-                    const totalPad = String(totalSlots).padStart(2, '0');
-                    const sizeMB = (bytes.length / 1024 / 1024).toFixed(1);
-                    const url = URL.createObjectURL(new Blob([bytes], { type: 'application/pdf' }));
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = `ARX_Higienizado_LOTE_${slotPad}_de_${totalPad}.pdf`;
-                    if (bytes.length > FORM_LIMIT) {
-                        a.className = 'download-link oversized';
-                        a.innerHTML = `<strong>Baixar LOTE ${slotPad} de ${totalPad}</strong> <span style="opacity:0.7; font-size:0.7rem;">(${sizeMB} MB)</span>
-                                       <span class="oversized-note">⚠ Higienizado, mas excede 20 MB — envie pelo WhatsApp da ARX após baixar.</span>`;
-                        oversizedSlots.push(slotPad);
-                    } else {
-                        a.className = 'download-link';
-                        a.innerHTML = `<strong>Baixar LOTE ${slotPad} de ${totalPad}</strong> <span style="opacity:0.6; font-size:0.7rem;">(${sizeMB} MB)</span>`;
-                    }
-                    downloadGrid.appendChild(a);
-                });
-
-                // Alerta consolidado para lotes oversized
-                if (oversizedSlots.length > 0) {
-                    const alert = document.createElement('div');
-                    alert.className = 'oversized-alert';
-                    const plural = oversizedSlots.length > 1;
-                    alert.innerHTML = `<strong>⚠ Atenção — ${oversizedSlots.length} lote${plural ? 's' : ''} acima do limite do formulário de envio (20 MB)</strong>
-                        ${plural ? 'Os lotes' : 'O lote'} <strong>${oversizedSlots.join(', ')}</strong> ${plural ? 'também foram higienizados, mas contêm páginas isoladas muito pesadas (geralmente escaneamentos em alta resolução) que excedem' : 'também foi higienizado, mas contém uma página isolada muito pesada (geralmente um escaneamento em alta resolução) que excede'} o limite do formulário. Baixe ${plural ? 'esses arquivos' : 'esse arquivo'} normalmente e envie pelo <strong>WhatsApp da ARX</strong>: <a href="https://wa.me/5543988102220" target="_blank">enviar agora</a>.`;
-                    downloadGrid.parentNode.insertBefore(alert, downloadGrid);
-                }
-                loteText.innerText = `Higienização concluída. Pacote técnico organizado em ${totalSlots} lotes prontos para envio. Todos os documentos foram auditados e reconstruídos para análise pela ARX.`;
-                const pesoOriginalMB = vaultFiles.reduce((acc, f) => acc + f.size, 0) / (1024 * 1024);
-                document.querySelectorAll('.price-card').forEach(c => c.classList.remove('active'));
-                if (pesoOriginalMB <= 200) document.getElementById('tier-standard').classList.add('active');
-                else if (pesoOriginalMB <= 400) document.getElementById('tier-plus').classList.add('active');
-                else document.getElementById('tier-max').classList.add('active');
-                statusArea.scrollIntoView({ behavior: 'smooth' });
-            } catch(e) { loteText.innerText = "Erro na síntese."; }
-        }
-
-        const dropZone = document.getElementById('drop-zone');
-        dropZone.ondragover = (e) => { e.preventDefault(); dropZone.style.borderColor = 'var(--gold)'; };
-        dropZone.ondragleave = () => { dropZone.style.borderColor = 'var(--gold-border)'; };
-        dropZone.ondrop = (e) => { e.preventDefault(); handleFiles(e.dataTransfer.files); };
-        document.getElementById('file-input').onchange = (e) => { handleFiles(e.target.files); };
-    </script>
+    const dropZone = document.getElementById('drop-zone');
+    dropZone.ondragover = function(e) { e.preventDefault(); dropZone.classList.add('drag-over'); };
+    dropZone.ondragleave = function() { dropZone.classList.remove('drag-over'); };
+    dropZone.ondrop = function(e) { e.preventDefault(); dropZone.classList.remove('drag-over'); handleFiles(e.dataTransfer.files); };
+    document.getElementById('file-input').onchange = function(e) { handleFiles(e.target.files); };
+</script>
 </body>
 </html>
