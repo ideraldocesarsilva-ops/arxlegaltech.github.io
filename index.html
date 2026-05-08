@@ -94,7 +94,6 @@
             .checkout-section { padding: 1.25rem; margin-top: 1.5rem; }
             .btn-pagar { padding: 1rem; font-size: 0.9rem; }
             footer { padding: 1.5rem 1rem; }
-            .gate-footer { position: relative; margin-top: 1.5rem; }
         }
 
         /* Celulares médios (481px - 640px) */
@@ -122,7 +121,6 @@
             .diagnosis-box { padding: 2rem; }
             .checkout-section { padding: 1.75rem; }
             footer { padding: 2rem 1.5rem; }
-            .gate-footer { position: relative; margin-top: 2rem; }
         }
 
         /* Tablets (641px - 768px) */
@@ -165,6 +163,11 @@
         .upload-status-text { font-size: 0.8rem; color: var(--silver); margin-top: 0.5rem; text-align: center; }
         footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--border); color: var(--silver); font-size: 0.75rem; width: 100%; background: var(--navy); }
         .gate-footer { position: absolute; bottom: 0; left: 0; width: 100%; }
+
+        /* Em mobile o gate-container vira static, então o footer absolute some do lugar certo */
+        @media (max-width: 768px) {
+            .gate-footer { position: static; width: 100%; margin-top: 2rem; }
+        }
         .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(8,12,20,0.3); border-top-color: #080c14; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 6px; }
         @keyframes spin { to { transform: rotate(360deg); } }
     </style>
