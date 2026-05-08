@@ -266,8 +266,12 @@
                     <input type="text" id="f-advogado" class="form-input" placeholder="Dr. Joao da Silva">
                 </div>
                 <div class="form-field">
-                    <label class="form-label">E-mail *</label>
+                    <label class="form-label">E-mail para recebimento do relatorio ARX *</label>
                     <input type="email" id="f-email" class="form-input" placeholder="joao@escritorio.com.br">
+                </div>
+                <div class="form-field">
+                    <label class="form-label">Celular *</label>
+                    <input type="tel" id="f-celular" class="form-input" placeholder="(43) 99999-9999" maxlength="15" oninput="formatarCelular(this)">
                 </div>
                 <div class="form-field">
                     <label class="form-label">CPF ou CNPJ *</label>
@@ -275,23 +279,43 @@
                 </div>
                 <div class="form-field">
                     <label class="form-label">Tipo de analise *</label>
-                    <select id="f-tipo" class="form-select">
+                    <select id="f-tipo" class="form-select" onchange="mostrarAvisoOutro(this)" style="background:#0f1729; color:#e8e8e8;">
                         <option value="">Selecione...</option>
+                        <option value="Viabilidade de Novo Caso">Viabilidade de Novo Caso</option>
                         <option value="Auditoria">Auditoria / Regularizacao de Imovel</option>
                         <option value="Usucapiao">Usucapiao</option>
                         <option value="Leilao">Leilao</option>
-                        <option value="Distressed">Distressed / Ativo Problematico</option>
                         <option value="Contrato">Analise Contratual</option>
                         <option value="Revisao de Processo (Estoque)">Revisao de Processo (Estoque)</option>
+                        <option value="Outro">Outro</option>
                     </select>
+                    <p id="aviso-outro" style="display:none; font-size:0.75rem; color:#c9a84c; margin-top:0.4rem; font-style:italic;">&#9888;&#65039; Especificar na descricao do caso abaixo.</p>
                 </div>
                 <div class="form-field">
-                    <label class="form-label">Intencao da analise</label>
+                    <label class="form-label">Intencao do cliente / advogado *</label>
                     <input type="text" id="f-intencao" class="form-input" placeholder="Ex: verificar viabilidade de usucapiao tabular">
                 </div>
                 <div class="form-field full">
-                    <label class="form-label">Descricao do caso</label>
-                    <textarea id="f-descricao" class="form-textarea" placeholder="Descreva o contexto, historico relevante e o que o cliente pretende..."></textarea>
+                    <label class="form-label">Descricao do caso e intencao do cliente *</label>
+                    <textarea id="f-descricao" class="form-textarea" rows="5" placeholder="Descreva o caso, a situacao atual, o numero do processo, o objetivo e qualquer contexto relevante..."></textarea>
+                </div>
+                <div class="form-field full">
+                    <label class="form-label">Esta analise e continuacao de uma analise anterior?</label>
+                    <label style="display:flex; align-items:center; gap:0.75rem; margin-top:0.5rem; cursor:pointer; color:var(--silver); font-size:0.85rem;">
+                        <input type="checkbox" id="f-continuacao" onchange="toggleContinuacao(this)" style="width:16px; height:16px; accent-color:#c9a84c;">
+                        Sim, e uma continuacao (segunda ou terceira analise do mesmo caso)
+                    </label>
+                    <div id="area-continuacao" style="display:none; margin-top:1rem; padding:1rem; background:rgba(201,168,76,0.05); border:1px solid rgba(201,168,76,0.2); border-radius:4px;">
+                        <label class="form-label" style="margin-bottom:0.5rem; display:block;">Relatorio ARX anterior (opcional)</label>
+                        <input type="file" id="f-relatorio-anterior" accept=".pdf" style="color:var(--silver); font-size:0.8rem; width:100%;">
+                        <p style="color:var(--silver); font-size:0.75rem; margin-top:0.4rem;">Envie o relatorio da analise anterior para contexto adicional.</p>
+                    </div>
+                </div>
+                <div class="form-field full">
+                    <label style="display:flex; align-items:center; gap:0.75rem; cursor:pointer; color:var(--silver); font-size:0.85rem;">
+                        <input type="checkbox" id="f-esboco" style="width:16px; height:16px; accent-color:#c9a84c;">
+                        Quero um esboco estrutural da peca processual no relatorio
+                    </label>
                 </div>
             </div>
 
@@ -301,19 +325,19 @@
                 <div class="pricing-grid">
                     <div id="tier-standard" class="price-card">
                         <div style="color:var(--gold); font-family:'Cormorant Garamond',serif; font-size:1.8rem;">ARX Standard</div>
-                        <div style="font-size:2.5rem; color:#fff; margin:1rem 0;">R$ 380</div>
+                        <div style="font-size:2.5rem; color:#fff; margin:1rem 0;">R$ 280</div>
                         <div style="color:var(--silver); font-size:0.8rem; margin-bottom:2rem;">Analise completa - Ate 200 MB</div>
                         <button class="tier-btn" onclick="selecionarPlano('standard', this)">Selecionar</button>
                     </div>
                     <div id="tier-plus" class="price-card">
                         <div style="color:var(--gold); font-family:'Cormorant Garamond',serif; font-size:1.8rem;">ARX Plus</div>
-                        <div style="font-size:2.5rem; color:#fff; margin:1rem 0;">R$ 430</div>
+                        <div style="font-size:2.5rem; color:#fff; margin:1rem 0;">R$ 330</div>
                         <div style="color:var(--silver); font-size:0.8rem; margin-bottom:2rem;">Analise completa - Ate 400 MB</div>
                         <button class="tier-btn" onclick="selecionarPlano('plus', this)">Selecionar</button>
                     </div>
                     <div id="tier-max" class="price-card">
                         <div style="color:var(--gold); font-family:'Cormorant Garamond',serif; font-size:1.8rem;">ARX Max</div>
-                        <div style="font-size:2.5rem; color:#fff; margin:1rem 0;">R$ 480</div>
+                        <div style="font-size:2.5rem; color:#fff; margin:1rem 0;">R$ 380</div>
                         <div style="color:var(--silver); font-size:0.8rem; margin-bottom:2rem;">Analise completa - Acima de 400 MB</div>
                         <button class="tier-btn" onclick="selecionarPlano('max', this)">Selecionar</button>
                     </div>
@@ -558,16 +582,39 @@
         setTimeout(function() { checkout.scrollIntoView({ behavior:'smooth', block:'start' }); }, 200);
     }
 
+    function mostrarAvisoOutro(sel) {
+        const aviso = document.getElementById('aviso-outro');
+        if (aviso) aviso.style.display = sel.value === 'Outro' ? 'block' : 'none';
+    }
+
+    function toggleContinuacao(cb) {
+        const area = document.getElementById('area-continuacao');
+        if (area) area.style.display = cb.checked ? 'block' : 'none';
+    }
+
+    function formatarCelular(input) {
+        let v = input.value.replace(/\D/g, '').substring(0, 11);
+        if (v.length > 10) v = '(' + v.substring(0,2) + ') ' + v.substring(2,7) + '-' + v.substring(7);
+        else if (v.length > 6) v = '(' + v.substring(0,2) + ') ' + v.substring(2,6) + '-' + v.substring(6);
+        else if (v.length > 2) v = '(' + v.substring(0,2) + ') ' + v.substring(2);
+        else if (v.length > 0) v = '(' + v;
+        input.value = v;
+    }
+
     async function iniciarPagamento() {
-        const advogado = document.getElementById('f-advogado').value.trim();
-        const email    = document.getElementById('f-email').value.trim();
-        const tipo     = document.getElementById('f-tipo').value;
-        const intencao = document.getElementById('f-intencao').value.trim();
+        const advogado  = document.getElementById('f-advogado').value.trim();
+        const email     = document.getElementById('f-email').value.trim();
+        const celular   = document.getElementById('f-celular') ? document.getElementById('f-celular').value.trim() : '';
+        const tipo      = document.getElementById('f-tipo').value;
+        const intencao  = document.getElementById('f-intencao').value.trim();
         const descricao = document.getElementById('f-descricao').value.trim();
-        const cpfCnpj = document.getElementById('f-cpfcnpj').value.replace(/\D/g, '');
+        const cpfCnpj   = document.getElementById('f-cpfcnpj').value.replace(/\D/g, '');
+        const continuacao = document.getElementById('f-continuacao') ? document.getElementById('f-continuacao').checked : false;
+        const esboco    = document.getElementById('f-esboco') ? document.getElementById('f-esboco').checked : false;
 
         if (!advogado) { alert('Informe o nome do advogado.'); return; }
         if (!email || !email.includes('@')) { alert('Informe um e-mail valido.'); return; }
+        if (!celular) { alert('Informe o celular.'); return; }
         if (!tipo) { alert('Selecione o tipo de analise.'); return; }
         if (!cpfCnpj || (cpfCnpj.length !== 11 && cpfCnpj.length !== 14)) { alert('Informe um CPF (11 digitos) ou CNPJ (14 digitos) valido.'); return; }
         if (!planoSelecionado) { alert('Selecione um plano.'); return; }
@@ -613,7 +660,7 @@
             const cobrancaResp = await fetch(ARX_API_BASE + '/api/intake/cobranca', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ advogado: advogado, emailAdvogado: email, cpfCnpj: cpfCnpj, tipoAnalise: tipo, intencao: intencao, descricao: descricao, plano: planoSelecionado, s3Key: key }),
+                body: JSON.stringify({ advogado: advogado, emailAdvogado: email, celular: celular, cpfCnpj: cpfCnpj, tipoAnalise: tipo, intencao: intencao, descricao: descricao, plano: planoSelecionado, s3Key: key, continuacao: continuacao, esbocoProcessual: esboco }),
             });
             if (!cobrancaResp.ok) {
                 const err = await cobrancaResp.json().catch(function() { return {}; });
